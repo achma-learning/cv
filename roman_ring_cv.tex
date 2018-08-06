@@ -1,0 +1,147 @@
+\let\nofiles\relax
+\documentclass[margin,line]{res}
+\usepackage[colorlinks=true, urlcolor=blue]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{etaremune}
+
+\oddsidemargin -.5in
+\evensidemargin -.5in
+\voffset -50pt
+%\topmargin -.2in
+\headsep 0pt
+\textwidth=6.0in
+\textheight=9.4in
+\itemsep=0in
+\parsep=0in
+
+% Headings
+\pagestyle{fancy}
+\lhead{Roman Ring --- Curriculum Vitae}
+\chead{}
+\rhead{\thepage\ of \pageref*{LastPage}}
+\lfoot{}
+\cfoot{}
+\rfoot{}
+\renewcommand{\headrulewidth}{0.4pt}
+%\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+
+\newcommand{\myname}{Roman Ring --- Curriculum Vitae}
+\newlength{\mynamewidth}
+\settowidth{\mynamewidth}{\namefont\myname}
+
+\name{\hspace*{0.5\textwidth}\hspace{-0.5\mynamewidth} \myname \vspace*{.1in}}
+% On the first page, have no header.
+\thispagestyle{empty}
+
+\begin{resume}
+
+\section{\sc Contact Information}
+\hfill {inoryy@gmail.com}\\
+
+\section{\sc Education}
+{\bf M.S., Computer Science,} University of Tartu, Estonia \hfill {\it September 2018---July 2020}\\\\
+{\bf B.S., Mathematical Statistics,} University of Tartu, Estonia \hfill {\it September 2014---July 2018}\\
+\vspace*{-.1in}
+\begin{itemize}
+\item[ ] G.P.A.: 4.53/5.0
+\end{itemize}
+
+\section{\sc Employment}
+{\bf Research Assistant Intern,} Comput. Neuroscience Research Group \hfill {\it February 2018---Present}\\
+\vspace*{-.1in}
+\begin{itemize}
+\item[ ] Carrying out research in the domain of reinforcement learning
+\end{itemize}
+\vspace*{-.05in}
+%{\bf Research Assistant,} iCV Research Group \hfill {\it September 2017---December 2017}\\
+%\vspace*{-.1in}
+%\begin{itemize}
+%\item[ ] Carrying out machine learning research in the domain of computer vision
+%\item[ ] Specializing in facial emotion recognition and facial image reconstruction
+%\end{itemize}
+
+{\bf Senior Web Developer,} KNP Labs \hfill {\it September 2011---February 2015}\\
+\vspace*{-.1in}
+\begin{itemize}
+\item[ ] Development and support of complex web based applications (banking, education, retail)
+\item[ ] Coaching junior developers with hands-on workshops, pair programming sessions, PR reviews 
+\end{itemize}
+\vspace*{-.05in}
+{\bf Web Developer,} Attitude OÜ \hfill {\it September 2010---September 2011}\\
+\vspace*{-.1in}
+\begin{itemize}
+\item[ ] Development and support of web based applications
+\end{itemize}
+
+%{\bf Web Developer,} A2B Grupp OÜ \hfill {\it  June 2010---September 2010}\\
+%{\bf Web Developer,} Las Flores Tours \hfill {\it  February 2010---June 2010}
+
+\section{\sc Computer Skills}
+{\it Expert in:} Python, PHP, JavaScript; Keras, Symfony, Doctrine, Angular; git
+\vspace*{+.01in}\\
+{\it Proficient in:} R, C++, Java, HTML, CSS; Tensorflow, Theano, NumPy, SciPy; AWS
+\vspace*{+.01in}\\
+{\it Experience in:} Bash, MATLAB, SAS, LaTeX; Caffe, PyTorch, OpenCV; vim
+
+%\section{\sc Projects}
+%{\bf Starcraft II Reinforcement Learning Agent,} (Python, Tensorflow) \hfill {\it October 2017---Present}\\
+%\vspace*{-.1in}
+%\begin{itemize}
+%  \item[ ] 
+%\end{itemize}
+%\vspace*{-.1in}
+%{\bf Coders Strike Back AI Bot,} (C++) \hfill {\it December 2016---May 2017}\\
+%\vspace*{-.1in}
+%\begin{itemize}
+%  \item[ ] 
+%\end{itemize}
+
+\section{\sc Activities}
+{\bf Open Source}
+\begin{itemize}
+    \item[ ] Symfony Web Framework, Doctrine ORM (contributor)
+    \item[ ] SciPy, StatsModels, Theano, PySC2 (minor contributor)
+    \item[ ] \href{https://github.com/Inoryy/pysc2-rl-agent}{PySC2 RL Agent}, \href{https://github.com/Inoryy/csb-ai-starter}{CSB AI Starter}, \href{https://github.com/Inoryy/Banklink}{Banklink}, \href{https://github.com/KnpLabs/mailjet-api-php}{Mailjet PHP API} (creator)
+\end{itemize}
+\vspace*{-.1in}
+{\bf Competitions}
+\begin{itemize}
+\item[ ] Kaggle 2018 Data Science Bowl (277/3634, team) \hfill {\it April 2018}
+\item[ ] Kaggle Recruit Restaurant Visitor Forecasting (233/2158) \hfill {\it February 2018}
+%\item[ ] Kaggle Carvana Image Masking Challenge (193/735) \hfill {\it September 2017}
+\item[ ] Codingame AI Contest Coders of the Caribbean (28/3623) \hfill {\it April 2017}
+%\item[ ] Kaggle State Farm Distracted Driver Detection (449/1440) \hfill {\it April 2016}
+\item[ ] Hackerrank University World Cup (22/4466, team) \hfill {\it September 2015}
+\item[ ] IEEEXtreme 8.0 (208/1853, team) \hfill {\it September 2014}
+\end{itemize}
+\vspace*{-.1in}
+{\bf Talks}
+\begin{itemize}
+    \item[ ] Deep Reinforcement Learning (DevClub, Tallinn) \hfill {\it June 2018}
+    \item[ ] Behavior Driven Development with Behat and Mink (DevClub, Tallinn) \hfill {\it January 2013}
+\end{itemize}
+\vspace*{-.1in}
+{\bf Certificates}
+\begin{itemize}
+    \item[ ] Zend Certified Engineer PHP 5.3 \hfill {\it November 2012}
+\end{itemize}
+
+\section{\sc Relevant Coursework}
+Information Theory, Stochastic Processes, Matrix Calculus, Monte-Carlo Methods, Neural Networks, Data Analysis I-II, Non-Parametric Statistics, Numerical Analysis, Mathematical Analysis I-III, Probability Theory \& Statistics I-II, Algebra (Abstract \& Linear), Intro to Comp. Neuroscience
+\vspace*{-.1in}
+\\\\
+{\it Online:} Machine Learning (Stanford CS229), CNNs for Visual Recognition (Stanford CS231n), Deep Learning for NLP (Stanford CS224d),
+Intro to AI (Berkeley CS188), DRL Bootcamp (Berkeley), Reinforcement Learning (UCL), Deep Reinforcement Learning (Berkeley CS294)
+
+%\section{\sc Research Interests}
+%Reinforcement Learning, specifically model-free methods. Particularily interested in working on improving sample efficiency and stability of RL algorithms by applying variance reduction techniques.
+
+\end{resume}
+\end{document}
