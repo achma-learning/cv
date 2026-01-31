@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV - Prénom Nom</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <style>
+        :root {
+            --paper-color: #fbf9f4;
+            --ink-color: #3d3d3d;
+            --accent-color: #c5b358;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #e0e0e0;
+            color: var(--ink-color);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 20px auto;
+            background: var(--paper-color);
+            border: 1px solid var(--accent-color);
+            padding: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.15);
+        }
+
+        .page-border {
+            border: 3px double var(--accent-color);
+            padding: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .monogram {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            color: var(--paper-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 40px;
+            font-weight: 700;
+            margin: 0 auto 20px;
+            border: 3px solid #b3a04f;
+        }
+
+        .header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5em;
+            margin: 0;
+            font-weight: 700;
+            color: var(--ink-color);
+        }
+
+        .header h2 {
+            font-family: 'Lora', serif;
+            font-size: 1.5em;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--accent-color);
+            margin: 5px 0 20px 0;
+        }
+
+        .contact-info {
+            text-align: center;
+            font-size: 0.95em;
+            margin-bottom: 30px;
+            border-top: 1px solid #e0d9c0;
+            border-bottom: 1px solid #e0d9c0;
+            padding: 15px 0;
+        }
+
+        .contact-info span {
+            margin: 0 15px;
+        }
+
+        .contact-info a {
+            color: var(--ink-color);
+            text-decoration: none;
+        }
+
+        .contact-info a:hover {
+            color: var(--accent-color);
+        }
+
+        .contact-info i {
+            color: var(--accent-color);
+            margin-right: 8px;
+        }
+
+        .section {
+            margin-bottom: 35px;
+        }
+
+        h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8em;
+            color: var(--ink-color);
+            text-align: center;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+
+        h3::before, h3::after {
+            content: '';
+            display: inline-block;
+            width: 50px;
+            height: 1px;
+            background-color: var(--accent-color);
+            vertical-align: middle;
+            margin: 0 15px;
+        }
+
+        ul {
+            padding-left: 20px;
+            list-style: none;
+        }
+
+        ul li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        ul li::before {
+            content: '⚜';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-size: 1em;
+        }
+
+        .experience-item, .education-item {
+            margin-bottom: 30px;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 2px;
+        }
+
+        .item-header h4 {
+            font-family: 'Lora', serif;
+            font-weight: 700;
+            font-size: 1.15em;
+            margin: 0;
+        }
+
+        .date {
+            font-style: italic;
+            color: #555;
+            white-space: nowrap;
+            font-size: 0.9em;
+        }
+
+        .item-sub-heading {
+             font-style: italic;
+             color: #777;
+             margin: 0 0 10px 0;
+        }
+
+        .experience-item ul {
+            padding-left: 15px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 40px;
+        }
+
+        .skills-grid h4 {
+             font-family: 'Cormorant Garamond', serif;
+             font-weight: 700;
+             font-size: 1.2em;
+             margin-bottom: 10px;
+        }
+
+        /* Styles for QR Code and Download Button */
+        .qr-code {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 80px;
+            height: 80px;
+        }
+
+        .download-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: var(--accent-color);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .download-btn:hover {
+            background-color: #a4a23c;
+        }
+
+        @media print {
+            .qr-code, .download-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- QR Code and Download Button -->
+    <div class="qr-code" id="qrcode"></div>
+    <button class="download-btn" id="downloadBtn">Télécharger en PDF</button>
+
+    <div class="container">
+        <div class="page-border">
+            <header class="header">
+                <div class="monogram">PN</div>
+                <h1>Prénom Nom</h1>
+                <h2>Profession - Domaine d'activité</h2>
+                <div class="contact-info">
+                    <span><a href="tel:+212000000000"><i class="fas fa-phone"></i>+212 000000000</a></span>
+                    <span><a href="mailto:prenom.nom@example.com"><i class="fas fa-envelope"></i>prenom.nom@example.com</a></span>
+                    <span><i class="fas fa-map-marker-alt"></i>Ville, Pays</span>
+                </div>
+            </header>
+
+            <main class="main-content">
+                <!-- Sections here (as before) -->
+                <div class="section">
+                    <h3>Profil</h3>
+                    <p style="text-align: center;">Professionnel dynamique avec de fortes compétences en [secteur d'activité] et une expertise en [compétence clé].</p>
+                </div>
+                <!-- More sections... -->
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Generate QR Code
+        QRCode.toDataURL(window.location.href, function (err, url) {
+            if (err) throw err;
+            document.getElementById("qrcode").innerHTML = `<img src="${url}" alt="QR Code" />`;
+        });
+
+        // Download CV as PDF
+        document.getElementById("downloadBtn").addEventListener("click", function () {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.html(document.querySelector(".container"), {
+                callback: function (doc) {
+                    doc.save('cv_prenom_nom.pdf');
+                },
+                margin: 10
+            });
+        });
+    </script>
+</body>
+</html>
