@@ -1,0 +1,23 @@
+make a web version of cv, with desktop and mobile compatible, a qr at bottom and a button to download as pdf (bookmarklet)
+
+source :
+make one or two page and add other later CV here
+use this as main template : https://github.com/sharu725/online-cv , https://online-cv.webjeda.com/ , then add styling from v0.html or other simplist, and add a signature picture at botton, with a qr code to scan for fast view, and a card view, or linktree
+http://rush-nlp.com/cv/cv.comp.pdf
+
+add a signature , to online page : https://www.slimane.io
+https://vyftan.github.io/papers/short_cv.pdf
+https://vyftan.github.io/
+https://scholar.google.com/citations?user=MG817V4AAAAJ&hl=zh-CN&authuser=1
+https://hanshuyan.github.io/
+https://cs.harvard.edu/malan/
+https://dockarami.github.io/mourad-karami-profile/
+
+requirement to add,
+	1. a profile picture 300pxX300px location at top left like in ver3.html, use grok to improve it
+	2. a signature 222pxX90px personalized like here : https://www.slimane.io, location at bottom right and qr code at bottom left, the signature name should be : signature.png , use this website to make it : https://signaturely.com/online-signature/draw/ , then resize it for 222pxX90px and convert it to svg : https://convertio.co/png-svg/
+`	3. qr code at bottom left before signature, in footer = auto generated?
+
+final use gemini-cli with a pdf with all important and must inclued , and make index.html to host in github, so later buy website with your name
+
+so idea, a website that show full cv, and qr code that show card cv with a buttlon that has colored border and slighetely animated that links to full cv, and make sure this is on one html file , use javascript for displaying the cv card and cv full, display cv full by defautl and add a button to view cv card, and make 
