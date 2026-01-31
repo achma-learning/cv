@@ -200,7 +200,7 @@
             width: auto;   /* Maintain aspect ratio */
         }
 
-        .download-btn, .toggle-view-btn {
+        .download-btn {
             padding: 10px 20px;
             background-color: var(--accent-color);
             color: #fff;
@@ -216,51 +216,8 @@
             right: 20px;
         }
 
-        .download-btn:hover, .toggle-view-btn:hover {
+        .download-btn:hover {
             background-color: #a4a23c;
-        }
-        
-        .toggle-view-btn {
-            top: 70px;
-            right: 20px;
-        }
-
-        #card-view {
-            display: none;
-            text-align: center;
-        }
-
-        .card-view-content {
-            padding: 50px 0;
-        }
-        
-        .card-view-content h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 3em;
-            margin-bottom: 10px;
-        }
-
-        .card-view-content h2 {
-            font-family: 'Lora', serif;
-            font-size: 1.5em;
-            color: var(--accent-color);
-            margin-bottom: 40px;
-        }
-
-        .card-links a {
-            display: block;
-            max-width: 400px;
-            margin: 15px auto;
-            padding: 15px;
-            border: 2px solid var(--accent-color);
-            text-decoration: none;
-            color: var(--ink-color);
-            font-size: 1.2em;
-            transition: all 0.3s ease;
-        }
-        .card-links a:hover {
-            background: var(--accent-color);
-            color: var(--paper-color);
         }
 
         /* Responsive Design */
@@ -295,13 +252,9 @@
                 top: 10px;
                 right: 10px; /* Adjusted for mobile */
             }
-            .toggle-view-btn {
-                top: 60px;
-                right: 10px; /* Adjusted for mobile */
-            }
         }
         @media print {
-            .download-btn, .toggle-view-btn {
+            .download-btn {
                 display: none;
             }
         }
@@ -311,7 +264,6 @@
     <div class="container">
         <div class="page-border">
             <button class="download-btn" id="downloadBtn">Download as PDF</button>
-            <button class="toggle-view-btn" id="toggle-view">View Card</button>
              <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-pic">
             <div id="cv-view">
                 <header class="header">
@@ -497,44 +449,10 @@
                     <!-- </object> -->
                 </footer>
             </div>
-            <div id="card-view">
-                <div class="card-view-content">
-                    <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-pic" style="position: static; display: block; margin: 0 auto 20px;">
-                    <h1>Roman Ring</h1>
-                    <h2>Research Engineer</h2>
-                    <div class="card-links">
-                        <a href="https://github.com/Inoryy" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-                        <a href="https://scholar.google.com/citations?user=MG817V4AAAAJ&hl=zh-CN&authuser=1" target="_blank"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
-                        <a href="mailto:inoryy@gmail.com"><i class="fas fa-envelope"></i> Email</a>
-                    </div>
-                </div>
-                 <footer class="footer">
-                    <div class="qr-code" id="qrcode-card"></div>
-                </footer>
-            </div>
         </div>
     </div>
 
     <script>
-        const cvView = document.getElementById('cv-view');
-        const cardView = document.getElementById('card-view');
-        const toggleBtn = document.getElementById('toggle-view');
-        const downloadBtn = document.getElementById('downloadBtn');
-
-        toggleBtn.addEventListener('click', () => {
-            if (cvView.style.display !== 'none') {
-                cvView.style.display = 'none';
-                cardView.style.display = 'block';
-                toggleBtn.textContent = 'View Full CV';
-                downloadBtn.style.display = 'none'; // Hide download button in card view
-            } else {
-                cvView.style.display = 'block';
-                cardView.style.display = 'none';
-                toggleBtn.textContent = 'View Card';
-                downloadBtn.style.display = 'block'; // Show download button in CV view
-            }
-        });
-
         // Generate QR Code
         QRCode.toDataURL(window.location.href, { errorCorrectionLevel: 'H' }, function (err, url) {
             if (err) throw err;
@@ -543,12 +461,6 @@
             qrImgCv.style.width = '100px'; // Adjust QR code size
             qrImgCv.style.height = '100px';
             document.getElementById('qrcode-cv').appendChild(qrImgCv);
-            
-            const qrImgCard = document.createElement('img');
-            qrImgCard.src = url;
-            qrImgCard.style.width = '100px'; // Adjust QR code size
-            qrImgCard.style.height = '100px';
-            document.getElementById('qrcode-card').appendChild(qrImgCard);
         });
 
         // Download CV as PDF
