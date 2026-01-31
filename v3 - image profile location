@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My CV - Prénom Nom</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <style>
+        /* Base Styles for the CV */
+        body {
+            font-family: 'Lora', serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #fff;
+            border: 1px solid #c5b358;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .monogram {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #c5b358;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            font-weight: bold;
+            margin: 0 auto;
+            position: absolute;
+            top: -40px;
+            left: 10px;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin: 0;
+        }
+
+        header h2 {
+            font-size: 1.5em;
+            color: #777;
+            margin: 10px 0;
+        }
+
+        .contact-info {
+            text-align: center;
+            font-size: 0.95em;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .contact-info a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        .section {
+            margin-bottom: 35px;
+        }
+
+        .section h2 {
+            font-size: 1.8em;
+            color: #333;
+            border-bottom: 2px solid #c5b358;
+            padding-bottom: 5px;
+        }
+
+        section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        section ul li {
+            margin: 10px 0;
+        }
+
+        section ul li strong {
+            font-weight: bold;
+        }
+
+        .download-btn {
+            background-color: #c5b358;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.1em;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+
+        .download-btn:hover {
+            background-color: #b4a24b;
+        }
+
+        /* QR Code Styles */
+        .qr-code {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            width: 80px;
+            height: 80px;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.9em;
+            margin-top: 40px;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        /* Hide QR Code and Download Button when printing */
+        @media print {
+            .qr-code, .download-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- QR Code -->
+        <div class="qr-code" id="qrcode"></div>
+
+        <!-- Download Button -->
+        <button class="download-btn" id="downloadBtn">Télécharger en PDF</button>
+
+        <!-- Header Section -->
+        <header>
+            <div class="monogram">PN</div>
+            <h1>Prénom Nom</h1>
+            <h2>Profession - Domaine d'activité</h2>
+            <div class="contact-info">
+                <span><a href="tel:+212000000000">📞 +212 000000000</a> | </span>
+                <span><a href="mailto:prenom.nom@example.com">📧 prenom.nom@example.com</a> | </span>
+                <span>📍 Ville, Pays</span>
+            </div>
+        </header>
+
+        <!-- Career Profile Section -->
+        <section id="career-profile">
+            <h2>Career Profile</h2>
+            <p>
+                Dynamic professional with strong expertise in [Industry/Field]. Proven ability to [mention key accomplishments or skills]. Committed to continuous growth and contributing to [specific objectives or goals].
+            </p>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education">
+            <h2>Education</h2>
+            <ul>
+                <li><strong>University of XYZ</strong> — Degree in [Your Degree] (Year)</li>
+                <li><strong>High School ABC</strong> — High School Diploma (Year)</li>
+            </ul>
+        </section>
+
+        <!-- Work Experience Section -->
+        <section id="experiences">
+            <h2>Work Experience</h2>
+            <ul>
+                <li>
+                    <strong>Company XYZ</strong> — Job Title (Year to Year)
+                    <ul>
+                        <li>Responsibility 1</li>
+                        <li>Responsibility 2</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Company ABC</strong> — Job Title (Year to Year)
+                    <ul>
+                        <li>Responsibility 1</li>
+                        <li>Responsibility 2</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Certifications Section -->
+        <section id="certifications">
+            <h2>Certifications</h2>
+            <ul>
+                <li><strong>Certification 1</strong> — Issuer (Year)</li>
+                <li><strong>Certification 2</strong> — Issuer (Year)</li>
+            </ul>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects">
+            <h2>Projects</h2>
+            <ul>
+                <li><strong>Project 1</strong> — Description of the project, key achievements, and skills learned.</li>
+                <li><strong>Project 2</strong> — Description of the project, key achievements, and skills learned.</li>
+            </ul>
+        </section>
+
+        <!-- Open Source Contributions Section -->
+        <section id="oss-contributions">
+            <h2>Open Source Contributions</h2>
+            <ul>
+                <li><strong>Project 1</strong> — Description of your contributions to open-source project 1.</li>
+                <li><strong>Project 2</strong> — Description of your contributions to open-source project 2.</li>
+            </ul>
+        </section>
+
+        <!-- Publications Section -->
+        <section id="publications">
+            <h2>Publications</h2>
+            <ul>
+                <li><strong>Publication 1</strong> — Description of your publication, where it was published, etc.</li>
+                <li><strong>Publication 2</strong> — Description of your publication, where it was published, etc.</li>
+            </ul>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills">
+            <h2>Skills</h2>
+            <ul>
+                <li><strong>Technical Skills:</strong> Skill 1, Skill 2, Skill 3</li>
+                <li><strong>Soft Skills:</strong> Communication, Teamwork, Problem-solving</li>
+            </ul>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>Generated with ❤️ by [Your Name].</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // Generate QR Code for the current URL
+        const qrCodeElement = document.getElementById('qrcode');
+        const currentUrl = window.location.href;
+        QRCode.toCanvas(qrCodeElement, currentUrl, function (error) {
+            if (error) console.error(error);
+        });
+
+        // Set up download button to generate PDF
+        const { jsPDF } = window.jspdf;
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            const doc = new jsPDF();
+            doc.html(document.body, {
+                callback: function (doc) {
+                    doc.save('my-cv.pdf');
+                },
+                margin: [20, 20, 20, 20],
+                x: 10,
+                y: 10
+            });
+        });
+    </script>
+
+</body>
+
+</
