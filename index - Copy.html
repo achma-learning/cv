@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roman Ring - Curriculum Vitae</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <style>
+        :root {
+            --paper-color: #fbf9f4; /* Creamy paper */
+            --ink-color: #3d3d3d;   /* Dark charcoal */
+            --accent-color: #c5b358; /* Gold */
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #e0e0e0;
+            color: var(--ink-color);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 20px auto;
+            background: var(--paper-color);
+            border: 1px solid var(--accent-color);
+            padding: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.15);
+        }
+        
+        .page-border {
+            border: 3px double var(--accent-color);
+            padding: 30px;
+            position: relative;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 3px solid #b3a04f;
+            position: absolute;
+            top: 30px;
+            left: 30px;
+        }
+
+        .header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5em;
+            margin: 0;
+            font-weight: 700;
+            color: var(--ink-color);
+        }
+
+        .header h2 {
+            font-family: 'Lora', serif;
+            font-size: 1.5em;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--accent-color);
+            margin: 5px 0 20px 0;
+        }
+
+        .contact-info {
+            text-align: center;
+            font-size: 0.95em;
+            margin-bottom: 30px;
+            border-top: 1px solid #e0d9c0;
+            border-bottom: 1px solid #e0d9c0;
+            padding: 15px 0;
+        }
+        .contact-info span {
+            margin: 0 15px;
+        }
+        .contact-info a {
+            color: var(--ink-color);
+            text-decoration: none;
+        }
+        .contact-info a:hover {
+            color: var(--accent-color);
+        }
+        .contact-info i {
+            color: var(--accent-color);
+            margin-right: 8px;
+        }
+
+        .section {
+            margin-bottom: 35px;
+        }
+
+        h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8em;
+            color: var(--ink-color);
+            text-align: center;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+
+        h3::before, h3::after {
+            content: '';
+            display: inline-block;
+            width: 50px;
+            height: 1px;
+            background-color: var(--accent-color);
+            vertical-align: middle;
+            margin: 0 15px;
+        }
+
+        ul {
+            padding-left: 20px;
+            list-style: none;
+        }
+        ul li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 25px;
+        }
+        ul li::before {
+            content: '⚜';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-size: 1em;
+        }
+
+        .experience-item, .education-item {
+            margin-bottom: 30px;
+        }
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 2px;
+        }
+        .item-header h4 {
+            font-family: 'Lora', serif;
+            font-weight: 700;
+            font-size: 1.15em;
+            margin: 0;
+        }
+        .date {
+            font-style: italic;
+            color: #555;
+            white-space: nowrap;
+            font-size: 0.9em;
+        }
+        .item-sub-heading {
+             font-style: italic;
+             color: #777;
+             margin: 0 0 10px 0;
+        }
+        .experience-item ul {
+            padding-left: 15px;
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 40px;
+        }
+
+        .skills-grid h4 {
+             font-family: 'Cormorant Garamond', serif;
+             font-weight: 700;
+             font-size: 1.2em;
+             margin-bottom: 10px;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e0d9c0;
+        }
+
+        .qr-code {
+            width: 100px;
+            height: 100px;
+        }
+
+        .signature {
+            width: 222px;
+            height: 90px;
+        }
+
+        .download-btn, .toggle-view-btn {
+            padding: 10px 20px;
+            background-color: var(--accent-color);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-family: 'Lora', serif;
+        }
+
+        .download-btn:hover, .toggle-view-btn:hover {
+            background-color: #a4a23c;
+        }
+        
+        .toggle-view-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        #card-view {
+            display: none;
+            text-align: center;
+        }
+
+        .card-view-content {
+            padding: 50px 0;
+        }
+        
+        .card-view-content h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .card-view-content h2 {
+            font-family: 'Lora', serif;
+            font-size: 1.5em;
+            color: var(--accent-color);
+            margin-bottom: 40px;
+        }
+
+        .card-links a {
+            display: block;
+            max-width: 400px;
+            margin: 15px auto;
+            padding: 15px;
+            border: 2px solid var(--accent-color);
+            text-decoration: none;
+            color: var(--ink-color);
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+        .card-links a:hover {
+            background: var(--accent-color);
+            color: var(--paper-color);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-border">
+            <button class="toggle-view-btn" id="toggle-view">View Card</button>
+             <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-pic">
+            <div id="cv-view">
+                <header class="header">
+                    <h1>Roman Ring</h1>
+                    <h2>Research Engineer</h2>
+                    <div class="contact-info">
+                        <span><a href="mailto:inoryy@gmail.com"><i class="fas fa-envelope"></i> inoryy@gmail.com</a></span>
+                    </div>
+                </header>
+
+                <main class="main-content">
+                    <div class="section">
+                        <h3>Education</h3>
+                        <div class="education-item">
+                            <div class="item-header">
+                                <h4>M.S., Computer Science</h4>
+                                <span class="date">September 2018</span>
+                            </div>
+                            <p class="item-sub-heading">University of Tartu, Estonia</p>
+                            <ul>
+                                <li>Thesis: <a href="http://dspace.ut.ee/handle/10062/61039">Replicating DeepMind StarCraft II RL Benchmark with Actor-Critic Methods</a></li>
+                            </ul>
+                        </div>
+                        <div class="education-item">
+                            <div class="item-header">
+                                <h4>B.S., Mathematical B.S., Mathematical Statistics Statistics</h4>
+                                <span class="date">September 2014 - July 2018</span>
+                            </div>
+                            <p class="item-sub-heading">University of Tartu, Estonia</p>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Employment</h3>
+                        <div class="experience-item">
+                            <div class="item-header">
+                                <h4>Research Engineer</h4>
+                                <span class="date">March 2020</span>
+                            </div>
+                            <p class="item-sub-heading">DeepMind, London, UK</p>
+                        </div>
+                        <div class="experience-item">
+                            <div class="item-header">
+                                <h4>Research Engineer Intern</h4>
+                                <span class="date">June 2019 - September 2019</span>
+                            </div>
+                            <p class="item-sub-heading">DeepMind, London, UK</p>
+                            <ul>
+                                <li>Contributed to AlphaStar's league system development and launch on the Battle.net</li>
+                                <li>Created proof-of-concept ML framework in JAX, showcased with CV and NLP models</li>
+                            </ul>
+                        </div>
+                        <div class="experience-item">
+                            <div class="item-header">
+                                <h4>Research Assistant</h4>
+                                <span class="date">February 2018 - February 2020</span>
+                            </div>
+                            <p class="item-sub-heading">Comput. Neuroscience Research Group</p>
+                            <ul>
+                                <li>Assisted with research and engineering in the domain of deep reinforcement learning</li>
+                            </ul>
+                        </div>
+                         <div class="experience-item">
+                            <div class="item-header">
+                                <h4>Research Assistant</h4>
+                                <span class="date">June 2018 - December 2018</span>
+                            </div>
+                            <p class="item-sub-heading">PerkinElmer</p>
+                            <ul>
+                                <li>Improved instance segmentation pipeline in fluorescent medical imaging</li>
+                            </ul>
+                        </div>
+                         <div class="experience-item">
+                            <div class="item-header">
+                                <h4>Senior Web Developer</h4>
+                                <span class="date">September 2011 - February 2015</span>
+                            </div>
+                            <p class="item-sub-heading">KNP Labs</p>
+                            <ul>
+                                <li>Developed and suppored complex web based applications (banking, education, retail)</li>
+                                <li>Coached junior developers with hands-on workshops, pair programming sessions, PR reviews</li>
+                            </ul>
+                        </div>
+                        <div class="experience-item">
+                            <div class="item-header">
+                                <h4>Web Developer</h4>
+                                <span class="date">September 2010 - September 2011</span>
+                            </div>
+                            <p class="item-sub-heading">Attitude OÜ</p>
+                            <ul>
+                                <li>Developed and supported web based applications</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Skills</h3>
+                        <div class="skills-grid">
+                            <div>
+                                 <h4>Expert in</h4>
+                                 <ul>
+                                    <li>Python, PHP, JavaScript</li>
+                                    <li>Keras, Symfony, Doctrine, Angular</li>
+                                    <li>git</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4>Proficient in</h4>
+                                <ul>
+                                    <li>C++, R, Java, HTML, CSS</li>
+                                    <li>Tensorflow, PyTorch, NumPy, SciPy</li>
+                                    <li>AWS</li>
+                                </ul>
+                            </div>
+                             <div>
+                                <h4>Experience in</h4>
+                                <ul>
+                                    <li>Bash, MATLAB, SAS, LaTeX</li>
+                                    <li>Caffe, Theano, OpenCV</li>
+                                    <li>vim</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Open Source</h3>
+                        <ul>
+                            <li>Symfony Web Framework, Doctrine ORM (contributor)</li>
+                            <li>TensorFlow, PySC2, SciPy, StatsModels (minor contributor)</li>
+                            <li><a href="https://github.com/Inoryy/reaver-pysc2">Reaver: SC2 DRL Agent</a>, <a href="https://github.com/Inoryy/csb-ai-starter">CSB AI Starter</a>, <a href="https://github.com/KnpLabs/mailjet-api-php">Mailjet PHP API</a> (creator)</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h3>Talks</h3>
+                        <ul>
+                            <li>Reinforcement Learning (Guest Lecture, University of Tartu) - December 2018</li>
+                            <li>Deep Reinforcement Learning (DevClub, Tallinn) - June 2018</li>
+                            <li>Behavior Driven Development with Behat and Mink (DevClub, Tallinn) - January 2013</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h3>Teaching</h3>
+                        <ul>
+                            <li>Neural Networks, TA (University of Tartu) - Spring 2019</li>
+                            <li>Deep Reinforcement Learning, TA (University of Tartu) - Autumn 2018</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h3>Competitions</h3>
+                        <ul>
+                            <li>Kaggle 2018 Data Science Bowl (277/3634, team) - April 2018</li>
+                            <li>Codingame AI Contest Coders of the Caribbean (28/3623) - April 2017</li>
+                            <li>Hackerrank University World Cup (22/4466, team) - September 2015</li>
+                            <li>IEEEXtreme 8.0 (208/1853, team) - September 2014</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h3>Awards</h3>
+                        <ul>
+                            <li>Estonian National Contest for University Students, B.S. programme, 2nd prize - December 2018</li>
+                            <li>DevClub Best Talk Award - December 2018</li>
+                            <li>Cybernetica AS  Master's Fellowship - October 2018</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h3>Relevant Coursework</h3>
+                        <p>Information Theory, Stochastic Processes, Matrix Calculus, Monte-Carlo Methods, Machine Learning, Neural Networks, Data Analysis I-II, Numerical Analysis, Mathematical Analysis I-III, Probability Theory & Statistics I-II, Algebra (Abstract & Linear)</p>
+                        <p><em>Online:</em> Machine Learning (Stanford CS229), CNNs for Visual Recognition (Stanford CS231n), Deep Learning for NLP (Stanford CS224d), Intro to AI (Berkeley CS188), DRL Bootcamp (Berkeley), Reinforcement Learning (UCL), Deep Reinforcement Learning (Berkeley CS294)</p>
+                    </div>
+                </main>
+
+                <footer class="footer">
+                    <div class="qr-code" id="qrcode-cv"></div>
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAzIAAADGCAYAAAAJ3rW/AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAEcWSURBVHhe7d0JvNTT+wfwk5I9hUiWSNaksi/5RWUpJaSSSIvIEhUhQmRNi73QIpGt4t+eSImibP34qahERaFVUrb538+ZZ8x3zpyZO8t3m3s/79fr+7rnzNxl7p1773yf7znP85SJFFFEREREREQFZDt5S0REREREVDAYyBARERERUcFhIENERERERAWHgQwRERERERUcBjJERERERFRwGMgQEREREVHBYSBDREREREQFh4EMEREREREVHAYyREQe+fTTT1XDhg1VkyZN1Ntvvy23EhERkRvY2Z+IyAMTJ05UzZo1k1nU9OnTVaNGjWRGRERE+eCKDBGRBx544AEZxY0cOVJGRERElC8GMkRELps5c6aaO3euzOL++ecfGREREVG+GMgQEbmsW7duMkp0xBFHyIiIiIjyxUCGiMhF/fr1UwsWLJBZov32209GRERElC8GMkRELkEAc+utt8osWdWqVWVERERE+WIgQ0Tkgl9//VVdcMEFMrPbe++9ZURERET5YiBDRJSnrVu36iBm+fLlcosdAxkiIiL3sI8MEVEe/vrrL9W8eXM1efJkuSW1P/74Q22//fYyIyIionxwRYaIKA9t2rTJKIipUKECgxgiIiIXMZAhIsoBFrPbtWunxowZI7ekV7lyZRkRERGRGxjIEBHl4Oqrr1ajRo2SWfEYyBAREbmLgQwRUZZuuukm9dxzz8ksrkaNGuqFF16QWSIGMkRERO5iIENElIU+ffqogQMHyiyuSpUq6u2331a777673JJor732khERERG5gYEMEVGG+vfvr+655x6Zxe2xxx7qvffeU9WqVdNVzGwqVaokIyIiInIDAxkiogw8+uijqmfPnjKL22WXXfRKzKGHHqrnf//9t35r4ooMERGRuxjIEBEV46677lLdu3eXWVy5cuXU+PHjVd26deWWaF8Zmz333FNGRERE5AYGMkREaVx77bWqb9++MosrU6aMGj16tGrQoIHcEpVqRQbbz4iIiMg9DGSIiFLo3LmzGjx4sMwSPfbYY6ply5Yyi0sVyFSsWFFGRERE5AYGMkREBjS7vOyyy9TQoUPllkSD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vvP5+P77d/t+/v/+P/4/w//X/2H//P/8/+7+9+eP39//x9/fv9e/+P7+3/+//35+f3b+/v+b/+/+H/+/+/b2P/+Hv5/+//sH7//Hn9+v75/fv+e//j+/L8///x//b//+f/b++P7/Xj//L/9/g/vj+/L83/8f/x+/X9+vv//+//z/+/b8P7z+/H+/f3t+/b/7/fH//r99ve/37fvb2//eP3+7P/v/vvx/ff/z9/vv2+v/u//5ff/y//+/r9+/+P78ffv//n5/fX9+/n+/vr2f/9//v+/f/+/r7/+v//v/v//v+/v6+vf/v/f//z9/P7/fX3v//7+/v///vr2+/n/+/b9vf2+/f/77/f7+/3/++P7//735/n5//f/+f/7+/v/+/f/9//r7+/v///e//5//v+/L/+vv9fXv//P/+/f93f/w9/n/5//f/t//P/+/fv+//3//f77+//v/+Pz5//v/5+/L7+/f/+vv/+v/3v/+//v7+/L/8/n/+f/r3/f317//r/+/f9/fXv//v+7v/+/f//3P/v9+P/v/+f/f/v/+v99vf5v/35+/v5/n/39fX3+7/++P//9/P7+/f//9//n+P/+/v75///j+/79f/n/z//3v9/+n5+vv5/f3/7+7v/r+/v69v//z+/P7/evr7/X3+/n/7/f7+9vvf9/L9ffv/+/P/z//v/8/vf9+//+//n/+vvz+/v//v/7//f3+//z/fH//f/+9vf/+//+D+/r+/v/3//j9vf/w//H/y//r+/L7+/+b+//v9/v/+vv5+vv//fX/+v79f/x//r//b3+//7/z/f7+vr+P7//3j//f/+fv//v7/+/76//7f/v+vfz7e/b//+v9+/X+///5+/3x//+D//n9+//v99f2+/f76/vr/+fv/7+9//3///n/+Pv/++v74f3t/e3r6+v/+X/6///7///v/39/L/9fX1/+P/+P/+v/z9///9vf/+vv/5//L7/+vr9fv/+v77+fv98v/+ffv//n/+/r69vf/w/2v/3/+f/r//r/+f/x+f/x/v/v/3/8v/5+/P79+vr+f3/+f//n/+v77+f/+///v/v+//z/vf39f2yv/8P79/n3/9//r/+P/+v/r/+vvz8eP//v3x+/P7+f319//3//v7//Pz+D79/v3++///f//fH//f3x+fv//n/+f/+fn7//r/+/vz++b35+ff+9///x+fX/9/H/+f/x/r9+P//n9+v7x+/36//n/+/v6/vf/+fv/+fn5///5//r/+Pv9+/X/+//v3+v39+fn9+fn9+ff+ff/v9/vv9/vv9+fn5//L/+/v6+/v/z//H+Pv9ff3++fn+ffv8f/+/3/+v7/f/7+fn99f/3+/X9/n/+/v/+/X9+/v/+v31/fj+//r+f/7ffr+/L/+/X3+fv5+/v3+/X9+fvz//H//f/z//X/9/vv//v/3+9vX/+/v/z+ev99+/v//3v/+ff7++f39ff/8//v9/P7+9v3/9/v/+/3+/v/z9///v7/f/79f/x9+f/++/n/9ff//+f39+vr+fn7+/f39+/v/+vv99fn+fn/8/vb9//L7+v/9+f/+/X7+//7+fn9+/H+D7+/ffz//+f76+/77/vb8+/z9/P/8/v/9+/v//n9/n3+ffv//fv/++f/6+vr//P/+/vr/+/r+/P/y+/v++f/+fn/+/P38+/38+f/+fv7+//z//L/9/v7/+vvx+/P+ff+///r/+f/9/v/3++vv99/38+v/+f7+/v/+/vr//X9///z//v/++v/7+vr//f/+//r9ff/7+/P7/f/y/n/8fv79+f39+/7/+/n99f/z/n/9+ff+f/y+vr6+ff/8+/79/n39//z7+vv+ff9+/v3/+/z+/v3+/P/+/vz//vv+/vz9/P76+v74f/3+/v39/vr+/P77fn3+v/+fX+D/ffz+f/z//v/5+/z+/v79+/78+/3++/37//3+/vr9/Pr7/fv+///4//j8+vr8/vz++f/4+f3y/vr7+f79/f/++v78/vr9/Pr6/fr+/P79/v/++f39+/3++f/+/f3++vv/+f/7+/v7/fX/+/v9+/39+//4+vvz+/37+f/9+//7+//z+vz8+/r++f/+D+/vz+/f/7+f/x/f3//f/++fnx/v/7+/r+/P7+/f//f3/+f76+vr8/n/+P7++v/9//79/vj//f7+/P/9/v7//f/+f3/+vv79+vj8/f/9/vr8+fv+/v/5+vv+///++vrz/+/38+f3++/3y+/39+/r+f/3+/vz/+/39/vz/+/z9+/r+/P76/vr++Pz6+vz9+f/+9///+/n/+Pz++Pj9/fz7+/3+/v/9+/r6+/7++vv8/fr++/z9+f/4/P75//r7+fj6/v/6+vr89f/19f/x+//7+fn++/z5/Xj9/v3/ff+ff/9+Pz8/fz9/P7/fvz+/P39//x9+//39ff39+/z++fr9/fz9/P7+/P78/P/+/v79/Pz8/P/+fn5/fn5//v79/f35/v/9/vz++fr+/v/9/vr+ff/+/v3+/f/9ff7/fn/9/n/+ff/+ff/+ff/+fv/9/v3++v3+ffv9fvv8ff/9/fr8+fr89f3z/f3x9ffr6/f37+f/++/n9+/X9+vv5+/n+/n5/P/9ff7+f/5/fr+fn9//r+/f/8ff7+/vx9fvr+/vz+//39/P/+/f/+D+/P7//b9+/3z/+/n+8fv7+v/z//f/y+/n7+//v/+/3+/vv++/r2+vr//f/9fn7+///6+v/9/v39/f36+/z8/v/8+//x+f3++/v/ffn+/n/9fn7+//v+ff/+9f/yffn9/n39/v3+ffr/fv39/v/9/P/9/f/8+/7+/P7+/v/8f/1//Pz+//j9/Pv8fH/+fn/8ff/+fn/+//z9/f/9f/v9ff/7+fn9fn/+/n5ff/7+/v/++n/9/n39/n/++n/9/v7+f//+f3/9/v7/fn/+fn9/v/8/fz+/v39/fz+/P/9ff/9+/v//fr+/n7+/P/8fH7+/P/9fn/+/v/6/vr8/v/5/X/+f//+v3/+/35/f3/9fH3+fX/8f3/+fn7//r+/v7+/v7++v//+fv/+fn8+fz5/P3++vz+/H/8/P78/v78/f/+fnz+/v79/v/+/f/+fv/9fn9+/n5/fr++v/6+v3++v/7+fr+/v//+vv5+/f9/v3+/vz//fr9+v/5/vr++vv9+v/+/vz8+vn9+vv/+/X//vz8+//z9fvr/fv/9f//+f//+/v/+/vr//X98f/x+/X+D+/X/8fr/+fr/8ffr++P/8f//+vr++Pv9+vv//vv//v7/+vv7//n++v76//r7//v9/P/8/v/++f/+fn/++v78/vr6/fn5+f/++f78fn/+fP/9/vr8+fr9ffr++v78fP38fnx+/v39fn/+/f/9ff3+/fz+fn7+/f/+/fz6+f/+fn7+/fz9+fn6+/v/+/n++v/8+f/9+f35ff7/fv3+/P/+ff3//n5/fv/9ff7+/v/9/v3+/P3+/fr+/P79+vr8/Pr+/v/+fvz//v/++fz9+v/+ffv+/fr89fn8/v3++f/8/v78/v/++f/+fn8+/7++/n5//r+/v7/ffv8+//9/f379/Pz8+//z+/vz+/P/+fv++v7+/v/9+/z++fr9ffr8ff39fv/+/v7+f//+f//+v78ffv+/n99//3/fv/9fv/8+v/8+/37+f76+vr8/vj9+fj9+fv+ff/9+v/8+/3++/37//79fv79fv79/vz9/vz9/P/9/vr/ff/+ff/+/fz9+/v9/Pz+/P/8fnz+//3+/v7+/f/+fn7+/v3++f38+f7++/z9+fz9+vr+///6/v78/vj9+P76+vz8+vj9/Pz+fnx+/n7+fnz+/f/+/vz/ff/+f//9fn/+f//+/v3/ff/+/f3++v3++v/+ff/9/n79/f/+/v79/Pz/fn9/fr+/v/++/n3/fn/+fn/9+fr/+/L++v3++vz8/fr9/vz8/vz8/fr9+P7+fnz//vz+/v39/f36/vj8+f/8+f7+fn5//vz++vz8/vj++vz+/v/8+v/7/Pr8+f/++/j5/f39+fr9/fz9/Pr7/fv+fXv8ffr9+/r+/vj+/vz9/P7/fn/+fv/+ffv9/v3++v3+/v39+/77//r8/f/+/v/9+fr9ffr8fX3+fn/9ff/+ff78fn7+//7+/v/9/vr89fr8+f/6+f/8/f78/vr8/f38+vr++P/+fn5+//79/f78/v39+vj8/f/8fnz+/f/8+f7++/z9+fz9+vv9+vv+/Pz/ffv+/v39ff/+/vr9+/n9/Pr9+/n9+Pr9+/v8/P7+//v+ff/+/v/9+/n99fP7+/v9+Pz7/f/79/P38/f3/eP/8P/8+/P+ff3/f//+fP7+/v/8/vz9+P38+vj79/P/+f/6+P389/f5+/n7+fr7+fr7+f38+/38+/39fn9/vz+fn5/vz+/fz+/fr/fn+fn/+f/5+/P78fH/+Pj//v3+/v39+/r69fr9+vr6+/r+/v77/vz++/3+/vr8+v7+fv7+D+/v7+/v78/vz6+vv79+P/9//37+/f/+fn++/v/9/n7/ff/+ff/+fn++/n7+/n9/v75/fr++vz++/v/9+/v9/fr7+f/+fv/8fP78fnz+/v78+v/9/fr+/v/9+/r7+v37+vn/+fv9+f76/vr9ff/++v3++/39/fr7/vv+fn7+/f/9+/r6+/r6/P/6+v3+/v79/v38+vr/9fXz+fn5/f39+fn+D+/f/+vvx+fH+vv/6/Pj9/n18fXz/D+/r6/vz8+vvz8/vz+//r+/P/7/fr9+/3y+/Pz8+Pz+fn3+fn/+fn5+/v/8/fz+/v/+/f/8fPz8+vj8fX3+/H/8fX/+/f/8+/j6+P/8fn/9fn/+f/5/fr8/v/8f/3+/v3//H3//v3++vz6/n/+fX59f33+f/z+//z+/v/+fn9+fn9+f39/f/9+v/++fn/+f/9+f//+//z++f/++fn8+fz9/n/++vz6/vz6+vv7+/v9/f3++f/7+//x+vv++/7+/n3+fn3/fr/+fn/9fn++/n1//H9+//7/fr+ffr+ffz9fn3+fnz+//z+/v/8//3/+/35/f39/v/9/vz9/P79/v78/v/9/fr9+Pz9/vz8/vz8/Pr7+/r7/fXz//P79/fr8+vr99f3z9ff5/fP9+P/7fn3//v79/vz9/fr+/P79+vr6/Pr6/fr+/fr6+v/+D+/f76/fr/9f339fX7+/P/+fv/+/f/+/vr9+/v9/P/9/vz8+fz+/n/+/v/9/n/9+f/8fX3//v/++v/9/v38+/38+vv8/f78/v/9+/3+fn9+/n/+/vz9+vv/+fn++/r++vr6+vz++vz8/f7+/v/9/v78/vr6+v39/f/7+//z9+vv+D9/v/+fnz+/P/8/v/+fn79fnx+fX/8fn3+f/x/f35/fv/9+fn9+f36/n/+fn/+/n7+//7/fr9+v3/+f37+/f/+fn8/fz9/P78ff/+ff7+/H/+f3/+fn/+ff79+vv6+/v5+/v5+/r8/v/7+vr+/f/+/n/+/n9+f3/9+f36+v/8+/r++vv++vz7+/r8+/n+/P36fn1+fn18fXz8+v/7+fr8/v/+/f/6+/z/fP78/f/9/n/9+vz6+v/8+v/9/f3+/v/++n5//n/+fn/9fnz+fHx+/n/+/H9+/n/+f35+/35+//x+fn9//r++/r8//z+/vz+/P/+fH9+/n5/fr++f3/+fH/8fn/8fn1+/r++/v//v3/+/3/+f/x/P//+/3//Pz+D+/f/+v7x+/X9+vv5+/v9+P38/f/+/f3++v3+/v39/f/9ff7/fn9/P3++vz+/f/+D+/P78/v3++v7+/v9+P/5+/v/+fr6+/r8+vv+/vz8fn1+/v/9/P/+fn9//n/9fn/+fnx+fnz+fn3+fnz+//3+/v/8+/r+/v7++v/+fn1/fn/+/n/8f//+fnx+/n3/fn/+/v79+/r+/vj8+f/8+vj9+/v+/vr8/f/6fn/+/f7+/f7+/f/9+/v+/vz+fnx+/n/+/v7+D+/P/8+/z+/f7/D+ff59fn/+f//+/f/9//n9+/76/vr++f7+/vr6+/r+/vj+/f/+fn/+fn/+/v7+/v7++v7+fv7+/f7+/P/+fn/9+fr/fnz+/v79+/v8/f/8fnz+/v7+/v/8+vv+/vj+/vr9+/76fnx+/n3/fnx+/v39+/7+/v/8/f/9+/v+/f/+/v/9/vz+/vr9+/76/vr8+f/6+/j6+/j+D+/f7+/P7//b/7v37//n+fn7+/v/+/f/+fH7+/P/9+/3+fn/9+fnx+/v3+/v39/f/9+f/+/f38/f/+fn9+/n/+f/x+/n/+fn/+/P/+fP78/f/+fvz+/v3+/v/8/f/+fnz+/v7+/P7+/f/+fn/+/P/+/v78/v/++f/+fP7+/v/8fv/+/n/+/P/+/f3+/v/+fn3+/f3+/n/+/P36+/39/vz8/vz+fn/+/n/+fX1+/v39+fn6/v/8+fr9/f/+/v/8/P/+/f36+/r6/f/+fP78/f/+/fz+fP7+/v/9fnz+/f/+/f/+fnz+/f7+/v/8fv/8fn3+D+/fz8fn/+/P/9/n1+/n1+//z//X3/+/P79fn/+fn3/fn3+fX1+/n39+f/y+/n8/Pj8+/76+P/+fPz+/v/+fn/9fP/+fn/8fnz+/P/5fnz9/n/9+f/5fnz+fn3+/v79/Pz6/Pz6/P/+/v/9fnx+/n/8D+/P7+/v39/n19/31+fXx9fv8+v38+/79fX3+/v79/fz6/f/6/vr9+/r89fv6+v/6fn1+/n/+fP7+fv3+/v39+/v++v/8fnz+/n/9fn/+/v/9fnz+fn3+D+/P7/Cv2Zeb7Pz8/v5//v/+/P7+/v/8fP79/n/9+vv+fXv8ffr9+/r+/f/8fnz+//3+/vr+/f/9+/r6+/r6/P/8fnx+/v38/Pr6fn/+fvz//v39/f76fvz+fH/9/f/6fv7+/v79fn/+f//9+vv8/v3+/P76/vr++vz8/vz9/P/9/f/+f/79/f/9ff7+f//+f//+/n3/fr+/v/8+/79+vr+fn/+fn9/v/8/v/8/fz8/f3/+f//9/v3++f35+fz+/v78+v/7fn/+fP79f3/+fv39fv/+fn/+fv/+fn/9/v3+/P/9fnz+fn3+/n/8D+/v78ffz/f3x+/f7+fXz8+/z9+/r7+fX7+/r++f76/vr9+/r++v39+v3+fn5+//79/f/+/vz8/vz8fH/+fnz+fP78fv/9fP7+/fz+/f/++Pz9+/r6+v3+/v39/vz/fn/+fn9+//7+D+/P36/vz6+vv99fn19f31+fn38+vr+/H/8f35/f39+//z/ff/+f//9fn/+/3/+f/5/fv/8D+/vz6+/v3+/f//+/P/9fP7+/P36/P/9fP7+/vr8+vr++f/+/fr+/v3+/v39/vj+/f/8/v/8/vz9+/r9+f/8+f/9+v36/vz8/f/9/vj++f77/vr++Pz7/vr++vz6fn/+fP/9/vj9+/r6fn1+/v/9/vz+/vr9+f/5+/r7+/X1+/Xz/fn+fn/+fn3+/v/9+/v+/vz+/P/+fn/9+fr+D+/P36/vz++/r++/r++/n/+ff5/v/6+vz+/vz9+//9//r++fn9+fn9+f3/+f/5/fn3+D+/v76+vr8+vv+/vr9+/r9+/v+D+/P7+/r6+v/8+/j6fnx9fn9+vz+/P7//b9+vr+fn18fX7/Pr9+f/59fH/9//v8+/n+ff/8f//+/f/8/vx/fnx+fn3+fX98fv/+/vz8/vz+/vz+/v/8+v7+fnz//v7+/vz+/v/+fn3+/v7+/v/+fX/+fP/+fn/9fn/+fP/9/vz+fn3+/v/9/vz8/f/+/v/9+f/8/vz+/f3+/v/8/v/8/vr++f76/fr+/vj8+f76/fr+/vz9+fr7fn1+/v/9+v/+fH5+//x+/v/+fX/+fP/8fn3+fn/+f//+fv/9fP79fn3+fn/+fn/9fn3+fnz+fP79fn/+fvz//v39+fn+fn/8D+/P/8+/z+/f7/D+fnz+/v78D+/P36/fr6/fr6/v3+fn18fX5/vz8f//+/f38+n/8fn9+/n/+fn9+/n/+fn3+fn3+fnz+/n/+fHx+fP/+fP7+/f/+D+/v7+/f/+fnz+//3+/v/+/f/8+f/+fv/+/f/9/P/+fn3+/v7+/n/+/v7+/v79+/r+/v/8+vv+/vj+/f/+fn3+/v39+/r8/v/9+/v+/f/+/vr9+/r8/v/9+/r+/v/9fnz+fn3+fn3+D+/P/8/v/+fnz+/P78/v78+v/7fnx+//3+/v/8/f79/f/8+vr8+v/6fn/+/f7+/v/+fP78/v/+fn3+fn3+/n/+fH/+fnz+fn3+fn3+fnz+//3+/v/8fP78fv/9fP79+vr9/vz8+/r+/vz/fnz+fn3+/v78fn3+/n/+fP/9+fn9+f36/n/+fn/+/P36/P/8fn3+fH5+/nx/fX/9fn9+/v/8fnz+/P78fn/+/P36+f/+fn7//v/+fH/+fnz+fP79+vr9+/r++vz8+/n+/P/+fH7+/P/9fn3+fn3+fnz+f//9+/v8/f/9+/v9+/76/vj8+vz+fnx/fn1+/nx+//3+/v/8+vz+fnz+fn3+/v/9/P7+/n/+fX59fv5+/nx/f/58D+/v78fn1+/n19fn5//n+fn18ff/+fn1+/v/9fv/+P/+f//+/f/8fn3+/nx/f//9/v3+/v39+/7++vr9+vr8/f38+vv8/fr8fnx+fnz+f//9fn/+/v/8+vv9/vj9fn9+fn/8D+/P78/v39/f36/fr+/f/9+v77+fr6+/r6+f/5+//3+fn/9fnz+//z6+/39+fr9/fz9/fr8/f3+/vr+/f76/vr9/Pr8+f/6+vr9+f/6+v36/vz6fn/+fn/+D+/v78/v/8+/z+/f7/D+/f3+/v/8fP7+fP78/f/6fn/+/f7+/P/+fX59/n3+ff59fn/+f//+/f39fn/+fv38+/38+vj9/P/+fn/+fn/9fn3+fP/8fn3+fnz+//z+D+/vz9fvz+vv99fn19f31+fn18fXz8+v38+v/+fX5+/n3+ff5+f/5//r6+f/5//j6/P/++P/8fH7+/P/8fX7+/P/9ffv9/P/+fP7+fv3+/v39+/v++v/8fnz+f//9f/v+/f3+/P76/vr9+Pr9+f/5+v/6/f3+/v/9/vz+/vr+fn/+D+/v7+/fz8+/z8+/z9+/v++f/+fnz+//z9ff/9fn/9fP7+/vr++v78/f/+fnz+/v79/v/+fv39fv/+fnz+/P/8fn/+fH/+fP7+/n/+/n/+/v7+/v79fn/+fn3+/n/+D+/P78/v39/n19f/5+/Pz+/f7+/f/9/v7++v/+fH/+fP7+/n/8D+/P76+v78/v/8/v/8/v/9/vj9+/7+/vr9fn/+/f3++v/9fnz+//z+/v7+fn/+fn/+fn/+/P/+fX/+fP/+fn/9fnz+/n/+/v79/Pz6/Pz6/P/9/f/6+f/5+v/8fnz+fH7+//x+//3+/v/+/f/+fX/+fH7+/n/+fH/+D+/P/9/n1+/f7/fX1+/v99fn5+/n1+fn3+ff5+/r6/vr+/v78+v/7fnz+/v79fv/9/vz+/vr8+v/5/X/+fH5+//x+/v/8fnz+//3+/v/9/Pz8/P/9fnz+fn3+/v/+/v/8fnz+fn3+fn/+f/5/fr++/n/8D+/P7+/f/+fnz+//z+/f78+v/7fvz+/f39+vr8+v/+/fr9/f3+/vz++f/+fP78/f78/v/+fn/+f//+/v38/v/+fn/9fn3+fP7+/v/8fn/9fn3+fn3+f//+/vz+fn3+fX/+fX59fv5+/nx/fX/9fn/+fP/9/v39/vj+/f/8fnz+fn3+/f/9/P/+fX/+fX/+fn3+fn3+/P36+f/+fn7+/P36/P/8+vv+/f36+v/+fX59fn/+fn/+fn/+fn/+f/5/fr++/n/+/P/+f//+fvz/D+/P7+/f/+/r6/P/6+f3+/P3+/v/9+/v/+Pz9/f/++v/+/vz9+fr7fn1+/nx/fv/+/P/+fn/9/vj+/f/9fn/+fX/+fn/+f//9+vv8/f/9+/v9/f7+/v/+fP78/v/9/vj8+f/8+vj9fn/+fv3+fn3+fn3+/P/9+fn9+P/9fn/+/P36+f/+fn79fnx+//3+/v/8fn3+fH5+/nx/fX/9fn/+D+/P78/v39/n19f31+fn18fXx9fH1/v/8/vr+fnz+/f39+v3+D+/v76/fr/9f33+fX1+/v99f3/+fn/+fn/+fn9/v/8f/z9//j8/f/6+vv8/v3+/P76/vr++f77fn/+fP/+fn/9+v36/vz6fn3+fn3+/f3+/vz+/vz+/v/8/vz9+v38/v/+fn/+f//+D+/P/+/vz6+/3/Cv//+/v36+v/8+/n+/v36+P/9/vv+/vz9/P/9/P/8+f/+fv/9fn/+fv39/vz8/vz8/Pr7/fr9+Pj6/fr9/vr6+vr9/vr+/v3+/f/+/f3+/P76/vj8+v/6fn1+/n/+D+/P/8+/z+/f7/D+fnz+fvz9/vz+/v/8fn/+fnz+/P/8/v/+/f/9/v38fn/+D+/v78fn/+/P/9/n1+/n1+//z//X3/fX59f/18fX7/Pr9+f/5fnz+/H/+fn3+/v/9/P/9+/v8/f/+fnz+/v79/Pz6/Pz6/P/8/f79/f/9/P78fn1/fr9//n/9+f/6+fr/fnz+fn3+/f/+/P/8/vz+/P/+D+/P78+v/+fX1+/31+/X5+/v19/v1+fX/+D+/P79/n/+/Xz+fX59f/1+/v//fX1//P7+/P36fn1+fn18fXx9fXz+/n39+vr99f3z9fX7+vv5+fn5+f/+/f38+n/+fnz+/n/+fn/+f//+D+/P7+/v39/n19f/7/ff7//v7/D+/P78+v/5/fX99fv1/fXz+fn1+/Xx+fn18fn59fHx/fHx/fn18fn+D+/P36+v31/fXz9/n98/z/D+/P7+fXx+fn1+P/++P/+fP7+/Pz+/f/+/fz8/P/8fnz+/v/+fnx+/n/+fn/+fn9+/nx+//3+/v/8+v/7fnx+/n/8D+/P79fv/8fv/8/v3+/P36+v/8+/j6+v/+fn1+/v/+fP7+f//+f//+/v39fn1+D+/P79fv/8fv/9fP78/v78/v7+fv3+/v39+/r9+f/5+v/6/f3+/v/8fnz+//3+/v/8fnz+f/5+/nx/fX/9fn/+fn/+fn/9+f/6+v3+/v39/vr+/v/9/v/+/vz8/vz8+vr8/P36/P/6+f/5/X/+f/5/fr9+/n9+//7+D+/P36/v36/vz6+f77/vr+/n/+D+/f7+/f/8fnz+/f/+/v/9+f/5/fz6/f/6/vr9+/r89fv6+v36fn/+fn3+/P/9/vz8fn/+fH/+fnz+f/58D+/P7+/v39/f36/v38//z6/P36+f/+D+/P36/vz8/v/8/v78/v/8/v/+f/5/f39/f/++f/5+/n5/fv/8D+/v76/fr/9f3/+fn1+/P59f//+/X98f3z/P/9/v3++v/9/v7++v/6+fn9fnx+/n/8D+/P78+v/+fX1+/31+/X5+/v1+f/z6/v/+P/6+v36+v36+f/8+f76+vr+/vz8/v/+fn1+fn/+f/5//r+/vz++P37/fH79//r+fn1+fn1+fn1+//x/fn3+fX1+f//8fn1+f//+D+/v7+/v39/n19fX5/f//+/vz+fn1+f//8D+/f79/n/+/Xz+fX59fn1+/nx+//3+/v7+/vz+/n/+fH/+f/58D+/P78/v39/n19fX5/f/z+fnz+fn3+fH5+/nx/f/78D+/P78/v/9/Pz8/v/+/X7/Pz8fnx/fv/8/vz9+vr++f/5+v/+fX/+fn3+fn/+f/5/fr/9/f/9/vj+/f/8+f/5/vr++f7+/v/+f/5/f3//fn9+f39+//z+//x+//3+/v78/P/+fn1+/v/8fn1+//3+/v78/f/+fv38/v/+D+/P7+/f/+/r6/f/7/ff7+fv/+fv/8/vz+fn3+/v/8fP79f/5+f35/f/7/f/7+fn9+fnx/fn3+/P/8D+/v7+/f/+fnz+/f/+fnz+/v78fP/+fn/+/v/9/f/9/vz+/vr8+v/6+f7+/v/9fnz+//3+/v78/vz+/P36/P/5/fr8/f36/vz8fn/+fn3+/P/8/vz8fn3+f//+fvz+fn/+f/5//r+/v7+/v7++v//+fn/+D+/v78+vv+fnz+fHx+f/58f//8/f39/v3+/P3+/vz9+//z/fH/9fP7+fv3+/v/+fvz+//3+/P/+D+/v78/v38/n19f/5+fn1+P/++P/5+fn1+f/z6/v/+P/4/P7+/P/+fv/9fP7+/v36/vz8/vz8fX5+/nx/fnz+fn/+fn9+fnz+/f78D+/P79fv/8fv/9fP7+/f/+fnz+/f/9fvz8/P/9fnz+fP/8fH/+fnz+fP79+vr9+vz8/f/+/f3+/vj+/v3+/vr9+/76/vr9fn/+fn3+fnz+//3+/v/+fn/+fn/+D+/P/+/vz6+/3/Cv//+/v36+f/8+/79fn/+fnx+//3+/v/8+v/6/vr8/v/9/P78fn1+/v/9+f/8/v/+/f/9+v3+fH5//r+/vz+/P37/fn/+/n/+/nx+/r++/v//fn1/f/78fn3+/v/8fn3+fP/+fP7+/v/+/f/+f//+fnx+//z+fP/+fn3+/f/9+v/+/f3+/v/8+vv+/v38/v/+D+/P79fX7+/P36/vX+fn5/fP/+fXz+fX5+f/5+f/5+fv3+fn3+f//+f//+fP78/n/+fH/+fnz+fH7+//x+//3+/v/9+vv8/v3+/P76/vr++vz8/P38/vr+fvz+D+/v7+/fz8+/z8+/z9+/v++f/+fnz+//z+vv9+/n3/Pr+/P78/P/+fn/+fn/9+fr/fn3+/v/8/vz+fn3+/v/8+v36/vz+/v/8fn/+fnz+//x+fv/9fP79+f36+/r8+v/8fn3+/nx/fX/+fP/+D+/P7+/v39/f36/f/5+/3+/n5+/n5/v3+fXx9fv8+v38/X1//L8/P35+fz8fn1+//3+/v/+/v/9+v3+/vz9+fr7fn1+fnx+/nx+//3+/v/8/f79/f/9/Pz8/vj+/f/8fnz+//3+/v/+D+/P7+/v39/f36/f/5/ff7//P3+f39+Pz8/P37/Pz+/n98/z6/v/8/vz6fn1+fn18fXx9fHz+fH/9fnz+fn/+fP79/fz6/f/6/vr+/f/8/n/+fn/+f//+/v38/v/+fn1+fnz+fn/+D+/vz6+vr+/P7/Cv/w9/n//v3x+/v99fn99/f/8fn/9+vv5+/n+ffv6/fX5fn3+fn/+fv7+/v/+fn3+/v/+fnz+/v78/v/+fv3+/v/9/Pz+/v39+vr9+/r8/P/+/v/+D+/f78/v3++v7+/v1+P/++P/5+fn1+/nx/fHx9fv/+fv7+/v/+/fz+/v39fn1+D+/f78/v3++v7+/v5+/P78fnx+/v3+/n/+fnx+//3+/v/8+vv8/v3+/P76/vr9+Pr9+f/5+v38/f7+/v/9/vz+/vr6fn1+//z+/P/8/v39+v3+/v39+v39/vj9+P76+v74fnx+//x+fn9+f//8fn3+fn/+fvz//v39/f78/vj+fn/+D+/v7+/fz8+/z8+/z9+/v++f/+fnz+//z+vv5+fn59fn9+//3+/vz+/v79+f/5/P36/f/6/vr8+f/6+vr9/vr8fn/+fH/+f//9+vv8/v3+/P76/vr9+v35+vr+/Pz8/P/+fn/+D+/P78/v39/n19f/1+fn9//r++fn9//r6/P/++fnx+f/5+/P7+/v39/n19f/7+/v/9//r6/vr9+/r8+v/6fn1+fn/+fn3+/v/9+f/9+v3+/vz9+Pr9fn1+f//+fP7+/v/9/vz+/vr9+vz8+/r+fn/+fH/+fP79+vr+f//+fnx+/v/8/v/+fX59fv5+/nx/f//+f//8fX3//X58fnz+f/58fn3+/n/+fHx+fP/+fP7+/f/+D+/v7+/f/+fnz+/f/+fnz+/f7+/v/+fX/+fP/+fH/+fP78/P/9fnx+/n/+D+/v7+/f/+/r6/f/7/ff7+fv/+fv/+fP79fn3+fnz+//z+fP78fn3+f//9fn/+D+/P36+v31/fXz+/n98/3+/v39+f/59fn/+f/5/v/9/v39/v3++v/6+vr+fn/+fn/+fn/+D+/P78/v38/n19f/z+fnz+/f/6/vj8fn/9fv/+fn/+fn/9+fr+fnx+fP78fv/9fP79+vr+fn/+D+/f79/n/+/Xz+fX59fn1+/v1+f/z6fn1+//3+/v7+/vz+/f/6+vr8/f/9/vr9fn1+//x+fv/+fH5+//x+/v/8fnz+/v7+fn/+fP78/v/8fn3+f//9fn/+D+/v7+/v39/f36/f/5+/39/f/++vz+/v/8/v78/v/8/v/+fP78fn3+fX1+f//+fH5+/nx/f/78D+/P7+/v39/f36/f/5/ff7//P3+/P78/vz6+f/5+v/+fn1+//z+fn/+f/5/fr++/n/+f/4f//+/P/+fX/+fH7//f/+fH/+fn/+f//+fvz+/f/9+vr9fn/+fn/+fn/+D+/v76/fr/9f33+fX1+/v99f3/+fHx+//3+fH5+/nx/fn/+fX/+f//+/f39fnz+/n/9fn/+fn3+fn/+fH5+//x+/v/8fnz+//3+/v/9/vz8/f/8fnz+//3+/v/+fP79f//9fn3+fn3+fnz+fn3+fnz+//3+/v/8/v/+fnz+//z+/P/8/v/+/v/9+/v+/f/+/v/+fn1+/v/8fn/+fn3+fn3+/P/9+fn9+fnx/fn3+fn/+fn/+fP79fn/+fn3+fn3+/P/+D+/v7+/f/+fnz+/f/+fnz+/f/8/n/+fX/+fP/+fH7+/P/9fn3+fnz+fn3+f//+/vz+fn3+f//+/v38+/38+vv9+vv+/P3+/f3++v39+v39+v3+/v38+/38+vr8/P/9fnz+/f7+/v/8fv/+fH5+//x+/v/+D+/v7+/f/+fnz+/f/+fnz+//3+/v3+/v79+P/9fn3+/P3+/P/+/v7+D+/P7+/f/+fnz+/f/+fnz+fP78/f78/v/+fP/9/n/+fP/+D+/P/8+/z+/f7/D+f//+/v38+/38+vj9+/r+/P3+/v3+/v/8+v/7fnx+/v38/v/+fnz+fn3+fX/+fP78+v/7fnx+//3+/v/+fn/+fv39/vz8/f/8fn3+fn/+f/5/fX/+fX/+fH/+fn/+fn/+D+/P76/fr/9f338f/w8/v7/fn9+/33+fnz+fnz+/f/9+v/+fH5+//x+/v/+fX59f//8fv78/v/+D+/f79/n/+/Xz+fX59fn1+/nx+//z8/fz+/v3+/P78/Pr7/fr9/vr6+v3+fH5+//x+fv/+fnz+//3+/v/+/f/9/vz8/f/9/Pz8/v/9+/v+/vz8fn3+/v/+/v/+f/5/f3//f//+fvz9fP/9fn1+/v/9fn1+f//+f//+/v/9/vz+fn3+/P/+fn1+//3+/v/8/f/+/v3+/f3+/P76/vr9/Pr8fn/+fn/+fH5+//x+/v/+/f/+f//+fH5+//x+//3+/v/8fv/9+fn+f//8fX3+/f/+/vz8fn1+//3+fnx+//3+/v/+fX/+fH7//f/+fH/+fnz+//3+fnx+//z+fn1+//z+/v/+fX59fv5+/nx/fX/9fn/+D+/P/8/v/+fnz+/f7+/P/9+v74fn/+fP/+fP78/P/9fn/+fnz+//x+f/4+f//8fv78/v/+fv39/vz8/f38/f38/fz+/f7+/v7+/vz8+/r8/P/8/v79/v/+fvz+//3+/v/+fP78/f/+fnz+//z+fP78/f/+fn/+f//+/v3+/P76/vr9/P36/P/6+f/5/f/8/v7+/vz+/v79/Pz+/f/9/vz8+/r8/Pr8/vr8/Pr+/P78/v3+fnz+//3+D+/v78+vv+fnz+/f76/vr9+Pr6+v/8+/j6+v/+fP78fn3+/f/9+v/+fP7+/P/+fn/9fn3+fnz+fn3+fnz+f/58D+/P78/v39/n19f/5+/P7+/v/8+v/8+v/+fH7+/P/9fn/+f/5/f3//fn9+f39+//z+//z+/v/+fH5+/nx/fX/9fn/+fn/+D+/P/8/v/+fnz+/P78+v/8+vv9+f/5+v/+f/5/f39+fn9+//z+//z9ff/9fn3+/n/+fH5+/nx/fv/+f//+fnx+/n/+fH7+//x+//3+/v/+/P/+fH7//f/+fnz+fP/+fH7+/P/9+vz8+v/6fn/+fvz//v39/vz8/vj9fn/+fnz+fn3+/v/8/vz+/v78/v/+f/5/f3/+f//+fnz+//3+/v/+fvz+//z+/v38/f/+/vz8+vj9+P76+v74/vr+f//+fvz+/f/9+vv9+fn8/v/9fnz+//3+/v/+/f/+f//8fH/+fnz+/v78/v/+fnz+/P/+fn3+/P/8/v/9+vv8/v3+/P76/vr9fn1+fnx+fv/+fn1+//3+/v/8fv/+fH5+/v/+fP78fn/+fH5+//x+f//8fn3+fnz+/v/9+/v8+v/7fnx+/n3/fnz+fn3+fnz+//3+fnx+//z+f//9+vv8/v3+/P76/vr8/Pr+/P7+/v/+f//+D+/P7+/f/+/r6/P/6+f/+fn/+fn/+/v/+/v/9/v3+/P76fn/+fP78/v/8/v/+f/5/fn/+D+/v7+/f/+fnz+/f/+fn/+fn9+fn9+fn9+fnx/fn3+fX1+f//8D+/P79fX7+/P36+v/+fn1/fn9+f35/f//+f//+/v39/vz8fn1+//z+/v3+/v79+f35+//3+f/5+/nx/fX/9fn/+D+/v76/fr/9f3/+fn1/P/++v/9+/P/+fP78/f78/v/+fn1+fn/+fv/9fn1+//z+/P/8/vz+fn3+/v/8+v36/vz+/v/8+vv+/f36+v/9/P/8/v/9fn1+//3+/v/+D+/P/8+/z+/f7/D+fn1+f//8fnz+//3+/v/+fnx+fv/+fn/+fv39/v3+/v39fn1+f//+/f/8/v/+fv3+/v39+v/++v/8fnz+//3+/v7+/v78/f/+fvz+/f/9+v38+v/+f/4+f3/+f//9/v38fn1+//x+fn1+//3+/v/9/vz+/vr+/vz8/vj9/P/+fn1+//z+/v/+fnz+/P78/f79/f/6/f36/v/8fnz+f//9f/v+/f3+/P76/vr8+f/6+vr8/v/8/f/+/f3+/vz+/vz+/v/8+v/7fn1+/v/+f/5/f3//f//+fvz+//3+/v/+fvz9fn/+f/5+/nx/fX/9fn/+f/5/fv9+//x/fr8+/7+fn1+//3+fnx+//z+/v/+fn1+//3+fnx+//3+/v78/f/+fnz+//z+fH5+/nx/f/78D+/P76+vr+/Pr6/vr+/Pr+/Pr+/v/9/P/+/f3+/vz+fnx+/nx/fX/9fn/+f/5/fn/+fP/+fP78+v/7fnx+//3+/v/8+v/7fnx+/nx/fX/+fP/+D+/f78/v3++v7+/v5+/f76/fr+/fr6+v/+fn3+/f/9+fn9/v/8/f79/f/8fnz+//3+/v/+f//8fX3+/f/+/vz8+v/8fn3+fnx+f/58D+/P78/v39/f36/f/5/f36/f/5+/P78fnz+fP78+v/9/P/9fnz+//z+/v/+fP78fn3+fn3+/v/8/vz+fn3+/v/9+f/9+v3+/f3+/vr9+/n9/Pr8+f/6+vr+/f/8fn3+/v39/Pz8/P/8+f/8/f/8fn/+fn3+/v38/v3+/P76/vr++Pz7/vr+/v/8/f/+fn/+f//+fvz9fP/9/v3+/vz9/f/+/v/8+f/8fn3+fn3+/P/9+fn9+f38+f/+fv39fv/+/vz8fn3+/v38/v3+/P76fn3+/P/9fn3+fn3+f//+fnx+/nx/f//+f//8fX3+/f/+/vz8fn1+//3+/v/8+vv9+fn8+f/+D+/P79/n/+/Xz+fX59fn1+/nx+//z8/fz+/v/+/f/+f//+fn1+//3+/v7+/v/+fP78fn3+f//+fP78fn3+fn/+fP78fv/9fP79fn1+fnx+f/58D+/v76/fr/9f3/+fn1/P/++v/9+/v/9fnz+//3+/v79/Pz6/Pz6/P/9fnz+/f/+/f/+f//+fvz9fn/+f//+fvz+/f/9+v3+/vz9/f/9/Pz8fn3+/P/+D+/P78+v/+fX1+/31+/X5+/v1+fn1+/v5+/n5/v38+/z6/vr++f77+v36/vz8/f/9/v3+fnz+fn3+/f/9/P/+fn1+f//+fP7+/v/8/v/+fnz+//x+fn1+//3+/v/8/v/+fnz+//z+/v79/vz8/f/8fn/+fn/+fH5+/nx/fX/+fP/+fH7+/P/9+vz8/f/8+f/8/v/9/v7+/v78+vj9fn/+f//+fvz+//3+/v/+/v3+/v78/vj+fn/+D+/P7+/v/+fnz+//z+/v/8fnz+//3+/v/+fX59fn/+fP/9fn1+/v1+f/z6fn3+f/58fn3+fnz+fH7+//x+//3+/v/9/v38fn1+//z+/P/8+v/7fnz+//3+/v/+fnz+//z+fn/+fP/+fn3+/f/+D+/P79fv/8fv/9fP7+/v/8fnz+//3+/v/+fP/+fH7+/f/9fnz+fH5+/nx/f//9+v/+fH5+//x+fn1+//3+fnx+//z+fn1+/v/8fv/+fH5//nx+//3+/v/+fX/+fH7//f/+fH/+fnz+//3+fnx+f/58fn3+fP/8fv/+fH5+/nx/f//+f//8fX3+/f/+/vz8fn1+//3+/v/8fv/+fn3+/f/+fP/9+f/9+v3+/v/+/f/+fn/+fn3+/v/8+v36/vz+/v38/v/+fnz+f/58fn3+/nx/f//+f//8fX3+/f/+fn/+fnz+/f/8f//+fnz+//z+/v/+fn1+//z+/v/8/v3+/P76/vr9+Pr9+f/5+v38/f7+/v/9/vz+/vr6fn1+//z+/P/8+v36/vz6fn1+fnz+fH7+//x+//3+/v78/f/+fvz+/f/9+vv9+fn8/v/9fnz+//3+/v/+fvz+//z+/v78/v/9fnz+//3+/v/8+vv9+vv8/v3+/P76/vr9+f/5+v/+fX59f//8fv78/v/+fP79+vr9/vz8+/r8fn3+fn/+fP/9fnz+fH5+/nx/f//+f//8fX3+/f/+/vz8fn1+//3+/v/8+vv8+f35/f/8D+/P7+/f/+/r6/f/7/ff7+fv/+fv/8/vz+fn3+/v/8fP79f/5+f35/f/7/f/7+fn9+fnx/fn3+/v/8D+/v76/fr/9f33+fX1+/v99f3/+f//+fvz+/f/9+vv9+fn8/v/9fnz+//3+/v/+fvz+/f/9+vv9+fn8/f/9/vz+/vr9+f/5+v/+fn1+/v38/Pz8/v/9fnz+f//9+v/+fn1+fn/+fnz+/v78/f/+fn/+fnx+fnx+fn3+/n/+fnx+/v38/v/+fnz+f/58fn3+fnz+//3+/v/+f//+fP78/v/+fX59f//8fv/+D+/v76/v36/f/5/f39/f/++v/9fnz+//z+/P78/v/8fn3+/v7+/v78/f/+fnz+/v7+/v/9fnz+//z+fH/+f//+fP78fn/+D+/P7+/v/+fnz+/f/+fnz+//3+/v3+/v79+f/9+v/+fH7+/v/+fnz+D+/P76+v78/v/+fX59fn1+/v1+f/z6+f3x9P/8+f/5+vv+fn/+fn/+D+/P76+v78/v/+fnz+//z+D+/f78/v39/n19f/7/ff7+/v/8/v/9+f38+v/+f/4+f3/+D+/f78/v39/n19f/z+fnz+fP79+f76+vr+/vz8fn3+/v/8/v/+fn3+/f/9+v/+/f3+/v/8fn3+fnz+fn3+fP/8fn3+fnz+//z+/v/+fX59f//8fn/+D+/v78/v/+fnz+/v/8+vv9/f/+fH5+/nx/fX/9fn/+f/5/fv9+//x/f/5+f/5/fn/+D+/v78fn/+/P/9/n1+/n1+//z//X3/fX59f/18fXz+fX59fv5+/nx/fX/+fP/+D+/f78/v38/n19f/z+/f7+/v/+fn/+fn/+D+/f78+v/8+vv9/v/+f//+fnx+/v/+f/5/f3/+f35/f/7/f/5+/nx/fnz+//3+/v/9+vz8+/r8/v/9/vz8/vj9+P76+v74/vr+/v/+fP78/f/+/v/9+f/8/v/9+v/+/f3+/v/8+f/8/f/9/v3+/P76/vr9+f/5/vr8fn/+fH7//f7+/v/+f//8fX3+/f/+/vz8/f/9fnz+//3+fnx+//z+fn/+f/5+/nx/fX/9fn/+f/5/fv9+//x/fr8+/7+fX59/n3+ff59fv99fn/+f//8fn3+fnz+/f/8fn3+fn/+f//+/vz+fn3+f//+/v3+/P76/vr++Pz7/vr+/v/+f//+D+/P7+/f/+/r6/f/7/ff7+fv/+fv/8/vz+fn3+/v/8fP79f/5+f35/f/7/f/7+fn9+fnx/fn3+/f/9fn/+fP7+/v/8fn/+fn3+fn/+fnz+//3+/v/+fnz+fnz+//3+fnx+//z+fn/+D+/P79/n/+/Xz+fX59fX5/vz+/P/9/v3+/P76/vr++f/5+/r9+P/+fX59/n3+ff59fv99fv/+fP78/f78/v/8fn/+fP78/f/+fnz+//z+fn/+fnx+//z+fn1+fv/+fP/8fn3+fX/+fX/+fn3+fn3+/v79/Pz6/Pz6/P/+fn1+fnx+fv/+fn1+fnz+fH5+/nx/fv/+f//+fnx+/nx/fX/9fn/+fn/+D+/v78+v/+fX1+/31+/X5+/v1+fn1+/v5+/n5/v38/v3+/P76/vr9+f/6+vr8/f/+/v/+fn/+fv3+/v39/f/8fnz+//3+/v7+/v78+vj9+f/+fX59/n3+ff59fv99fn/+fP/+fP78/v/9fnz+//x+fv/9fP7+/v/+fn1+/nx/fX/+f//+D+/f78/v3++v7+/v5+/f76/fr+/fr6+v/+fn1+//z+fn/+fn9+//x/fn/+D+/P36+v31/fXz9/n9+/v/8+f/8/f78/v/+fn1+fn/+fn/+fn/+fnz+fnz+//3+/v/8fP78fv/9fP79/vr+fn/+fn/+fnz+fP79/f/+D+/P7+/v/+fnz+/f/+fnz+fH5+/nx/f//9+f/9+v3+/v39/vr9+f/5+vv9+vv+/Pz+fn3+fnz+//z+D+/P7+/f/+fnz+//z+D+/P78/v/+fn1+/v/8+v/8fn3+fnz+fn3+fn/+f//8fX3+/f/+/vz8/f/8fnz+//3+/v/+/f/+f//8fH/+fnz+//z+/v/+/f/+fH5+//x+/v/+D+/f7+/f/+/r6/P/6+f/+fn/+fvz8+/n9/f78/f/6/fz9fn1+D+/P78/v/9/Pz8/v/+/X7/Pz8/P/9/v3+/P76/vr9+Pj6/vr8+f/8+f76fn/+fP78+v/7fnx+//3+/v/+fnz+fP7+/f/+fn/+f//9+v38/v/+fnz+//3+fH5+/nx/f//+f//8fX3+/f/+/vz8/v/9fnz+//3+fnx+//z+fH/+f//+fP78/v/+fnz+fP/8fn3+fn/+fvz+//3+/v/8/v/8fn/+fP78+v/7fnz+//3+/v/+fnz+//z+/P/8fv/+fH5+/nx/f//+f//8fX3+/f/+/vz8+v/8fn/+fnx+f/58D+/P78/v39/f36/f/5+/P7+/v/+/X7+/v7+/v78/v/9fnx+//3+/v7+/f/+fnz+/f/8fn3+/P/9fn3+f//+f//+fnx+fX/9+f/5/fn/+D+/P78/v38/n19f/5+/P7+/v/+fP78+v/7fvx//n9/f/5+fn/+fv39/v39/vr9fn1+//z+/P/8/v/+fn/+fX/+f//+fvz+/f/9+vv9+v/+fX59/v/9fv/+D+/v76/fr/9f33+fX1+/v99f3/+fnz+f/58fn3+/nx/fX/+fP/+fP78fn/+fH/+fnz+//x+fn1+//3+/v78fn3+/n/+/v78/f78/v/+fP7+/v/+fnz+/v/8+v/+/f3+/v/9/v7+/v78/f/+fnz+//z+/v/9+f/5+v38fn1+//z+/P/8/v/+fP78/v/+fnz+fP/+fn3+/f/9+v/+/f3+/v/9/v7+/v78fn3+fP/8fn/+f//+fnx+//z+/P/8fv/+fH5+/nx/f//+f//8fX3+/f/+/vz8fn1+//3+/v/8+vv8+v/7f//8D+/P7+/f/+/r6/f/7/ff7+fv/+fv/8/vz+fn3+/v/8fP79f/5+f35/f/7/f/7+fn9+fnx/fn3+/v/8D+/P76/fr/9f33+fX1+/v99f3/+f//+fvz+/f/9fnz+//3+/v/+fvz+//z+/v78/v/8fn/+D+/v7+/f/+fnz+//z+/v/+/f/+f//+f//+fv38+/38+v/+fnz+//z+fH5+/nx/fX/9fn/+f//+f//+fn/+fvz//v39/f78/vj+fP/+fvz+//3+/v/+/v3+/v78/vj+/f/+fn3+D+/v78+vv+fnz+fn3+f//+f//+fP7+/P/+fn/9fn/+fH7+/P/9fn3+fn/+fnz+//3+fnz+//z+/P/9fn3+/f/9/Pz8/v/9fnz+f//9fn/+D+/vz6+vr+/Pr/9f3z+f/z6+P/8+/n+/v38+/38+vj9+Pr9fn3+/n/+fnx+f/78D+/P7+/v39/n19fX5/f/z+fnz+//3+/v78/vj+fn/+D+/P78/v39/f36/f/5+/v/+D+/P76+v78/v/+fnz+/f7+/vz+/v/8fn3+/v7+fn/+f/5/fv9+//x/fr8+/7+fn3+D+/P76+v78/v/+fnz+/f/+fn/+fn/+D+/f78/v39/f36/f/5+/v/+fn/+fnz+/f/+/f38+v/+f/4+f3/+fnz+//z+/v/+f//+fP78/v/+fP/9/n/+fP/+f//+fH5+/nx/f//+f//8fX3+/f/+/vz8fn1+//3+/v/+fv/+fP78fn/+fH5+/nx/fv/+f//+fn/+fnx+//z+/P/8+v/7fnz+//z+/P/8/v/+fnz+//z+fP7+/v/+fP78fn3+fn3+fH7+//x+//3+/v/9/vz+/f3+/v/8+vv+/v38/v/+D+/f78/v3++v7+/v5+/f76/fr+/fr6+v/+fH/+f//+fn/+fnz+fH5+//x+//3+/v/+f//+fP78fn3+f//9fn/+D+/v76/v36/f/5/f39+fn9+//z+//x+/v/8/vz+/vr8fn1+fnx+/nx+//3+/v/9+f38fn3+/P/8fn3+fn/+f/5/fX/+fP/+D+/f78+v/+fX1+/31+/X5+/v1+fn1+P/8fnz+//3+/v78/vj9+vz8/f/8fnz+fP78/f/+fnz+fn3+/P/8fv/+fH5+/nx/f//+f//8fX3+/f/+/vz8fn1+//3+/v/8fn/+fn3+/v38/v3+/P76/vr++Pz7/vr+/v/+fH5+//x+/v/+D+/P7+/f/+fnz+//z+/v/8/v3+/P3+/vz8fn/+fH/+fH7//f/+fH5+/nx/fnz+//3+/v/+f/5/fn/+D+/P7+/v39/n19f/z+/fz+/v39/f/++vz+/v/8/v78/v/8fn/+f/5/fv9+//x/f/78D+/P7+/v39/n19f/z+/f7+/v/+fH7//f/+fH5+/nx/fX/9fn/+f/5/fv9+//x/f/5+fn/+fP/+D+/v76/fr/9f33+fX1+/v99f3/+fnz+//3+fH5+/nx/fn/+fX/+fH7+/f/9fn/+f/5+/nx/fnz+//3+/v79+f35+//3+f/5+/nx/fX/9fn/+D+/P7+/f/+/r6/f/7/ff7+fv/+fv/8/vz+fn3+/v/8fP79f/5+f35/f/7/f/7+fn9+fnx/fn3+/v/8D+/P7+/f/+/r6/f/7/ff7+fv/+fv/+fn/+f//+fnz+//3+/v/+fP78fn3+fn3+f//+fH5+/nx/f/78D+/v78/v38/n19f/z+fnz+/f/+/v/+fn/+fn/+D+/v76/v36/f/5/f39/f/++v/9fnz+//z+fn/+f/5/fv9+//x/fv/+fP78+v/7fnx+//3+/v/+fnx+fv/+fn3+fnz+fn3+fn/+f/5+/nx/fX/9fn/+f//8D+/f78+v/+fX1+/31+/X5+/v1+fn1+P/++P/5+fn1+fn18f/x8P/8fnz+/P/9/n/+fP/+fn3+/n/+fnx+fnx+fn3+fn/+fnz+//3+/v/+/f/8+vv9/f/+fnx+/v38fn3+/P/8+v/7fnx+/nx/fX/+f//+fn/+fnz+//3+/v/8/vz+/vr8+v/6fn1+fnz+f/58D+/P36+v31/fXz9/n9+/v/8+f/8/f78/v/+fn1+fn/+fn/+fn/+fnz+fnz+//3+/v/+/v/9fnz+fnz+f//+f/4+f3/+f//8fX3+/f/+/vz8/v/9fnz+//3+fnx+//z+fn/+f//+fnx+//3+/v/8+vv8+P/+f//8D+/P/8/v/+fnz+/f7+/f/8fn/+fn/+fnz+/f/8f//+fnz+D+/P7+/f/+/r6/P/6+f3+/P/9/v3+/P76/vr9+v/++v/9+vv+/Pz+fn3+fnz+//z+/P/8/v/9fnz+//3+fH5+/nx/f//+f//8fX3+/f/+/vz8/v/9fnz+//3+fnx+//z+fH5+/nx/f//+f//8fX3+/f/+/vz8fn1+//3+fnx+//3+/v/8fv/+fH5+/v/+fP78+v/7fvx//n/+fP7+/P/+fnz+//3+/v7+/v78/v/+fn3+/n/+fn3+fn3+fnz+/v/8+v/9fn/+f/5/fv9+//x/f/78D+/P7+/v39/f36/f/5/f36/f/5+/P78fP/+fnz+/P/+fnz+fP79fn3+/v/8/v/+fn/+fv3+/v/+/vz8fn1+fv/+fH7//f/+fH5+/v/+D+/v7+/v/+fnz+/f/+fnz+//3+/v/9+f/9+v3+/v39/f/++v/+fnx+//3+fnx+//z+fP/8fn3+fX/+fP/+D+/f76/v36/f/5/f39+/n5+fv/+fvz8fn3+fnx+/nx+//3+/v/+fn3+fn3+/v/9fnz+fnz+f//+f/4+f3/+D+/f78/v39/n19f/z+/f7+/v/+fH7//f/+fH5+/nx/fX/9fn/+f/5/fv9+//x/f/78D+/v76/v36/f/5/f36/f/5+/P78fnz+fP78fn1+//3+/v/+fn/+f//+fnx+/v3+/f3+/v39+v38fn/+fnz+//z+f//+fP78fn/+fH5+/nx/fv/+f//+f//8fX3+/f/+/vz8fn1+//3+/v/+fv/+fH5+/nx/fX/9fn/+fn/+D+/P78+v/+fX1+/31+/X5+/v1+fn1+/v/+/v/8/f78/v/9fnz+//z+fP/8fn3+fn3+fn/+f//8fX3+/f/+/vz8+f/+fnz+//3+/v/+D+/f78/v3++v7+/v5+/f76/fr+/fr6+v/+fnz+fP/8fnz+//3+/v/+/vz8/f/9/P/8/f/8fnz+//3+/v7+/v78/v/+f/5/f39+/n/+/v7+/v79/v3+/v7+/P/+fnz+//z+/v/+fn3+/f/9+f/9+v3+/v/+fvz+fn/+fn3+fnz+fnz+/f/9/f/+fnz+fP/+fP78/v/+fH5+/nx/f//+f//8fX3+/f/9+f/5fnz+fn3+fn/+fn/+D+/v7+/v39/n19fX5/f/z+fnz+fH5+/nx/fX/9fn/+f/5/fv9+//x/f/5+fn/+fP/+fn1+fn/+fn/+D+/v78+v/+fX1+/31+/X5+/v1+fn1+/nx+//z8/f/8/v/9fn3+/n/+fnx+f/78D+/v76/v36/f/5/f39/f/++v/9fnz+//z+f//+fn3+fnz+/v78fn3+/n/+fP/9/v3+/f/+/f3+/v/8+v/8fnz+D+/P76+v78/v/+fnz+//z+D+/P36+v31/fXz9/n9+/v/8+v/9/vz8/f/+fn3+/n/+fnz+/v78/v/9/v39/vz+/f3+/v/8+f/8/f/9/vz+/vr8/f38+vv+/vz8fnx+fn3+fnz+//3+/v/8fv/+fH5+//x+f//8fX3+/f/+/vz8/v/+fnz+//3+/v/8fn/+fnz+fn3+fn/+f//+f//8fX3+/f/+/vz8+v/8fn3+fnx+fP78fn/+fP78+v/7fnx+//z+f//+fnz+//3+/v/+fn3+fX/+fP/+fn3+/v38/v3+/P76/vr9fn1+/nx+//z+fH5+/nx/fv/+f//+fnz+//3+/v/+fv3+/v39/f/8fn/+fnz+fn3+/v/8/v3+/f3+/P76/vr++Pz7/vr8/v/8/v/+fP78/f78/v/+fH7//f/+f//8fX3+/f/+/vz8/v/9fnz+//3+/v/+fvz9fn/+f//+D+/P/8/v/+fnz+/f7+/P/9/v38+vv8+vj9+/r+/P3+/v3+/v/8/v/8fn/+fP78fn/+fn/+D+/v76/v36/f/5/f36/f/5+/P78fnz+fP78/v/9+f38+v/+f/4+f3/+fn/+fn/+f//+fn/+fnz+fn3+fn/+fn/+fnx+//3+/v/8/vz+/v/8+vv+/f36+v/+fP78/f78/v/+f//+fnx+/nx/fX/9fn/+f/5/fv9+//x/f/5+fn/+fn1+fn/+D+/v76/v36/f/5/f36/f/5+/P78fH5+/nx/fv/+f//+fnx+f/58fn3+/P/9/Pz8/v/9fn/+fnx+f/58D+/v76/v36/f/5/f39/f/++v/9fnz+//z+/v/+fnx+fn3+fn3+fn/+fP78fn/+D+/v7+/v39/f36/f/5+/39/f/++vz+/v/8/v78/v/8fn/+fnx+fn3+fn3+fn/+fnz+/f/9/v/+/v/9/v3+/vz9+Pr9+f/5+v38/f7+/v/9/vz+/vr+/vj9fn1+/nx+//x+/v/+D+/f7+/v/+fnz+//z+/v/+/f/+f//+f//+fvz+/f/8fnz+//3+fnx+//z+/P/9fn3+f//+f//+f//8fX3+/f/+/vz8/f/8fnz+//3+/v/+/f/+f//8fn3+fnz+fn3+/f/9/v3+/P76/vr++Pz7/vr8+f/5+v/+f//+fP78fn/+fP/+fP78+v/7fnx+/v3+/P/9fn3+fnz+/f/9+v/+fH5+/nx/fv/+f//+fnz+fnx+//z+/P/9+f/9+v3+/v/+fn1+f//+D+/P7+/v39/n19f/5+fn1+/v1+f/z6+f3x9P/8+v/+/f3+/v38/v/+fnz+fnz+fP7+/f/+fn/+D+/v78/v/+fnz+//z+D+/P36+v31/fXz9/n9+/v/8+vv8/v3+/P76/vr9+Pr9+f/5+vr+/Pz8fn1+f//+D+/P7+/f/+/r6/f/7/ff7+fv/+fv/8/vz+fn3+/v/8fP79f/5+f35/f/7/f/7+fn9+fnx/fn3+/v/8D+/P7+/f/+/r6/f/7/ff7+fv/+fv/+fnz+//3+/v7+/v78fn/+fP78fn/+f//+fnx+//z+fP/8fn3+fX/+fP/+fH7+/f/+fn/+D+/v76/fr/9f33+fX1+/v99f3/+fn/+fn/+D+/v76/fr/9f3/+fn1+/f/8+f/5+vv+fnz+fnz+fn/+f/5/fv9+//x/f/5+fn/+fH/+fn1+//3+/v7+/v78/v/+fP78fn3+fP/+f//8D+/f78/v3++v7+/v5+/f76/fr+/fr6+v/+fnz+fn/+fn/+fH/+fP78+v/7fnx+//z+f//+fnz+//3+/v/8/vz+/vr9/Pr8fn/+fn/+fn/+fvz//v39/vz+/vr+/P79/v/+fnz+//3+fnz+//3+/v/+fnz+fn3+fn/+f/5/fv9+//x/fr8+/7+fX59/n3+ff59fv99fn/+f//8fH/+fnx+//3+/v/8/v/9/v7+/v78+vj9fn/+fnz+f/58D+/P78/v39/f36/f/5/ff7//P3+/P78fn3+/P/9+f/8/v/9fnz+//z+fn/+fnz+//3+/v/+/f/9/vz+/f/9fnz+f//9fn/+D+/P7+/f/+/r6/P/6+f3+/P3+/v/9/v3+/P76fn/+fP78+v/7fnx+//3+/v/+fP/9/f/+f//8fX3+/f/+/vz8+f/+fnx+//3+/v/8+v/7fvx//n/+fP7+/v/+fP78fn3+fH5+//x+//3+/v/9+f/5+vv+/vz8fn1+//z+/P/8/v/+fP7+/v/+fP/9fn3+fnz+//3+fnx+//z+fH5+/nx/f//+f//8fX3+/f/+/vz8/v/9fnz+//3+/v/+fvz+f//+/vz+fn3+f//+D+/P/8/v/+fnz+/f7+/P/9/n1+/n18fXz+fn1+/P/8fn3+/P/8/v/8/f/9/Pz8/v/9fnz+//z+fP/8fn3+fn/+fnz+fnz+/f/+/f3+/f/+/v/9fnz+fH7//f/+f//+D+/P79fX7+/P36+v3+/v39+fn18f/x8P/8fn/+fn/+fn/+fnz+//3+fnx+fn/+fH5+/nx/fv/+f//+fn/+fnx+//3+/v78fn3+fnx+f/58D+/P76+v78/v/+fnz+//z+/v/+fnz+fnz+/f/+fn/+fn/+f//8fX3+/f/+/vz8/v/+fnz+//3+/v/8+v/7fvx//n/+fP7+/v/+f//+fnz+//3+/v/8+f/8fn3+fn/+fnz+//3+/v/+fnz+fnz+//3+/v/+/f/9+v38/v/+fnz+//3+/v/9/v3+/v/+/f/9/v/+f/4+f3/+D+/f76/fr/9f33+fX1+/v99f3/+fn/+fn/+fn/+fnz+/nx/fn/+fX/+fP/+fP7+/f/9fnz+f//+fP7+/f/+fn3+fn3+fnz+/v78/f/+fnz+fP78fn/+fH5+//x+//3+/v/+fP/9/v/+f//8fX3+/f/+/vz8fn1+//3+/v/8fn/+fnz+fn3+fn/+f//+fP7+/P/+fnz+fH7//f/+f//8fX3+/f/+/vz8/f/9/P/8/f/8fnz+//3+/v/8/v3+/P76/vj+/v3+/v3+/vz+fnx+/v38/v3+/P76/vr8/f38/f3+/P76/vr9+Pr9+f/5+v/+fX59/n3+ff59fv99fn/+fP/+fH7//f7+/v/+fnz+//x+fv/9fP7+/v78/v/+fnz+//z+/v/+fP78+v/7fnz+//3+/v/+fn/+f/58fn3+/f/8fn3+/v/8fv/+f//+fP7+/v/+fnz+//3+/v/+fn/+fvz//v39/vz8+vr8/f/9/P/+fP78/v/+f//+fnx+/v3+/P76fn/+fP78+v/7fnz+//z+fH5+/nx/fX/9fn/+f/5/fv9+//x/f/5+fn/+fH5+/nx/fX/9fn/+fP/+D+/f78/v3++v7+/v5+/f76/fr+/fr6+v/+fnz+//3+/v7+/v/8/v/+fP78+v/7f//+fnx+//z+fH5+/nx/fX/+f//8D+/f78/v3++v7+/v5+/f76/fr+/fr6+v/+fn/+fX/+fP/+fP78/v/9fnz+//z+fP7+/v/+fn3+fn3+fnx+//3+/v/+/P/+fH7//f/+fH5+/v/+f//8fX3+/f/+/vz8+f/+fn/+fnz+fn/+D+/P79fX7+/P36+v3+/v39+fn18f/x8P/8fnz+//3+/v78fn3+fn3+fnz+//3+/v/+/f/9/v7+/v78fn3+f//+fvz9fn/+f//+fnx+fnx+fn3+fnz+fn3+fnz+/v/8fv/+fH5+/v/+fP/9/f/+fnz+//3+fnz+//3+/v7+/v78fn3+f//+fvz9fn/+f//+fnx+/nx/fX/+f//8fX3+/f/+/vz8/v/9/P/8/f/8fn/+fn/+f//8fn3+fnz+fn3+fnz+/v/8fv/+fnz+//3+fH5+/nx/fX/9fn/+f//8fX3+/f/+/vz8/v/9/P/8/f/8fnz+//3+fnx+//3+/v78/v/9/v/+fP78/v/+fP79/vz8/f/+/v/9/Pz8/v/9fnz+fn/+fnz+fn/+D+/v76/fr/9f33+fX1+/v99f3/+fn/+fn/+fn/+fnz+f/58D+/v76/v36/f/5/f39+fn/+fnz+//3+/v/8+v/8+v/+fH5+//x+//3+/v/+f//+f//8fX3+/f/+/vz8+f/+fnx+//3+/v78fn3+fH5+//x+f/58D+/P78+v/+fX1+/31+/X5+/v1+fn1+P/++P/5+fn1+P/++v3+/vz+fnx+//z+/v/+fX/+fP/+fP78fn/+fH/+fnz+//x+fn1+//3+/v78fn3+fn/+fn/+f//8fX3+/f/+/vz8/f/+fnz+//3+fnx+//3+/v/+fn/+fnz+f//+fH5+/nx/fv/+f//+fnx+//z+/v/+fvz9fn/+f//+fnx+fX/+f//8D+/v7+/f/+fnz+//z+/v/+/f/+f//+f//+fvz+/f/8fnz+//3+fnx+//z+fH5+/nx/fv/+f//+fnx+fnx+fn3+fn/+fP78+v/7fnx+/v3+/v78/f/+fn3+fH5+//x+//3+/v/8fn3+fnx+f/58D+/P76+v78/v/+fnz+//z+/f78/v/9fnz+//z+fH5+/nx/fX/+fP/+fH7//f7+/v/+fnz+//x+fv/9fP7+/v78/f/+fnz+f//+f//8fX3+/f/+/vz8fn1+//3+fnx+fX/+f//8fX3+/f/+/vz8/v/9fnz+//3+/v/8fv/+fnz+f//+f/4+f3/+D+/v76/v36/f/5/f39+/n5+fv/+fvz8/v/9fnz+//z+/v/8/v3+/P76fn/+fP/+fn3+/v/8fn3+fnz+fnz+//3+/v/+f//+fP7+/f/+fH5+/nx/fv/+f//+fnx+//3+/v78+v/8fn/+fnz+f/58D+/v7+/f/+fnz+//z+/v/+/f/+f//+f//+fvz+/f/8fnz+//3+fnx+//3+/v/9fn3+fnx+fn3+f//8fn3+/v78fn3+fn3+fn3+f//+fvz+//3+/v/+fnz+//3+/v/9+f38fn3+/v/9/v3+/v39/f/++v/9fnz+fH7//f/+fH5+/v/+fP78/v/+fH5+/nx/fv/+f//+fnx+fnx+fn3+fn/+fn3+/P/9fnz+//z+/v78/vj9+Pr9+f/5+v/+fX59fv5+/nx/fv/+fn/+fv/+fn/+f/5+/nx/fX/+f//8fX3+/f/+/vz8fn1+//3+/v/+/f/8fn/+fnx+//z+/P/8/v3+/P76/vr9+f/5+v/+fX59fv5+/nx/fv/+fn/+fn/+fn/+fnx+fX/+f//8fX3+/f/+/vz8+f/+fn/+fnx+//3+/v/+D+/v78/v/+fnz+//z+D+/f79/n/+/Xz+fX59fn1+/v1+f/z6+f3x9P/8+f/5+v/+f/4+f3/+fnx+fv/8D+/P76+v78/v/+fnz+//z+D+/P36+v31/fXz9/n9+/v/8+v/+f//+fP78/v/+fX59f//8fv/+fn3+fn/+fnz+f/5+/nx/fX/9fn/+f/5/fv9+//x/f/78D+/f78/v3++v7+/v5+/f76/fr+/fr6+v/+fn/+fn/+fH5+/nx/f//+f//8fX3+/f/+/vz8fn1+//3+/v/+/f/8/f/9/P/8fnz+//z+/v/+f/5/f3/+f//+fnz+//3+/v/+/f3+/P76/vr++f7+/vr+/vz+/v/8/v/+fnz+//z+fn/+f/5/fv9+//x/fr8+/7+fX59/n3+ff59fv99fn/+f//8fH/+fnx+//3+/v78fn3+fnx+f/58D+/P7+/f/+/r6/P/6+f3+/P3+/v/9+vv+/P76/vr9+Pj6/vr9+v3+fn3+f//8fn3+f//+fP78/f/+fnz+fH5+/nx/fv/+f//+f//8fX3+/f/+/vz8fn1+//3+/v/8fn/+fn3+fX/+fP/+D+/P78+v/+fX1+/31+/X5+/v1+fn1+P/++P/5+fn1+fn/+f/58fn3+fnz+f/58D+/v78/v39/n19f/z+/fz+fnz+fH5+/nx/fX/9fn/+f/5/fv9+//x/fv/+fP78/v/+fX59fv5+/nx/fv/+fn/+fn/+fn1+//z+/P/8/v3+/P76/vr++Pz7/vr+/v/8/f/+fP/9/v3+/P76/vr8+f/6+vr8/f/8fn/+fH5+/nx/fX/+fn1+/v/8fn/+fvz//v39/v/+fnz+//z+/v/+fv3+/v39fn1+//x+fn1+//3+/v7+/v78/f/+fnz+fP/+fn3+/v38/v/+fn/+f//+D+/P7+/f/+fnz+//z+D+/v78fn/+/P/9/n1+/n1+//z//X3/fX59f/18fXz+fX59fv5+/nx/fX/+fP/+D+/P78/v39/n19f/z+fnz+fn/+fnx+fn3+f//8fv/+D+/P79fv/8fv/8+/z+/v78+vj9+P76+v74fn1+//3+/v/8fn/+f//8fn3+fnz+fP78fn1+//z+/P/8/vz+fn3+fn/+f//+fn3+fX/+fP/+fn3+/v38/v/+fnz+/P/8D+/P78/v39/n19fX5/f/z+fnz+//3+/v/+fP78/v/9fnz+//z+fH5+/nx/fX/+fnz+fn1+/v/8/v/+/f/+f//8fX3+/f/+/vz8/v/9fnz+//3+fnx+//z+f//+fn3+/f/9fnz+fH7//f/+f//8fX3+/f/+/vz8/v/9fnz+//3+/v/+/f/+f//8fH/+fnz+//x+fn1+//3+/v/+fn3+fn3+fnz+//3+/v/+fX59f//8fv/+fn/+f/58D+/P/8/v/+fnz+/f7+/f/8fnz+//3+fH5+/nx/fX/+fP/+fH7//f7+/v/+fP7+/v/+fn3+fH5+//x+//3+/v/8/vz+fn1+f//+D+/P7+/f/+/r6/f/7/ff7+fv/+fv/8/vz+fn3+/v/8fP79f/5+f35/f/7/f/7+fn9+fnx/fn3+/v/8D+/P78/v39/n19f/5+/v/9/v/+fv38+/38+vr8/v/+fn3+f//+fvz+/f/9fnz+fH5+//x+//3+/v/9/v3+/P76/vr8/Pr8fn1+//x+f/58D+/P/8/v/+fnz+/v/8+v/8+v/+fH5+//x+/v/+fP/9/v39/v/9/P/9/f/9/n/+fP/+fn/+f/5+/nx/fX/9fn/+f/5/fv9+//x/f/78D+/P7+/v39/n19fX5/f/z+fnz+fn/+fP/8/f/9/n/+fP/+f//+f//8fX3+/f/+/vz8+f/+fnx+//3+/v78+v/8fn/+fnz+fP/+fP78fn/+fH5+/nx/f//+f//8fX3+/f/+/vz8+f/+fnx+fn3+fP78/f/+fnz+f//+f//8fX3+/f/+/vz8+f/+fnx+//3+/v/8+v/+fH5+/nx/fv/+f//+fnx+//z+/P/9fn3+fnx+f/58D+/v76/v36/f/5/f39+fn/+fnz+//3+fnx+fnx+fn3+f//+fvz+/f/9/v/9/Pz8/v/9fnz+f//+f//8fX3+/f/+/vz8+f/+fn/+fn/+f/5/fv9+//x/fv/+fP78+v/7fnx+//3+/v/+fnx+//z+f//+f//8fX3+/f/+/vz8/v/+fnz+//3+/v/+fvz+//z+/v/+fn3+fnx+f/58D+/P/8/v/+fnz+/P78fnz+//3+fH5+/nx/fX/+fP/+fH7//f7+/v/+fnx+//z+/v/+fH5+//x+//3+/v/+/f/8fn3+fnx+f/58D+/P79fX7+/P36+v3+/v39+fn18f/x8P/8fn3+fn/+f/5+/nx/fn/+f//8fX3+/f/+/vz8+f/+fn/+f/5/fv9+//x/f/5+fn/+fP/+fn1+fn/+fn/+D+/P76/fr/9f33+fX1+/v99f3/+fn/+f//+fP78/v/+fH5+/nx/fX/+fP/+fn1+//z+fn/+f//+fP7+/v/+fn/+f//8fX3+/f/+/vz8/f/9fnz+//3+/v/8+f/8fn3+fn3+fP/+fP78/v/+fP/+f//8fX3+/f/+/vz8/v/9fnz+//3+/v/+fvz+//z+/v7+/v78/f/+fn/+f//+fvz+//3+/v/+/f3+/v/9/v7+/v78/f/+fnz+//z+fP78/v/+fnz+fH7//f/+fH5+/v/+fP78+v/7fnx+/nx/fX/9fn/+f/5/fv9+//x/fr8+/7+fX59/n3+ff59fv99fn/+f//8fH/+fn/+fn1+//x+fv/9/f/+fnz+fP/+fP78+v/7fnx+//3+/v/+fn3+fn3+fn/+f/5+/nx/fX/9fn/+f/5/fv9+//x/f/78D+/P7+/v/+fnz+/P78/v/+/f/+f//+fnx+/v3+/v39/f/8fnz+//3+/v7+/v78+vj9+f/+f//+fH5+/v/+fP78/f/+fn/+fH5+/v/+fn/+fn/+f/5+/nx/fX/+f//8fX3+/f/+/vz8+f/+fnx+//3+/v/+fnz+fP78fn/+fH5+/nx/f//+f//8fX3+/f/+/vz8+v/8fn3+fnx+f/58D+/f7+/f/+/r6/f/7/ff7+fv/+fv/+fn/+f//+fnz+//3+/v/+fnz+fn3+fnz+//z+fH5+/nx/f//+f//8fX3+/f/+/vz8/f/+fnz+//3+/v/+/f3+/P76/vr9+Pr9+f/5+v/+fH7//f/+fP7+/v/+fnx+//3+fnx+fn3+f//+D+/P7+/v39/f36/f/5/f36/f/5+/P78f//+fnx+/f/+fn/+fnz+fnz+//3+/v/8fn/+fnz+fH5+/nx/fv/+f//+fn/+fnz+//3+/v7+/v78+vj9+P/+f//8fX3+/f/+/vz8/v/9fnz+//3+/v/8fn/+fnz+fH7//f/+fP7+/P/+fnz+fH5+/nx/f//+f//8fX3+/f/+/vz8+v/8fnz+//3+/v/+/f3+/P76/vr++f7+/vr+/v/+f//+D+/P7+/f/+/r6/f/7/ff7+fv/+fv/8/vz+fn3+/v/8fP79f/5+f35/f/7/f/7+fn9+fnx/fn3+/f/9fnz+D+/P36+v31/fXz9/n9+/v/8+v/8+v3+/v39+f/5+vr+/Pz8+v/+fX59fv5+/nx/f//+f//8fX3+/f/+/vz8+v/+fnz+//3+/v/+/v/9fnz+f//+fnx+fnx+fn3+fnz+//3+/v/+/v/9fn/+f//+D+/P/8/v/+fnz+/P78fn3+fn/+fH5+/nx/fv/+f//+f//8fX3+/f/+/vz8/v/+fnz+//3+/v/+/f/+f//8fnz+fP78fn3+fnx+//3+fnz+//z+/v/+fvz+f//+fnx+/nx/fX/9fn/+fn/+D+/v78+vv+fnz+fn/+D+/P78+v/+fX1+/31+/X5+/v1+fn1+fnx+f/58D+/v76/fr/9f3/+fn1+/f/8fnz+f/5+/nx/fn/+fn3+fn3+fn/+fP78fn/+fH5+/nx/fX/9fn/+f/5/fv9+//x/fv/+f//8fn3+fnz+fP78fn1+//z+/v/+fH7//f/+f//8fX3+/f/+/vz8fn1+//3+/v/+/f/+f//8fX3+/f/+/vz8fn1+//3+fn/+fH5+/nx/fX/+f//8fX3+/f/+/vz8fn1+//3+fnx+//z+fn/+D+/P78fn/+/P/9/n1+/n1+//z//X3/fX59f/18fXz+fX59fv5+/nx/fX/+fP/+fn1+fnx+f/58D+/P76+v78/v/+fnz+//z+/v/+fnx+fn3+fn/+f/5/fX/+fX/+fH7//f/+fH5+/nx/fv/+f//+fnz+//3+/v/9+f38fn3+/v/8fv/+fH5+//x+f/58D+/v78+v/+fX1+/31+/X5+/v1+fn1+/v/8/v/9/v3+/vz9+fr9+vr8/P/8+f/8/f/9/P/8/v/+fH7//f/+f//8fX3+/f/+/vz8fn1+//3+fnx+//z+fn/+D+/P79fX7+/P36+v3+/v39+fn18f/x8P/8fn3+fn/+f//+fP78fn/+fnx+//3+fH5+/nx/fX/+fP/+D+/P79fv/8fv/9fP7+/f/+fnz+/v/9+f38+v/+f/4+f3/+f//8fX3+/f/+/vz8fn1+//3+fnx+//3+/v/8+v/+f//+f//8fX3+/f/+/vz8+v/+fnz+//3+/v/8fn3+fnx+fn/+f/5/fr/+/f3+/v/9/v/+fn/+fn/+fnz+//3+fnz+//z+/P/9+v/+/f3+/P76/vr8/Pr8+vv9+f/5+v/+fn/+D+/f76/v36/f/5/f36/f/5+/P78f//+fnz+//3+/v/8+vv8/v3+/P76fn3+fn/+fP/9fn3+fn3+fn/+f//8fX3+/f/+/vz8/v/9/v3+/v/+/f/+fH5+//x+/v/+D+/f7+/v/+fnz+//z+fn/+f/5/f3//f//8D+/f7+/v/+fnz+//z+D+/f78/v39/n19f/5+fn1+fn/+f//8fX3+/f/+/vz8+f/+fnx+//z+f//+f//8fX3+/f/+/vz8+f/+fnx+//3+/v/+/f/+fn/+f//+D+/P/8/v/+fnz+/P7+/v/+/f/+f//+fnx+/v3+/v39/vz8/f/8fnz+//3+/v7+/v78+vj9+f/+f//+fH7//f/+fP78/f/+fnz+fn3+fn3+fnz+fn3+/v38/v3+/P76/vr8/v/8/f/9/v3+/f/+/v/9fnz+//x+f/58D+/v7+/f/+fnz+//z+D+/P36+v31/fXz9/n9+/v/8+v/+fnz+//3+/v/9+f/9+v3+/v/8+f/8fn3+fn3+fnz+fn3+/v38fn/+fH5+/nx/fv/+f//+fnz+//3+fnx+fX/+f//8fX3+/f/+/vz8fn1+//3+/v/+/f3+/P76/vj8fn/+fn/+D+/v7+/f/+fnz+//z+/f7+/v/+f//8fn/+fnz+//3+/v/+/f/9+v3+/v/9/v3+/P76/vr8+f/6+vr8+v/7fnz+//3+fnx+//z+/v/+/f/+fH5+//x+/v/+fn1+f//+D+/P7+/f/+/r6/f/7/ff7+fv/+fv/8/vz+fn3+/v/8fP79f/5+f35/f/7/f/7+fn9+fnx/fn3+/v/8D+/P7+/f/+/r6/f/7/ff7+fv/+fv/+fnz+//3+/v/9fn3+fnx+//3+/v/9fn/+f//8fn3+fnx+f/58D+/P79fv/8fv/9fP7+/v/+fnz+/f/+/f/+/v/+/v/9fnz+fP78+v/7fnx+//z+f//+fn3+fnz+fn3+fnz+/f/+f//8fX3+/f/+/vz8/v/9fnz+//3+/v/+/f/+fP78+v/7fvx//n/+fP7+/v/+fn/+fH5+/nx/fX/9fn/+f/5/fv9+//x/f/5+fn/+fH5+/nx/fX/9fn/+D+/P7+/f/+fnz+//z+fn/+f/5/f3//f35/fr+/vz9+vv+/Pz+f//8fnz+f/58D+/P/8/v/+fnz+/P78+v/8+vv9+f/5+vr+/Pz8+v/+fH5+/v/+fP78/f/+fnz+f/58D+/v7+/v39/n19f/z+fnz+fnx+//3+/v/8+vv8+v/+f/4+f3/+f//8fX3+/f/+/vz8fn1+//3+/v/8+vv9+vv9+vv+/Pz+/v3+/P/9fnz+fnz+fn3+f/5+/nx/fX/+fP/+fH7//f7+/v/+fnx+//3+/v/8fn3+fnz+f//+D+/f78/v3++v7+/v5+/f76/fr+/fr6+v/+fn/+fH5+/nx/fX/+f//8fX3+/f/+/vz8fn1+//3+/v/+/v/9fn/+fH5+/nx/f//+f//8fX3+/f/+/vz8/f/8fn/+fnx+//3+/v/8+v/+fn3+fnz+f//+fn/+D+/v76/v36/f/5/f36/f/5+/P78fnz+fnz+fnz+/P/8fv/+fH5+/v/+fP78fn/+fH5+/nx/fv/+f//+fn/+fnx+//3+/v/9+f38fn3+fn/+fn/+f//+f//8fX3+/f/+/vz8/f/+fnz+//3+/v/+fn3+fnx+//3+/v7+/v78fn/+fP78+v/7f//+fP78fn/+fH5+/nx/fX/9fn/+f/5/fv9+//x/fr8+/7+fX59/n3+ff59fv99fn/+f//8fH/+fn/+fn/+fH5+/v/+f//8fX3+/f/+/vz8+f/+fnx+//3+/v/+/f/9+v38/v/+fnz+//3+fnx+//3+/v7+/v78/v/+fH5+/v/+fP7+/v/+fnz+//3+/v/9fn3+fn3+fnz+/v/9/P/9fn3+f/5+/nx/fv/+f//+fnz+//3+fnx+//z+fH5+/nx/f//+f//8fX3+/f/+/vz8/v/9/v3+/P76/vr9+Pr9+f/5+v/+fX59fv5+/nx/fv/+fH5+/v/+fP/9/n/+fP/+f//+f//8fX3+/f/+/vz8/v/9fnz+//3+/v/+fvz+//z+/v/+fnz+//3+/v7+/v78/f/+fn/+f//+fvz9fn/+f//+fnz+//3+/v/+/v/+/v/9/f/9/v3+/v39+v/++v/9+vv8/v3+/P76fn/+f//+fH5+/v/+fP7+/f/+fnx+//3+/v/8fn3+fnx+f/58D+/P/8/v/+fnz+/v/8+v/8+v/+fH5+//x+/v/+f/5/fv9+//x/f/78D+/P7+/f/+/r6/f/7/ff7+fv/+fv/+fn3+fn/+f//8fn3+fnx+f/58D+/P/8/v/+fnz+/P7+/v/+/v/9+f/8/v/9fnz+//z+fP/8fn3+fnx+//3+/v/+/f/+f//8fX3+/f/+/vz8+f/+fnx+//3+/v/+fX/+fP/+fn3+fn3+fn/+D+/P36+v31/fXz9/n9+/v/8+vv8+v3+/vz9+fr9+vr+/Pz8/P/8/v3+/P76/vj+/f/9/v/8fnz+//3+/v7+/v78/v/+f//+f//8fX3+/f/+/vz8/f/+fnz+//3+/v/+D+/f7+/f/+/r6/P/6+f/+fn/+fvz8/P/8/f/9/v7+/v78/v/+fnx+fX/+f//8fX3+/f/+/vz8/f/+fnz+//3+/v/+/f/+fH5+/v/+f//8fX3+/f/+/vz8/f/+fnx+//3+/v/+D+/f7+/v/+fnz+//z+fn/+f/5/f3//f//8D+/f7+/v/+fnz+//z+fP/+fP78/f78/v/+f//+fnx+/nx/fX/+f//8fX3+/f/+/vz8/v/+fnz+//3+fnx+//z+fn/+D+/f78/v3++v7+/v5+/f76/fr+/fr6+v/+fn/+fn/+fn/+fnz+/v/8+vv8/v/+fnx+//z+f//+fP78/f/+fnz+fP/+fH5+/nx/f//+f//8fX3+/f/+/vz8/v/+fnz+//3+/v/+/f/+f//+fP78fn3+fnz+//3+fnz+//z+/v/+/f/+f//8fX3+/f/+/vz8+f/+fn/+fnx+//3+/v/+D+/P7+/f/+fnz+//z+/v/+f//+f//+fvz+/f/8fnz+//3+fnx+//3+/v/+/f/+f//+fP78/f78/v/+fH7//f/+f//8fX3+/f/+/vz8fn1+//3+/v/+/v/8+v/+f//+fP7+/v/+fP78fn3+f//+fnx+f/58D+/v78/v39/n19f/z+/f7+/v/+fn3+fn3+fnz+/f/+/v/9fn/+fH7//f/+f//8fX3+/f/+/vz8/f/8fnz+//3+/v78+v/8fn/+fH5+/nx/f//+f//8fX3+/f/+/vz8/f/+fnx+//3+/v/+/f/+fH5+/v/+fP/9/vz+/f3+/v/8+v/8fn/+f//8D+/P7+/f/+fnz+//z+/f7+/v/+fn/+fn3+fn/+f/5/fv9+//x/fr8+/7+fX59/n3+ff59fv99fn/+f//8fH5+/v/+fn/+fnx+//3+/v/+/v/+/f/+f//8fH5+/nx/fv/+f//+fnx+//3+/v/8/v/+fnz+//3+/v/9/f78/vr+/vj9fn1+fv/+fP7+/f/+fn/+f//8D+/P/+/vz6+/3/Cv//+/v36+v/8+/79fn/+fnx+//3+/v/9/v3+/P76fn3+f//+f//8fX3+/f/+/vz8+v/+fn/+f//+fH5+/nx/f//+f//8fX3+/f/+/vz8/v/8fnz+//3+/v/+/v/8+vv9/f/+f//8D+/P/8/v/+fnz+/v/8+v/8fnz+//3+fnx+//z+/v/8fv/+fnz+fn3+fnz+fn/+f//8fX3+/f/+/vz8fn1+//3+/v/+fP7+/P/+f//8fX3+/f/+/vz8fn1+//3+/v/+fvz+f//+D+/P/8/v/+fnz+/P78+v/8+vv9+f/5+v/+fn3+f//+f//8fX3+/f/+/vz8/f/8fn/+fn/+f//8fn3+fn/+fH5+/nx/fv/+f//+fnz+//z+fH5+/nx/fX/9fn/+fn/+D+/P36+v31/fXz9/n9+/v/8+v/9/v3+/P76+v38+vv+/vz8fnx+f/78D+/P79fX7+/P36+v3+/v39+fn18f/x8P/8fn3+f/58D+/v76/fr/9f33+fX1+/v99f3/+fn/+f//+fP78/v/+fH5+/nx/fv/+f//+fP7+/P/+fnz+//3+/v/8+vv9+v/9fn3+fn3+f//+fnz+/v/8/v3+/P76fn3+fnz+fnz+/f/+f//8fX3+/f/+/vz8/f/8fnz+//3+/v/8/v/+fnz+//z+/v/8+f/9fnz+//z+/v/+fH7//f/+fP7+/P/+f//8fX3+/f/+/vz8fn1+//3+/v/+fn3+fn/+fn3+f/5+/nx/fv/+f//+fnx+/nx/fX/+fP/+fn3+fnz+fn3+/v/8/v3+/v39/f/8fn/+fn/+fn/+D+/v76/fr/9f3/+fn1+/f/8fn3+fX/+fH7+/f/+fH5+/v/+fnx+//z+fP/+fP7+/v/+fH7//f/+fP7+/v/+f//8fX3+/f/+/vz8/f/8fnz+//3+/v/+fn/+f/5+/nx/fX/+f//8fX3+/f/+/vz8/f/9/P/8/f/8fnz+//3+fnx+//3+fn/+fn3+fP78/f/+fP7+/f/+fnx+//3+fn/+fH5+/v/+fP78+v/7fnx+fX/+f//8D+/P78/v3++v7+/v5+/f76/fr+/fr6+v/+fH/+fn/+f//+f//8fX3+/f/+/vz8/f/8fn/+fnx+//3+/v/+D+/f78/v3++v7+/v5+/f76/fr+/fr6+v/+fnx+/v3+/f/8fn3+fP78+v/7fvx//n/+fP7+/P/+fH7//f/+fH5+/nx/fX/+f//8fX3+/f/+/vz8fn1+//3+fnx+//z+fn/+D+/f7+/v/+fnz+//z+fn/+f/5/f3//f//8D+/P36+v31/fXz9/n9+/v/8+vv8+v/7fvz//n/+fnx+//3+/v7+/v78+vj9+P76+v74fn/+fP78/f78/v/+fnz+//z+/P/8+f/9+v3+/v/+f//+fP78+v/7f//+fn3+fn3+fP78fn1+//3+/v7+/v78/v/+f//+fP78/v/+fn/+fP/+fP78fn/+fH5+/nx/fv/+f//+f//8fX3+/f/+/vz8+f/+fnx+//3+/v/+D+/v76/v36/f/5/f39+fn/+fnz+//z+fP78+v/7fnx+//3+/v/8fn3+fnx+f/58D+/P/8/v/+fnz+/v/8fn/+fn3+fn3+fn3+fnz+fnz+//3+/v/8/v/8fnz+//3+/v78fn3+fP78/f/+f//8fX3+/f/+/vz8/f/+fnz+//3+/v/8+vv8+P/+f//8fnz+//3+fH5+/nx/f//+f//8fX3+/f/+/vz8+f/+fnx+//z+fn/+D+/P/8/v/+fnz+/f7+/f/8fnz+//3+fH5+/nx/fX/+fP/+fH7//f7+/v/+fnx+//z+/v/+/f/9+v3+/v39/f/8fnz+//z+fn/+D+/P36+v31/fXz9/n9+/v/8+v/9+f38/f38/v/+fnz+//3+fn/+fP/9/vz+/f3+/v/+/f3+/f/+/v/9/v3+/v/+/f/9fnz+//z+/v/+fP78fn1+/v38/v/+fn/+f//+fnx+/v3+/P76/vr9+Pr9+f/5+v/+fX59fv5+/nx/fX/9fn/+D+/P36/fr6/f/5/fr9/f/++vz+/v/8fnz+fP7+/v/+fP78/f78/v/+fn/+f//8D+/f78/v3++v7+/v5+/f76/fr+/fr6+v/+fn/+fn/+fn/+fnz+/P/8/v/+fP7+/v/+fH5+/nx/f//+f//8fX3+/f/+/vz8+v/+fH5+/nx/f//+f//8fX3+/f/+/vz8/v/+fH5+/nx/f//+f//8fX3+/f/gQyREREREREVHCgM8iIiIiIiLKRQYyRERERERUcBjIEBERERFRwWEgQ0REREREBYeBDBERERERFRwGMkREREREVHAYyBARERERUcFhIENERERERAWHgQwRERERERUcBjJERERERFTgvz/f05Qj2wSOAAAAAElFTkSuQmCC" alt="Signature" class="signature">
+                    <button class="download-btn" id="downloadBtn">Download as PDF</button>
+                </footer>
+            </div>
+            <div id="card-view">
+                <div class="card-view-content">
+                    <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-pic" style="position: static; display: block; margin: 0 auto 20px;">
+                    <h1>Roman Ring</h1>
+                    <h2>Research Engineer</h2>
+                    <div class="card-links">
+                        <a href="https://github.com/Inoryy" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                        <a href="https://scholar.google.com/citations?user=MG817V4AAAAJ&hl=zh-CN&authuser=1" target="_blank"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
+                        <a href="mailto:inoryy@gmail.com"><i class="fas fa-envelope"></i> Email</a>
+                    </div>
+                </div>
+                 <footer class="footer">
+                    <div class="qr-code" id="qrcode-card"></div>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cvView = document.getElementById('cv-view');
+        const cardView = document.getElementById('card-view');
+        const toggleBtn = document.getElementById('toggle-view');
+
+        toggleBtn.addEventListener('click', () => {
+            if (cvView.style.display !== 'none') {
+                cvView.style.display = 'none';
+                cardView.style.display = 'block';
+                toggleBtn.textContent = 'View Full CV';
+            } else {
+                cvView.style.display = 'block';
+                cardView.style.display = 'none';
+                toggleBtn.textContent = 'View Card';
+            }
+        });
+
+        // Generate QR Code
+        QRCode.toDataURL(window.location.href, { errorCorrectionLevel: 'H' }, function (err, url) {
+            if (err) throw err;
+            const qrImgCv = document.createElement('img');
+            qrImgCv.src = url;
+            document.getElementById('qrcode-cv').appendChild(qrImgCv);
+            
+            const qrImgCard = document.createElement('img');
+            qrImgCard.src = url;
+            document.getElementById('qrcode-card').appendChild(qrImgCard);
+        });
+
+        // Download CV as PDF
+        document.getElementById("downloadBtn").addEventListener("click", function () {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.html(document.getElementById("cv-view"), {
+                callback: function (doc) {
+                    doc.save('roman_ring_cv.pdf');
+                },
+                margin: 10,
+                autoPaging: 'text',
+                html2canvas: {
+                    scale: 0.2
+                }
+            });
+        });
+    </script>
+</body>
+</html>
