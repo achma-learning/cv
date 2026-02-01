@@ -44,18 +44,18 @@
         .header {
             text-align: center;
             margin-bottom: 30px;
-            position: relative;
+            padding-top: 30px; /* Add padding to not overlap with pic */
         }
 
         .profile-pic {
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            margin: 0 auto 20px;
-            border: 3px solid #b3a04f;
+            border: 3px solid var(--accent-color);
             position: absolute;
             top: 30px;
             left: 30px;
+            z-index: 5; /* Ensure it's above other elements */
         }
 
         .header h1 {
@@ -228,58 +228,50 @@
             display: none;
             text-align: center;
         }
-
-        .card-view-content {
-            padding: 50px 0;
-        }
         
-        .card-view-content h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 3em;
-            margin-bottom: 10px;
+        .linktree-links {
+            margin-top: 40px;
         }
 
-        .card-view-content h2 {
-            font-family: 'Lora', serif;
-            font-size: 1.5em;
-            color: var(--accent-color);
-            margin-bottom: 40px;
-        }
-
-        .card-links a {
-            display: block;
-            max-width: 400px;
+        .linktree-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            max-width: 90%;
             margin: 15px auto;
             padding: 15px;
             border: 2px solid var(--accent-color);
             text-decoration: none;
+            font-size: 1.1em;
+            font-weight: bold;
             color: var(--ink-color);
-            font-size: 1.2em;
+            background-color: transparent;
             transition: all 0.3s ease;
         }
-        .card-links a:hover {
+        .linktree-link i {
+            font-size: 1.5em;
+            width: 25px; /* To align text nicely */
+        }
+        .linktree-link:hover {
             background: var(--accent-color);
             color: var(--paper-color);
         }
 
+
         /* Responsive Design */
         @media (max-width: 768px) {
-            body {
-                background-color: var(--paper-color);
-            }
-            .container {
-                margin: 0;
-                border: none;
-                box-shadow: none;
-            }
             .page-border {
                 border: none;
                 padding: 15px;
             }
             .profile-pic {
-                position: static;
+                position: static; /* In mobile, let it be part of the flow */
                 display: block;
                 margin: 0 auto 20px;
+            }
+            .header {
+                 padding-top: 0;
             }
             .header h1 {
                 font-size: 2.5em;
@@ -287,16 +279,22 @@
             .header h2 {
                 font-size: 1.2em;
             }
+            #card-view .profile-pic {
+                position: static; /* Card view should follow mobile rules too */
+            }
+            #card-view .header {
+                padding-top: 0;
+            }
             .skills-grid {
                 grid-template-columns: 1fr;
             }
             .download-btn {
                 top: 10px;
-                right: 10px; /* Adjusted for mobile */
+                right: 10px; 
             }
             .toggle-view-btn {
                 top: 60px;
-                right: 10px; /* Adjusted for mobile */
+                right: 10px;
             }
         }
         @media print {
@@ -311,17 +309,19 @@
         <div class="page-border">
             <button class="download-btn" id="downloadBtn">Download as PDF</button>
             <button class="toggle-view-btn" id="toggle-view">View Card</button>
-             <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-pic">
+            <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-pic">
+
             <div id="cv-view">
                 <header class="header">
                     <h1>Roman Ring</h1>
                     <h2>Research Engineer</h2>
-                    <div class="contact-info">
-                        <span><a href="mailto:inoryy@gmail.com"><i class="fas fa-envelope"></i> inoryy@gmail.com</a></span>
-                    </div>
                 </header>
+                <div class="contact-info">
+                    <span><a href="mailto:inoryy@gmail.com"><i class="fas fa-envelope"></i> inoryy@gmail.com</a></span>
+                </div>
 
                 <main class="main-content">
+                    <!-- CV sections remain here -->
                     <div class="section">
                         <h3>Education</h3>
                         <div class="education-item">
@@ -342,8 +342,7 @@
                             <p class="item-sub-heading">University of Tartu, Estonia</p>
                         </div>
                     </div>
-
-                    <div class="section">
+                     <div class="section">
                         <h3>Employment</h3>
                         <div class="experience-item">
                             <div class="item-header">
@@ -363,163 +362,35 @@
                                 <li>Created proof-of-concept ML framework in JAX, showcased with CV and NLP models</li>
                             </ul>
                         </div>
-                        <div class="experience-item">
-                            <div class="item-header">
-                                <h4>Research Assistant</h4>
-                                <span class="date">February 2018 - February 2020</span>
-                            </div>
-                            <p class="item-sub-heading">Comput. Neuroscience Research Group</p>
-                            <ul>
-                                <li>Assisted with research and engineering in the domain of deep reinforcement learning</li>
-                            </ul>
-                        </div>
-                         <div class="experience-item">
-                            <div class="item-header">
-                                <h4>Research Assistant</h4>
-                                <span class="date">June 2018 - December 2018</span>
-                            </div>
-                            <p class="item-sub-heading">PerkinElmer</p>
-                            <ul>
-                                <li>Improved instance segmentation pipeline in fluorescent medical imaging</li>
-                            </ul>
-                        </div>
-                         <div class="experience-item">
-                            <div class="item-header">
-                                <h4>Senior Web Developer</h4>
-                                <span class="date">September 2011 - February 2015</span>
-                            </div>
-                            <p class="item-sub-heading">KNP Labs</p>
-                            <ul>
-                                <li>Developed and suppored complex web based applications (banking, education, retail)</li>
-                                <li>Coached junior developers with hands-on workshops, pair programming sessions, PR reviews</li>
-                            </ul>
-                        </div>
-                        <div class="experience-item">
-                            <div class="item-header">
-                                <h4>Web Developer</h4>
-                                <span class="date">September 2010 - September 2011</span>
-                            </div>
-                            <p class="item-sub-heading">Attitude OÜ</p>
-                            <ul>
-                                <li>Developed and supported web based applications</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="section">
-                        <h3>Skills</h3>
-                        <div class="skills-grid">
-                            <div>
-                                 <h4>Expert in</h4>
-                                 <ul>
-                                    <li>Python, PHP, JavaScript</li>
-                                    <li>Keras, Symfony, Doctrine, Angular</li>
-                                    <li>git</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4>Proficient in</h4>
-                                <ul>
-                                    <li>C++, R, Java, HTML, CSS</li>
-                                    <li>Tensorflow, PyTorch, NumPy, SciPy</li>
-                                    <li>AWS</li>
-                                </ul>
-                            </div>
-                             <div>
-                                <h4>Experience in</h4>
-                                <ul>
-                                    <li>Bash, MATLAB, SAS, LaTeX</li>
-                                    <li>Caffe, Theano, OpenCV</li>
-                                    <li>vim</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="section">
-                        <h3>Open Source</h3>
-                        <ul>
-                            <li>Symfony Web Framework, Doctrine ORM (contributor)</li>
-                            <li>TensorFlow, PySC2, SciPy, StatsModels (minor contributor)</li>
-                            <li><a href="https://github.com/Inoryy/reaver-pysc2">Reaver: SC2 DRL Agent</a>, <a href="https://github.com/Inoryy/csb-ai-starter">CSB AI Starter</a>, <a href="https://github.com/KnpLabs/mailjet-api-php">Mailjet PHP API</a> (creator)</li>
-                        </ul>
-                    </div>
-
-                    <div class="section">
-                        <h3>Talks</h3>
-                        <ul>
-                            <li>Reinforcement Learning (Guest Lecture, University of Tartu) - December 2018</li>
-                            <li>Deep Reinforcement Learning (DevClub, Tallinn) - June 2018</li>
-                            <li>Behavior Driven Development with Behat and Mink (DevClub, Tallinn) - January 2013</li>
-                        </ul>
-                    </div>
-
-                    <div class="section">
-                        <h3>Teaching</h3>
-                        <ul>
-                            <li>Neural Networks, TA (University of Tartu) - Spring 2019</li>
-                            <li>Deep Reinforcement Learning, TA (University of Tartu) - Autumn 2018</li>
-                        </ul>
-                    </div>
-
-                    <div class="section">
-                        <h3>Competitions</h3>
-                        <ul>
-                            <li>Kaggle 2018 Data Science Bowl (277/3634, team) - April 2018</li>
-                            <li>Codingame AI Contest Coders of the Caribbean (28/3623) - April 2017</li>
-                            <li>Hackerrank University World Cup (22/4466, team) - September 2015</li>
-                            <li>IEEEXtreme 8.0 (208/1853, team) - September 2014</li>
-                        </ul>
-                    </div>
-
-                    <div class="section">
-                        <h3>Awards</h3>
-                        <ul>
-                            <li>Estonian National Contest for University Students, B.S. programme, 2nd prize - December 2018</li>
-                            <li>DevClub Best Talk Award - December 2018</li>
-                            <li>Cybernetica AS  Master's Fellowship - October 2018</li>
-                        </ul>
-                    </div>
-
-                    <div class="section">
-                        <h3>Relevant Coursework</h3>
-                        <p>Information Theory, Stochastic Processes, Matrix Calculus, Monte-Carlo Methods, Machine Learning, Neural Networks, Data Analysis I-II, Numerical Analysis, Mathematical Analysis I-III, Probability Theory & Statistics I-II, Algebra (Abstract & Linear)</p>
-                        <p><em>Online:</em> Machine Learning (Stanford CS229), CNNs for Visual Recognition (Stanford CS231n), Deep Learning for NLP (Stanford CS224d), Intro to AI (Berkeley CS188), DRL Bootcamp (Berkeley), Reinforcement Learning (UCL), Deep Reinforcement Learning (Berkeley CS294)</p>
                     </div>
                 </main>
 
                 <footer class="footer">
                     <div class="qr-code" id="qrcode-cv"></div>
-                    <!-- To use the PNG signature by default, uncomment the img tag below and comment out the object tag above. -->
-                    <!-- <object data="https://raw.githubusercontent.com/achma-learning/cv/1e5161ce8027815ea03823c56f4f0e18d60a5ab8/signature.svg" type="image/svg+xml" class="signature"> -->
                     <img src="https://raw.githubusercontent.com/achma-learning/cv/refs/heads/master/signature.png" alt="Signature" class="signature">
-                    <!-- </object> -->
                 </footer>
             </div>
+            
             <div id="card-view">
-                <div class="card-view-content">
-                    <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-pic">
+                <header class="header">
                     <h1>Roman Ring</h1>
                     <h2>Research Engineer</h2>
-                    <p class="short-bio">Short biography - role under name</p>
-                    <div class="contact-info card-contact-info">
-                        <span><a href="mailto:inoryy@gmail.com"><i class="fas fa-envelope"></i> Email</a></span>
-                        <span><a href="https://scholar.google.com/citations?user=MG817V4AAAAJ&hl=zh-CN&authuser=1" target="_blank"><i class="fas fa-graduation-cap"></i> Google Scholar</a></span>
-                        <span><a href="https://orcid.org/" target="_blank"><i class="fab fa-orcid"></i> ORCID</a></span>
-                        <span><a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank"><i class="fas fa-book-medical"></i> PubMed</a></span>
-                        <span><a href="https://www.researchgate.net/" target="_blank"><i class="fab fa-researchgate"></i> ResearchGate</a></span>
-                        <span><a href="https://github.com/Inoryy" target="_blank"><i class="fab fa-github"></i> GitHub</a></span>
-                        <span><a href="https://www.linkedin.com/in/roman-ring/" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a></span>
-                        <span><a href="https://sciprofiles.com/" target="_blank"><i class="fas fa-id-card-alt"></i> SciProfiles</a></span>
-                        <span><i class="fas fa-map-marker-alt"></i> Marrakech-Safi, Morocco</span>
-                    </div>
+                </header>
+                <div class="linktree-links">
+                    <a href="mailto:example@mail.com" class="linktree-link"><i class="fas fa-envelope"></i><span>example@mail.com</span></a>
+                    <a href="tel:+212600000000" class="linktree-link"><i class="fas fa-phone"></i><span>+212 600 000 000</span></a>
+                    <div class="linktree-link" style="cursor: default;"><i class="fas fa-map-marker-alt"></i><span>Marrakech-Safi, Maroc</span></div>
+                    <a href="https://website.com" target="_blank" class="linktree-link"><i class="fas fa-globe"></i><span>website.com</span></a>
+                    <a href="#" target="_blank" class="linktree-link"><i class="fas fa-graduation-cap"></i><span>Google Scholar</span></a>
+                    <a href="#" target="_blank" class="linktree-link"><i class="fab fa-orcid"></i><span>ORCID</span></a>
+                    <a href="#" target="_blank" class="linktree-link"><i class="fas fa-book"></i><span>PubMed</span></a>
+                    <a href="#" target="_blank" class="linktree-link"><i class="fab fa-researchgate"></i><span>ResearchGate</span></a>
+                    <a href="#" target="_blank" class="linktree-link"><i class="fab fa-linkedin"></i><span>LinkedIn</span></a>
+                    <a href="https://github.com/achma-learning" target="_blank" class="linktree-link"><i class="fab fa-github"></i><span>achma-learning</span></a>
                 </div>
                  <footer class="footer">
                     <div class="qr-code" id="qrcode-card"></div>
-                    <!-- To use the PNG signature by default, uncomment the img tag below and comment out the object tag above. -->
-                    <!-- <object data="https://raw.githubusercontent.com/achma-learning/cv/1e5161ce8027815ea03823c56f4f0e18d60a5ab8/signature.svg" type="image/svg+xml" class="signature"> -->
                     <img src="https://raw.githubusercontent.com/achma-learning/cv/refs/heads/master/signature.png" alt="Signature" class="signature">
-                    <!-- </object> -->
                 </footer>
             </div>
         </div>
@@ -530,40 +401,51 @@
         const cardView = document.getElementById('card-view');
         const toggleBtn = document.getElementById('toggle-view');
         const downloadBtn = document.getElementById('downloadBtn');
+        const profilePic = document.querySelector('.profile-pic');
+        const pageBorder = document.querySelector('.page-border');
+
+        // Store original position
+        const profilePicOriginalParent = profilePic.parentNode;
 
         toggleBtn.addEventListener('click', () => {
-            if (cvView.style.display !== 'none') {
+            const isCvView = cvView.style.display !== 'none';
+            if (isCvView) {
                 cvView.style.display = 'none';
                 cardView.style.display = 'block';
                 toggleBtn.textContent = 'View Full CV';
-                downloadBtn.style.display = 'none'; // Hide download button in card view
+                downloadBtn.style.display = 'none';
+                // In card view, if on mobile, the pic is static inside the header
+                if (window.innerWidth <= 768) {
+                    cardView.querySelector('.header').prepend(profilePic);
+                }
             } else {
                 cvView.style.display = 'block';
                 cardView.style.display = 'none';
                 toggleBtn.textContent = 'View Card';
-                downloadBtn.style.display = 'block'; // Show download button in CV view
+                downloadBtn.style.display = 'block';
+                 // Return pic to original position
+                if (window.innerWidth <= 768) {
+                    pageBorder.prepend(profilePic);
+                }
             }
         });
 
-        // Generate QR Code
-        QRCode.toDataURL(window.location.href, { errorCorrectionLevel: 'H' }, function (err, url) {
+        // Generate QR Code for both views
+        const qrUrl = window.location.href;
+        QRCode.toDataURL(qrUrl, { errorCorrectionLevel: 'H' }, function (err, url) {
             if (err) throw err;
             const qrImgCv = document.createElement('img');
             qrImgCv.src = url;
-            qrImgCv.style.width = '100px'; // Adjust QR code size
-            qrImgCv.style.height = '100px';
             document.getElementById('qrcode-cv').appendChild(qrImgCv);
             
             const qrImgCard = document.createElement('img');
             qrImgCard.src = url;
-            qrImgCard.style.width = '100px'; // Adjust QR code size
-            qrImgCard.style.height = '100px';
             document.getElementById('qrcode-card').appendChild(qrImgCard);
         });
 
         // Download CV as PDF
         document.getElementById("downloadBtn").addEventListener("click", function () {
-            window.print(); // Use window.print() for PDF generation
+            window.print();
         });
     </script>
 </body>
