@@ -88,6 +88,11 @@
             border-top: 1px solid #e0d9c0;
             border-bottom: 1px solid #e0d9c0;
             padding: 15px 0;
+            display: flex; /* Added for desktop one-row layout */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            flex-wrap: wrap; /* Allow items to wrap */
+            gap: 15px; /* Spacing between items */
         }
         .contact-info > div { /* Styling for individual contact items */
             margin: 5px 0;
@@ -277,6 +282,10 @@
                 top: 10px;
                 right: 10px; 
                 width: 100%; /* Make buttons full-width on mobile */
+            }
+            .contact-info { /* Override desktop flex for mobile stacking */
+                flex-direction: column;
+                gap: 5px; /* Adjust gap for mobile stacking */
             }
             .contact-info > div { /* Ensure individual contact items stack */
                 margin: 5px 0;
