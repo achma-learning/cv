@@ -5,23 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roman Ring - Curriculum Vitae</title>
     <!-- Favicon Markups from RealFaviconGenerator -->
-    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <link rel="shortcut icon" href="favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
-    <link rel="manifest" href="site.webmanifest" />
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <!-- Uicons by Flaticon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
     <style>
         :root {
             --paper-color: #fbf9f4; /* Creamy paper */
             --ink-color: #3d3d3d;   /* Dark charcoal */
-            --accent-color: #a28b46; /* Gold */
+            --accent-color: #c5b358; /* Gold */
         }
 
         body {
@@ -50,23 +49,20 @@
         }
         
         .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            text-align: center;
             margin-bottom: 30px;
+            position: relative;
         }
 
         .profile-pic {
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            border: 3px solid var(--accent-color);
-            margin-right: 30px;
-        }
-
-        .header-text {
-            text-align: center;
-            flex-grow: 1;
+            margin: 0 auto 20px;
+            border: 3px solid #b3a04f;
+            position: absolute;
+            top: 30px;
+            left: 30px;
         }
 
         .header h1 {
@@ -214,8 +210,8 @@
             height: 100px; /* Adjusted height to match QR code */
             width: auto;   /* Maintain aspect ratio */
         }
-
-        .download-btn, .toggle-view-btn {
+        
+        .download-btn {
             padding: 10px 20px;
             background-color: var(--accent-color);
             color: #fff;
@@ -231,75 +227,8 @@
             right: 20px;
         }
 
-        .download-btn:hover, .toggle-view-btn:hover {
+        .download-btn:hover {
             background-color: #a4a23c;
-        }
-        
-        .toggle-view-btn {
-            top: 70px;
-            right: 20px;
-        }
-
-        #card-view {
-            display: none;
-            text-align: center;
-        }
-        
-        .linktree-links {
-            margin-top: 40px;
-        }
-
-        .linktree-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            max-width: 90%;
-            margin: 15px auto;
-            padding: 15px;
-            border: 2px solid var(--accent-color);
-            text-decoration: none;
-            font-size: 1.1em;
-            font-weight: bold;
-            color: var(--ink-color);
-            background-color: transparent;
-            transition: all 0.3s ease;
-        }
-        .linktree-link i {
-            font-size: 1.5em;
-            width: 25px; /* To align text nicely */
-        }
-        .linktree-link:hover {
-            background: var(--accent-color);
-            color: var(--paper-color);
-        }
-
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .download-btn, .toggle-view-btn, .linktree-link, .contact-info a {
-            transition: all 0.3s ease;
-        }
-
-        .download-btn:hover, .toggle-view-btn:hover, .linktree-link:hover {
-            transform: scale(1.05);
-        }
-
-        body {
-            animation: fadeInPage 1s ease-in-out;
-        }
-
-        @keyframes fadeInPage {
-            from { opacity: 0; }
-            to { opacity: 1; }
         }
 
 
@@ -326,7 +255,10 @@
                 width: 100%;
                 box-sizing: border-box; /* Ensure padding doesn't affect layout */
             }
-
+            .page-border {
+                border: none;
+                padding: 15px;
+            }
             .profile-pic {
                 position: static; /* Allow it to flow with the layout */
                 display: block;
@@ -334,61 +266,50 @@
                 height: 120px; /* Adjusted size for mobile */
                 margin: 0 auto 20px; /* Center the profile picture */
             }
-
             .header {
                 padding-top: 0;
             }
-
             .header h1 {
                 font-size: 1.8em; /* Adjusted font size */
             }
-
             .header h2 {
                 font-size: 1.5em; /* Adjusted font size */
             }
-
-            .download-btn, .toggle-view-btn {
+            p {
+                margin: 0; /* Remove margin to prevent unnecessary space */
+                font-size: 1em;
+                line-height: 1.5;
+            }
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            .download-btn {
                 position: static; /* Remove absolute positioning on mobile */
                 width: 100%; /* Make buttons full-width on mobile */
                 padding: 15px;
                 font-size: 1.2em;
                 margin-top: 10px; /* Add margin to separate buttons */
-                min-height: 44px;
-                box-sizing: border-box;
+                right: auto; /* Reset right property */
+                top: auto; /* Reset top property */
             }
-
-            .contact-info {
+            .contact-info { /* Override desktop flex for mobile stacking */
                 flex-direction: column;
                 gap: 10px; /* Adjust gap for mobile stacking */
                 padding: 10px;
             }
-
-            .contact-info > div {
+            .contact-info > div { /* Ensure individual contact items stack */
                 margin: 5px 0;
-                text-align: center; /* Center text in mobile */
+                text-align: center;
             }
-
-            .linktree-link {
-                min-height: 44px;
-                box-sizing: border-box;
-                margin: 15px auto; /* Add margin to separate links */
-            }
-
             .contact-info a {
                 font-size: 1.1em; /* Increase font size for better readability */
-                display: inline-block;
-                padding: 10px;
-                min-height: 44px;
-                box-sizing: border-box;
             }
-
             .footer {
                 flex-direction: column;
                 align-items: center;
                 margin-top: 20px;
                 padding-top: 10px;
             }
-
             .qr-code, .signature {
                 width: 100px;
                 height: auto; /* Lock aspect ratio */
@@ -396,7 +317,7 @@
             }
         }
         @media print {
-            .download-btn, .toggle-view-btn {
+            .download-btn {
                 display: none !important;
             }
         }
@@ -406,20 +327,17 @@
     <div class="container">
         <div class="page-border">
             <button class="download-btn" id="downloadBtn">Download as PDF</button>
-            <button class="toggle-view-btn" id="toggle-view">View Card</button>
+             <img src="raw.githubusercontent.com/achma-learning/cv/refs/heads/master/img.jpg" alt="Profile Picture" class="profile-pic">
             <div id="cv-view">
                 <header class="header">
-                    <img src="https://raw.githubusercontent.com/achma-learning/cv/refs/heads/master/img.jpg" alt="Profile Picture" class="profile-pic">
-                    <div class="header-text">
-                        <h1>Roman Ring</h1>
-                        <h2>Research Engineer</h2>
+                    <h1>Roman Ring</h1>
+                    <h2>Research Engineer</h2>
+                    <div class="contact-info">
+                        <div><a href="tel:+212000000000"><i class="fas fa-phone"></i> +212 000000000</a></div>
+                        <div><a href="mailto:prenom.nom@example.com"><i class="fas fa-envelope"></i> prenom.nom@example.com</a></div>
+                        <div><a href="https://maps.google.com/?q=Marrakech-Safi, Maroc" target="_blank"><i class="fas fa-map-marker-alt"></i> Marrakech-Safi, Maroc</a></div>
                     </div>
                 </header>
-                <div class="contact-info">
-                    <div><a href="tel:+212000000000"><i class="fas fa-phone"></i> +212 000000000</a></div>
-                    <div><a href="mailto:prenom.nom@example.com"><i class="fas fa-envelope"></i> prenom.nom@example.com</a></div>
-                    <div><a href="https://maps.google.com/?q=Marrakech-Safi, Maroc" target="_blank"><i class="fas fa-map-marker-alt"></i> Marrakech-Safi, Maroc</a></div>
-                </div>
 
                 <main class="main-content">
                     <div class="section">
@@ -455,7 +373,6 @@
                         <div class="experience-item">
                             <div class="item-header">
                                 <h4>Research Engineer Intern</h4>
-                                <span class="date">June 2019 - September 2019</span>
                             </div>
                             <p class="item-sub-heading">DeepMind, London, UK</p>
                             <ul>
@@ -541,7 +458,7 @@
                         <ul>
                             <li>Symfony Web Framework, Doctrine ORM (contributor)</li>
                             <li>TensorFlow, PySC2, SciPy, StatsModels (minor contributor)</li>
-                            <li><a href="https://github.com/Inoryy/reaver-pysc2">Reaver: SC2 DRL Agent</a>, <a href="https://github.com/Inoryy/csb-ai-starter">CSB AI Starter</a>, <a href="https://github.com/KnpLabs/mailjet-api-php">Mailjet PHP API</a> (creator)</li>
+                            <li><a href="https://github.com/Inoryy/reaver-pysc2">Reaver: SC2 DRL Agent</a>, <a href="https://github.com/KnpLabs/mailjet-api-php">Mailjet PHP API</a> (creator)</li>
                         </ul>
                     </div>
 
@@ -593,67 +510,11 @@
                     <img src="https://raw.githubusercontent.com/achma-learning/cv/refs/heads/master/signature.png" alt="Signature" class="signature">
                 </footer>
             </div>
-            
-            <div id="card-view">
-                <header class="header">
-                    <h1>Roman Ring</h1>
-                    <h2>Research Engineer</h2>
-                </header>
-                <div class="linktree-links">
-                    <a href="mailto:example@mail.com" class="linktree-link"><i class="fas fa-envelope"></i><span>example@mail.com</span></a>
-                    <a href="tel:+212600000000" class="linktree-link"><i class="fas fa-phone"></i><span>+212 600 000 000</span></a>
-                    <a href="https://maps.google.com/?q=Marrakech-Safi,%20Maroc" target="_blank" class="linktree-link"><i class="fas fa-map-marker-alt"></i><span>Marrakech-Safi, Maroc</span></a>
-                    <a href="https://website.com" target="_blank" class="linktree-link"><i class="fas fa-globe"></i><span>website.com</span></a>
-                    <a href="#" target="_blank" class="linktree-link"><i class="fas fa-graduation-cap"></i><span>Google Scholar</span></a>
-                    <a href="#" target="_blank" class="linktree-link"><i class="fab fa-orcid"></i><span>ORCID</span></a>
-                    <a href="#" target="_blank" class="linktree-link"><i class="fas fa-book"></i><span>PubMed</span></a>
-                    <a href="#" target="_blank" class="linktree-link"><i class="fab fa-researchgate"></i><span>ResearchGate</span></a>
-                    <a href="#" target="_blank" class="linktree-link"><i class="fab fa-linkedin"></i><span>LinkedIn</span></a>
-                    <a href="https://github.com/achma-learning" target="_blank" class="linktree-link"><i class="fab fa-github"></i><span>achma-learning</span></a>
-                </div>
-                 <footer class="footer">
-                    <div class="qr-code" id="qrcode-card"></div>
-                    <img src="https://raw.githubusercontent.com/achma-learning/cv/refs/heads/master/signature.png" alt="Signature" class="signature">
-                </footer>
-            </div>
         </div>
     </div>
 
     <script>
-        const cvView = document.getElementById('cv-view');
-        const cardView = document.getElementById('card-view');
-        const toggleBtn = document.getElementById('toggle-view');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const profilePic = document.querySelector('.profile-pic');
-        const pageBorder = document.querySelector('.page-border');
-
-        // Store original position
-        const profilePicOriginalParent = profilePic.parentNode;
-
-        toggleBtn.addEventListener('click', () => {
-            const isCvView = cvView.style.display !== 'none';
-            if (isCvView) {
-                cvView.style.display = 'none';
-                cardView.style.display = 'block';
-                toggleBtn.textContent = 'View Full CV';
-                downloadBtn.style.display = 'none';
-                // In card view, if on mobile, the pic is static inside the header
-                if (window.innerWidth <= 768) {
-                    cardView.querySelector('.header').prepend(profilePic);
-                }
-            } else {
-                cvView.style.display = 'block';
-                cardView.style.display = 'none';
-                toggleBtn.textContent = 'View Card';
-                downloadBtn.style.display = 'block';
-                 // Return pic to original position
-                if (window.innerWidth <= 768) {
-                    pageBorder.insertBefore(profilePic, cvView);
-                }
-            }
-        });
-
-        // Generate QR Code for both views
+        // Generate QR Code
         const qrUrl = window.location.href;
         QRCode.toDataURL(qrUrl, { errorCorrectionLevel: 'H' }, function (err, url) {
             if (err) throw err;
@@ -662,45 +523,11 @@
             qrImgCv.style.width = '100px'; // Adjust QR code size
             qrImgCv.style.height = '100px';
             document.getElementById('qrcode-cv').appendChild(qrImgCv);
-            
-            const qrImgCard = document.createElement('img');
-            qrImgCard.src = url;
-            qrImgCard.style.width = '100px'; // Adjust QR code size
-            qrImgCard.style.height = '100px';
-            document.getElementById('qrcode-card').appendChild(qrImgCard);
         });
 
         // Download CV as PDF
         document.getElementById("downloadBtn").addEventListener("click", function () {
-            const name = prompt("Please enter your name for the PDF filename:", "Roman Ring");
-            if (name) {
-                const element = document.querySelector('.page-border');
-                const opt = {
-                    margin:       0.5,
-                    filename:     `${name} CV.pdf`,
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { scale: 2 },
-                    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-                };
-                html2pdf().from(element).set(opt).save();
-            }
-        });
-
-        // Fade in sections on scroll
-        const sections = document.querySelectorAll('.section');
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, {
-            threshold: 0.1
-        });
-
-        sections.forEach(section => {
-            section.classList.add('fade-in');
-            observer.observe(section);
+            window.print(); // Use window.print() for PDF generation
         });
     </script>
 </body>

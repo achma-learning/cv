@@ -5,22 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roman Ring - Curriculum Vitae</title>
     <!-- Favicon Markups from RealFaviconGenerator -->
-    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
     <!-- Uicons by Flaticon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
     <style>
         :root {
             --paper-color: #fbf9f4; /* Creamy paper */
             --ink-color: #3d3d3d;   /* Dark charcoal */
-            --accent-color: #c5b358; /* Gold */
+            --accent-color: #a28b46; /* Gold */
         }
 
         body {
@@ -49,20 +50,23 @@
         }
         
         .header {
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             margin-bottom: 30px;
-            position: relative;
         }
 
         .profile-pic {
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            margin: 0 auto 20px;
-            border: 3px solid #b3a04f;
-            position: absolute;
-            top: 30px;
-            left: 30px;
+            border: 3px solid var(--accent-color);
+            margin-right: 30px;
+        }
+
+        .header-text {
+            text-align: center;
+            flex-grow: 1;
         }
 
         .header h1 {
@@ -231,6 +235,35 @@
             background-color: #a4a23c;
         }
 
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .download-btn, .contact-info a {
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+        }
+
+        body {
+            animation: fadeInPage 1s ease-in-out;
+        }
+
+        @keyframes fadeInPage {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+
 
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -291,6 +324,8 @@
                 margin-top: 10px; /* Add margin to separate buttons */
                 right: auto; /* Reset right property */
                 top: auto; /* Reset top property */
+                min-height: 44px;
+                box-sizing: border-box;
             }
             .contact-info { /* Override desktop flex for mobile stacking */
                 flex-direction: column;
@@ -303,6 +338,10 @@
             }
             .contact-info a {
                 font-size: 1.1em; /* Increase font size for better readability */
+                display: inline-block;
+                padding: 10px;
+                min-height: 44px;
+                box-sizing: border-box;
             }
             .footer {
                 flex-direction: column;
@@ -330,9 +369,13 @@
              <img src="raw.githubusercontent.com/achma-learning/cv/refs/heads/master/img.jpg" alt="Profile Picture" class="profile-pic">
             <div id="cv-view">
                 <header class="header">
-                    <h1>Roman Ring</h1>
-                    <h2>Research Engineer</h2>
-                    <div class="contact-info">
+                    <img src="raw.githubusercontent.com/achma-learning/cv/refs/heads/master/img.jpg" alt="Profile Picture" class="profile-pic">
+                    <div class="header-text">
+                        <h1>Roman Ring</h1>
+                        <h2>Research Engineer</h2>
+                    </div>
+                </header>
+                <div class="contact-info">
                         <div><a href="tel:+212000000000"><i class="fas fa-phone"></i> +212 000000000</a></div>
                         <div><a href="mailto:prenom.nom@example.com"><i class="fas fa-envelope"></i> prenom.nom@example.com</a></div>
                         <div><a href="https://maps.google.com/?q=Marrakech-Safi, Maroc" target="_blank"><i class="fas fa-map-marker-alt"></i> Marrakech-Safi, Maroc</a></div>
@@ -527,7 +570,35 @@
 
         // Download CV as PDF
         document.getElementById("downloadBtn").addEventListener("click", function () {
-            window.print(); // Use window.print() for PDF generation
+            const name = prompt("Please enter your name for the PDF filename:", "Roman Ring");
+            if (name) {
+                const element = document.querySelector('.page-border');
+                const opt = {
+                    margin:       0.5,
+                    filename:     `${name} CV.pdf`,
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { scale: 2 },
+                    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+                html2pdf().from(element).set(opt).save();
+            }
+        });
+
+        // Fade in sections on scroll
+        const sections = document.querySelectorAll('.section');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        sections.forEach(section => {
+            section.classList.add('fade-in');
+            observer.observe(section);
         });
     </script>
 </body>
