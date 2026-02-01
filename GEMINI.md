@@ -18,8 +18,13 @@ Both versions are optimized for easy deployment on GitHub Pages and mobile acces
     *   Direct links to Email, Phone, Website, Google Scholar, ORCID, PubMed, ResearchGate, LinkedIn, GitHub, and SciProfiles. Each link is represented with icons for easy visual identification and functions as a Linktree-style button.
     *   Location (Marrakech-Safi, Morocco) is also displayed with an icon.
 *   **Responsive Design**:
-    *   The layout adapts seamlessly across both desktop and mobile devices using CSS media queries.
-    *   The mobile-first design uses a single-column layout for easy navigation on smaller screens.
+    *   The layout adapts seamlessly across both desktop and mobile devices using CSS media queries, prioritizing a mobile-first approach.
+    *   On small screens (max-width: 768px), padding and margins are removed from the body and container, and content is horizontally centered using flexbox (`display: flex`, `justify-content: center`, `align-items: center`) for optimal viewing.
+    *   `overflow-x: hidden` is applied to `html` and `body` to prevent horizontal scrolling.
+    *   Font sizes for headings (`h1`, `h2`) and paragraphs (`p`) are adjusted to ensure readability on smaller displays.
+    *   Buttons (like "Download as PDF" and "View Card") expand to full width and are repositioned for better mobile interaction.
+    *   Contact information (`.contact-info`) and other key elements stack vertically on mobile for enhanced usability.
+    *   The profile picture (`.profile-pic`) transitions from absolute positioning on desktop to static and centered within the flow on mobile.
     *   The desktop version uses a two-column layout with the profile picture on the left and detailed information on the right. Both layouts support easy scrolling and smooth transitions.
 *   **Interactive Features**:
     *   **PDF Download**: An "Download as PDF" button implements the browser’s native print functionality to generate a PDF version of the CV.
@@ -54,7 +59,7 @@ Both versions are optimized for easy deployment on GitHub Pages and mobile acces
     *   The footer, including the QR code and signature, is also displayed in the card view.
 *   **Responsive Layout**:
     *   **Desktop Version**: Two-column layout with a profile picture and key information on the left, and detailed CV content on the right.
-    *   **Mobile Version**: Single-column layout for easy readability. The mobile view removes borders and stacks content vertically.
+    *   **Mobile Version**: Optimized for single-column readability. This includes removal of unnecessary padding/margins, content centering using flexbox, adjusted font sizes for better readability, and full-width buttons for ease of use. Contact details within the CV view (`.contact-info`) now stack vertically and are centered. The profile picture also adjusts to a static, centered position within the mobile flow.
 
 # SEO and Accessibility Improvements
 

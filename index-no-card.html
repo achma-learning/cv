@@ -76,7 +76,6 @@
         .header h2 {
             font-family: 'Lora', serif;
             font-size: 1.5em;
-            font-weight: 400;
             font-style: italic;
             color: var(--accent-color);
             margin: 5px 0 20px 0;
@@ -90,8 +89,8 @@
             border-bottom: 1px solid #e0d9c0;
             padding: 15px 0;
         }
-        .contact-info span {
-            margin: 0 15px;
+        .contact-info > div { /* Styling for individual contact items */
+            margin: 5px 0;
         }
         .contact-info a {
             color: var(--ink-color);
@@ -230,14 +229,26 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
+            html, body {
+                overflow-x: hidden; /* Prevent horizontal scrolling */
+            }
             body { /* Applied to body directly */
                 padding: 0;
+                margin: 0; /* Ensured margin is 0 */
+                display: flex; /* Use flexbox to center content */
+                flex-direction: column; /* Stack elements vertically */
+                justify-content: center; /* Horizontally center the content */
+                align-items: center; /* Vertically center the content */
+                height: auto; /* Height is auto to allow scrolling */
+                text-align: center; /* Ensure text is centered inside */
             }
             .container {
                 margin: 0; /* Removed margin */
                 border: none;
                 box-shadow: none;
-                padding: 0; /* Removed padding */
+                padding: 10px; /* Adjusted padding */
+                width: 100%;
+                box-sizing: border-box; /* Ensure padding doesn't affect layout */
             }
             .page-border {
                 border: none;
@@ -249,10 +260,15 @@
                 margin: 0 auto 20px;
             }
             .header h1 {
-                font-size: 2.5em;
+                font-size: 1.8em; /* Adjusted font size */
             }
             .header h2 {
-                font-size: 1.2em;
+                font-size: 1.5em; /* Adjusted font size */
+            }
+            p {
+                margin: 0; /* Remove margin to prevent unnecessary space */
+                font-size: 1em;
+                line-height: 1.5;
             }
             .skills-grid {
                 grid-template-columns: 1fr;
@@ -260,6 +276,11 @@
             .download-btn {
                 top: 10px;
                 right: 10px; 
+                width: 100%; /* Make buttons full-width on mobile */
+            }
+            .contact-info > div { /* Ensure individual contact items stack */
+                margin: 5px 0;
+                text-align: center;
             }
         }
         @media print {
@@ -279,9 +300,9 @@
                     <h1>Roman Ring</h1>
                     <h2>Research Engineer</h2>
                     <div class="contact-info">
-                        <span><a href="tel:+212000000000"><i class="fas fa-phone"></i> +212 000000000</a></span>
-                        <span><a href="mailto:prenom.nom@example.com"><i class="fas fa-envelope"></i> prenom.nom@example.com</a></span>
-                        <span><i class="fas fa-map-marker-alt"></i> Marrakech-Safi, Maroc</span>
+                        <div><a href="tel:+212000000000"><i class="fas fa-phone"></i> +212 000000000</a></div>
+                        <div><a href="mailto:prenom.nom@example.com"><i class="fas fa-envelope"></i> prenom.nom@example.com</a></div>
+                        <div><i class="fas fa-map-marker-alt"></i> Marrakech-Safi, Maroc</div>
                     </div>
                 </header>
 
@@ -295,7 +316,7 @@
                             </div>
                             <p class="item-sub-heading">University of Tartu, Estonia</p>
                             <ul>
-                                <li>Thesis: <a href="http://dspace.ut.ee/handle/10062/61039">Replicating DeepMind StarCraft II RL Benchmark with Actor-Critic Methods</a></li>
+                                <li>Thesis: Replicating DeepMind StarCraft II RL Benchmark with Actor-Critic Methods</li>
                             </ul>
                         </div>
                         <div class="education-item">
@@ -454,10 +475,7 @@
 
                 <footer class="footer">
                     <div class="qr-code" id="qrcode-cv"></div>
-                    <!-- To use the PNG signature by default, uncomment the img tag below and comment out the object tag above. -->
-                    <!-- <object data="https://raw.githubusercontent.com/achma-learning/cv/1e5161ce8027815ea03823c56f4f0e18d60a5ab8/signature.svg" type="image/svg+xml" class="signature"> -->
                     <img src="https://raw.githubusercontent.com/achma-learning/cv/refs/heads/master/signature.png" alt="Signature" class="signature">
-                    <!-- </object> -->
                 </footer>
             </div>
         </div>

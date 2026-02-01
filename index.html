@@ -89,8 +89,8 @@
             border-bottom: 1px solid #e0d9c0;
             padding: 15px 0;
         }
-        .contact-info span {
-            margin: 0 15px;
+        .contact-info > div { /* Styling for individual contact items */
+            margin: 5px 0;
         }
         .contact-info a {
             color: var(--ink-color);
@@ -330,6 +330,10 @@
                 right: 10px;
                 width: 100%; /* Make buttons full-width on mobile */
             }
+            .contact-info > div { /* Ensure individual contact items stack */
+                margin: 5px 0;
+                text-align: center;
+            }
         }
         @media print {
             .download-btn, .toggle-view-btn {
@@ -351,13 +355,12 @@
                     <h2>Research Engineer</h2>
                 </header>
                 <div class="contact-info">
-                    <span><a href="tel:+212000000000"><i class="fas fa-phone"></i> +212 000000000</a></span>
-                    <span><a href="mailto:prenom.nom@example.com"><i class="fas fa-envelope"></i> prenom.nom@example.com</a></span>
-                    <span><i class="fas fa-map-marker-alt"></i> Marrakech-Safi, Maroc</span>
+                    <div><a href="tel:+212000000000"><i class="fas fa-phone"></i> +212 000000000</a></div>
+                    <div><a href="mailto:prenom.nom@example.com"><i class="fas fa-envelope"></i> prenom.nom@example.com</a></div>
+                    <div><i class="fas fa-map-marker-alt"></i> Marrakech-Safi, Maroc</div>
                 </div>
 
                 <main class="main-content">
-                    <!-- CV sections remain here -->
                     <div class="section">
                         <h3>Education</h3>
                         <div class="education-item">
@@ -367,7 +370,7 @@
                             </div>
                             <p class="item-sub-heading">University of Tartu, Estonia</p>
                             <ul>
-                                <li>Thesis: <a href="http://dspace.ut.ee/handle/10062/61039">Replicating DeepMind StarCraft II RL Benchmark with Actor-Critic Methods</a></li>
+                                <li>Thesis: Replicating DeepMind StarCraft II RL Benchmark with Actor-Critic Methods</li>
                             </ul>
                         </div>
                         <div class="education-item">
@@ -378,7 +381,8 @@
                             <p class="item-sub-heading">University of Tartu, Estonia</p>
                         </div>
                     </div>
-                     <div class="section">
+
+                    <div class="section">
                         <h3>Employment</h3>
                         <div class="experience-item">
                             <div class="item-header">
@@ -398,6 +402,128 @@
                                 <li>Created proof-of-concept ML framework in JAX, showcased with CV and NLP models</li>
                             </ul>
                         </div>
+                        <div class="experience-item">
+                            <div class="item-header">
+                                <h4>Research Assistant</h4>
+                                <span class="date">February 2018 - February 2020</span>
+                            </div>
+                            <p class="item-sub-heading">Comput. Neuroscience Research Group</p>
+                            <ul>
+                                <li>Assisted with research and engineering in the domain of deep reinforcement learning</li>
+                            </ul>
+                        </div>
+                         <div class="experience-item">
+                            <div class="item-header">
+                                <h4>Research Assistant</h4>
+                                <span class="date">June 2018 - December 2018</span>
+                            </div>
+                            <p class="item-sub-heading">PerkinElmer</p>
+                            <ul>
+                                <li>Improved instance segmentation pipeline in fluorescent medical imaging</li>
+                            </ul>
+                        </div>
+                         <div class="experience-item">
+                            <div class="item-header">
+                                <h4>Senior Web Developer</h4>
+                                <span class="date">September 2011 - February 2015</span>
+                            </div>
+                            <p class="item-sub-heading">KNP Labs</p>
+                            <ul>
+                                <li>Developed and suppored complex web based applications (banking, education, retail)</li>
+                                <li>Coached junior developers with hands-on workshops, pair programming sessions, PR reviews</li>
+                            </ul>
+                        </div>
+                        <div class="experience-item">
+                            <div class="item-header">
+                                <h4>Web Developer</h4>
+                                <span class="date">September 2010 - September 2011</span>
+                            </div>
+                            <p class="item-sub-heading">Attitude OÜ</p>
+                            <ul>
+                                <li>Developed and supported web based applications</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Skills</h3>
+                        <div class="skills-grid">
+                            <div>
+                                 <h4>Expert in</h4>
+                                 <ul>
+                                    <li>Python, PHP, JavaScript</li>
+                                    <li>Keras, Symfony, Doctrine, Angular</li>
+                                    <li>git</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4>Proficient in</h4>
+                                <ul>
+                                    <li>C++, R, Java, HTML, CSS</li>
+                                    <li>Tensorflow, PyTorch, NumPy, SciPy</li>
+                                    <li>AWS</li>
+                                </ul>
+                            </div>
+                             <div>
+                                <h4>Experience in</h4>
+                                <ul>
+                                    <li>Bash, MATLAB, SAS, LaTeX</li>
+                                    <li>Caffe, Theano, OpenCV</li>
+                                    <li>vim</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Open Source</h3>
+                        <ul>
+                            <li>Symfony Web Framework, Doctrine ORM (contributor)</li>
+                            <li>TensorFlow, PySC2, SciPy, StatsModels (minor contributor)</li>
+                            <li><a href="https://github.com/Inoryy/reaver-pysc2">Reaver: SC2 DRL Agent</a>, <a href="https://github.com/Inoryy/csb-ai-starter">CSB AI Starter</a>, <a href="https://github.com/KnpLabs/mailjet-api-php">Mailjet PHP API</a> (creator)</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h3>Talks</h3>
+                        <ul>
+                            <li>Reinforcement Learning (Guest Lecture, University of Tartu) - December 2018</li>
+                            <li>Deep Reinforcement Learning (DevClub, Tallinn) - June 2018</li>
+                            <li>Behavior Driven Development with Behat and Mink (DevClub, Tallinn) - January 2013</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h3>Teaching</h3>
+                        <ul>
+                            <li>Neural Networks, TA (University of Tartu) - Spring 2019</li>
+                            <li>Deep Reinforcement Learning, TA (University of Tartu) - Autumn 2018</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h3>Competitions</h3>
+                        <ul>
+                            <li>Kaggle 2018 Data Science Bowl (277/3634, team) - April 2018</li>
+                            <li>Codingame AI Contest Coders of the Caribbean (28/3623) - April 2017</li>
+                            <li>Hackerrank University World Cup (22/4466, team) - September 2015</li>
+                            <li>IEEEXtreme 8.0 (208/1853, team) - September 2014</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h3>Awards</h3>
+                        <ul>
+                            <li>Estonian National Contest for University Students, B.S. programme, 2nd prize - December 2018</li>
+                            <li>DevClub Best Talk Award - December 2018</li>
+                            <li>Cybernetica AS  Master's Fellowship - October 2018</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h3>Relevant Coursework</h3>
+                        <p>Information Theory, Stochastic Processes, Matrix Calculus, Monte-Carlo Methods, Machine Learning, Neural Networks, Data Analysis I-II, Numerical Analysis, Mathematical Analysis I-III, Probability Theory & Statistics I-II, Algebra (Abstract & Linear)</p>
+                        <p><em>Online:</em> Machine Learning (Stanford CS229), CNNs for Visual Recognition (Stanford CS231n), Deep Learning for NLP (Stanford CS224d), Intro to AI (Berkeley CS188), DRL Bootcamp (Berkeley), Reinforcement Learning (UCL), Deep Reinforcement Learning (Berkeley CS294)</p>
                     </div>
                 </main>
 
