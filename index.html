@@ -298,9 +298,11 @@
                 padding: 15px;
             }
             .profile-pic {
-                position: static; /* In mobile, let it be part of the flow */
+                position: static; /* Allow it to flow with the layout */
                 display: block;
-                margin: 0 auto 20px;
+                width: 120px; /* Adjusted size for mobile */
+                height: 120px; /* Adjusted size for mobile */
+                margin: 0 auto 20px; /* Center the profile picture */
             }
             .header {
                  padding-top: 0;
@@ -326,22 +328,45 @@
                 grid-template-columns: 1fr;
             }
             .download-btn {
-                top: 10px;
-                right: 10px; 
+                position: static; /* Remove absolute positioning on mobile */
                 width: 100%; /* Make buttons full-width on mobile */
-            }
-            .toggle-view-btn {
-                top: 60px;
-                right: 10px;
-                width: 100%; /* Make buttons full-width on mobile */
+                padding: 15px;
+                font-size: 1.2em;
+                margin-top: 10px; /* Add margin to separate buttons */
+                right: auto; /* Reset right property */
+                top: auto; /* Reset top property */
             }
             .contact-info { /* Override desktop flex for mobile stacking */
                 flex-direction: column;
-                gap: 5px; /* Adjust gap for mobile stacking */
+                gap: 10px; /* Adjust gap for mobile stacking */
+                padding: 10px;
             }
             .contact-info > div { /* Ensure individual contact items stack */
                 margin: 5px 0;
                 text-align: center;
+            }
+            .contact-info a {
+                font-size: 1.1em; /* Increase font size for better readability */
+            }
+            .footer {
+                flex-direction: column;
+                align-items: center;
+                margin-top: 20px;
+                padding-top: 10px;
+            }
+            .qr-code, .signature {
+                width: 100px;
+                height: 100px;
+                margin-bottom: 10px;
+            }
+            .toggle-view-btn {
+                position: static; /* Remove absolute positioning on mobile */
+                width: 100%; /* Make buttons full-width on mobile */
+                padding: 15px;
+                font-size: 1.2em;
+                margin-top: 10px; /* Add margin to separate buttons */
+                right: auto; /* Reset right property */
+                top: auto; /* Reset top property */
             }
         }
         @media print {
@@ -363,10 +388,10 @@
                     <h1>Roman Ring</h1>
                     <h2>Research Engineer</h2>
                 </header>
-                <div class="contact-info" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; margin-bottom: 30px; border-top: 1px solid #e0d9c0; border-bottom: 1px solid #e0d9c0; padding: 15px 0;">
+                <div class="contact-info">
                     <div><a href="tel:+212000000000"><i class="fas fa-phone"></i> +212 000000000</a></div>
                     <div><a href="mailto:prenom.nom@example.com"><i class="fas fa-envelope"></i> prenom.nom@example.com</a></div>
-                    <div><i class="fas fa-map-marker-alt"></i> Marrakech-Safi, Maroc</div>
+                    <div><a href="https://maps.google.com/?q=Marrakech-Safi, Maroc" target="_blank"><i class="fas fa-map-marker-alt"></i> Marrakech-Safi, Maroc</a></div>
                 </div>
 
                 <main class="main-content">
