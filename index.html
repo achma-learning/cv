@@ -286,17 +286,14 @@
                 text-align: center; /* Ensure text is centered inside */
             }
             .container {
-                margin: 0; /* Removed margin */
+                margin: 0;
                 border: none;
                 box-shadow: none;
-                padding: 10px; /* Adjusted padding */
+                padding: 10px;
                 width: 100%;
                 box-sizing: border-box; /* Ensure padding doesn't affect layout */
             }
-            .page-border {
-                border: none;
-                padding: 15px;
-            }
+
             .profile-pic {
                 position: static; /* Allow it to flow with the layout */
                 display: block;
@@ -304,69 +301,53 @@
                 height: 120px; /* Adjusted size for mobile */
                 margin: 0 auto 20px; /* Center the profile picture */
             }
+
             .header {
-                 padding-top: 0;
+                padding-top: 0;
             }
+
             .header h1 {
                 font-size: 1.8em; /* Adjusted font size */
             }
+
             .header h2 {
                 font-size: 1.5em; /* Adjusted font size */
             }
-            p {
-                margin: 0; /* Remove margin to prevent unnecessary space */
-                font-size: 1em;
-                line-height: 1.5;
-            }
-            #card-view .profile-pic {
-                position: static; /* Card view should follow mobile rules too */
-            }
-            #card-view .header {
-                padding-top: 0;
-            }
-            .skills-grid {
-                grid-template-columns: 1fr;
-            }
-            .download-btn {
+
+            .download-btn, .toggle-view-btn {
                 position: static; /* Remove absolute positioning on mobile */
                 width: 100%; /* Make buttons full-width on mobile */
                 padding: 15px;
                 font-size: 1.2em;
                 margin-top: 10px; /* Add margin to separate buttons */
-                right: auto; /* Reset right property */
-                top: auto; /* Reset top property */
             }
-            .contact-info { /* Override desktop flex for mobile stacking */
+
+            .contact-info {
                 flex-direction: column;
                 gap: 10px; /* Adjust gap for mobile stacking */
                 padding: 10px;
             }
-            .contact-info > div { /* Ensure individual contact items stack */
+
+            .contact-info > div {
                 margin: 5px 0;
-                text-align: center;
+                text-align: center; /* Center text in mobile */
             }
+
             .contact-info a {
                 font-size: 1.1em; /* Increase font size for better readability */
             }
+
             .footer {
                 flex-direction: column;
                 align-items: center;
                 margin-top: 20px;
                 padding-top: 10px;
             }
+
             .qr-code, .signature {
                 width: 100px;
-                height: 100px;
+                height: auto; /* Lock aspect ratio */
                 margin-bottom: 10px;
-            }
-            .toggle-view-btn {
-                position: static; /* Remove absolute positioning on mobile */
-                width: 100%; /* Make buttons full-width on mobile */
-                padding: 15px;
-                font-size: 1.2em;
-                margin-top: 10px; /* Add margin to separate buttons */
-                right: auto; /* Reset right property */
-                top: auto; /* Reset top property */
             }
         }
         @media print {
