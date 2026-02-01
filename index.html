@@ -69,7 +69,6 @@
         .header h2 {
             font-family: 'Lora', serif;
             font-size: 1.5em;
-            font-weight: 400;
             font-style: italic;
             color: var(--accent-color);
             margin: 5px 0 20px 0;
@@ -499,17 +498,28 @@
             </div>
             <div id="card-view">
                 <div class="card-view-content">
-                    <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-pic" style="position: static; display: block; margin: 0 auto 20px;">
+                    <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-pic">
                     <h1>Roman Ring</h1>
                     <h2>Research Engineer</h2>
-                    <div class="card-links">
-                        <a href="https://github.com/Inoryy" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-                        <a href="https://scholar.google.com/citations?user=MG817V4AAAAJ&hl=zh-CN&authuser=1" target="_blank"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
-                        <a href="mailto:inoryy@gmail.com"><i class="fas fa-envelope"></i> Email</a>
+                    <p class="short-bio">Short biography - role under name</p>
+                    <div class="contact-info card-contact-info">
+                        <span><a href="mailto:inoryy@gmail.com"><i class="fas fa-envelope"></i> Email</a></span>
+                        <span><a href="https://scholar.google.com/citations?user=MG817V4AAAAJ&hl=zh-CN&authuser=1" target="_blank"><i class="fas fa-graduation-cap"></i> Google Scholar</a></span>
+                        <span><a href="https://orcid.org/" target="_blank"><i class="fab fa-orcid"></i> ORCID</a></span>
+                        <span><a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank"><i class="fas fa-book-medical"></i> PubMed</a></span>
+                        <span><a href="https://www.researchgate.net/" target="_blank"><i class="fab fa-researchgate"></i> ResearchGate</a></span>
+                        <span><a href="https://github.com/Inoryy" target="_blank"><i class="fab fa-github"></i> GitHub</a></span>
+                        <span><a href="https://www.linkedin.com/in/roman-ring/" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a></span>
+                        <span><a href="https://sciprofiles.com/" target="_blank"><i class="fas fa-id-card-alt"></i> SciProfiles</a></span>
+                        <span><i class="fas fa-map-marker-alt"></i> Marrakech-Safi, Morocco</span>
                     </div>
                 </div>
                  <footer class="footer">
                     <div class="qr-code" id="qrcode-card"></div>
+                    <!-- To use the PNG signature by default, uncomment the img tag below and comment out the object tag above. -->
+                    <!-- <object data="https://raw.githubusercontent.com/achma-learning/cv/1e5161ce8027815ea03823c56f4f0e18d60a5ab8/signature.svg" type="image/svg+xml" class="signature"> -->
+                    <img src="https://raw.githubusercontent.com/achma-learning/cv/refs/heads/master/signature.png" alt="Signature" class="signature">
+                    <!-- </object> -->
                 </footer>
             </div>
         </div>
