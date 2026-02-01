@@ -556,7 +556,7 @@
                 <div class="linktree-links">
                     <a href="mailto:example@mail.com" class="linktree-link"><i class="fas fa-envelope"></i><span>example@mail.com</span></a>
                     <a href="tel:+212600000000" class="linktree-link"><i class="fas fa-phone"></i><span>+212 600 000 000</span></a>
-                    <div class="linktree-link" style="cursor: default;"><i class="fas fa-map-marker-alt"></i><span>Marrakech-Safi, Maroc</span></div>
+                    <a href="https://maps.google.com/?q=Marrakech-Safi,%20Maroc" target="_blank" class="linktree-link"><i class="fas fa-map-marker-alt"></i><span>Marrakech-Safi, Maroc</span></a>
                     <a href="https://website.com" target="_blank" class="linktree-link"><i class="fas fa-globe"></i><span>website.com</span></a>
                     <a href="#" target="_blank" class="linktree-link"><i class="fas fa-graduation-cap"></i><span>Google Scholar</span></a>
                     <a href="#" target="_blank" class="linktree-link"><i class="fab fa-orcid"></i><span>ORCID</span></a>
@@ -602,7 +602,7 @@
                 downloadBtn.style.display = 'block';
                  // Return pic to original position
                 if (window.innerWidth <= 768) {
-                    pageBorder.prepend(profilePic);
+                    pageBorder.insertBefore(profilePic, cvView);
                 }
             }
         });
