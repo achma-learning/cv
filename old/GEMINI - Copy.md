@@ -66,13 +66,6 @@ Both versions are optimized for easy deployment on GitHub Pages and mobile acces
 *   Minify CSS/JS to optimize page loading times.
 *   Cross-browser compatibility testing to ensure the website works well across Chrome, Firefox, Safari, and Edge.
 
-# Security and Privacy Considerations
-
-*   **Static Site Architecture**: The website is built as a static HTML file, which inherently minimizes server-side vulnerabilities and reduces the attack surface compared to dynamic applications.
-*   **Minimal Data Collection**: The design prioritizes user privacy. No personal user data is collected, processed, or stored by the website itself. Standard web server logs (e.g., GitHub Pages) may exist but are outside the application's control.
-*   **Dependency Review**: External libraries (`FontAwesome`, `qrcode.js`) are carefully selected for their reputation, minimal footprint, and security track record. Dependencies are kept to a minimum to reduce potential supply chain risks.
-*   **No Unnecessary Functionality**: Features are limited to presentation and basic interactivity, avoiding complex backend integrations or unnecessary scripts that could introduce vulnerabilities.
-
 # External Libraries Used
 
 *   **FontAwesome**: For professional icons (e.g., social media links, contact info).

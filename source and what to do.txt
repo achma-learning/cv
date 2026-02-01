@@ -21,3 +21,5 @@ requirement to add,
 final use gemini-cli with a pdf with all important and must inclued , and make index.html to host in github, so later buy website with your name
 
  so idea, a website that show full cv, and qr code that open page cv, and there two button one to download pdf, one to show show card cv with a buttlon that has colored border and slighetely animated that links to full cv, and make sure this is on one html file , use javascript for displaying the cv card and cv full, display cv full by defautl and add a button to view cv card
+ 
+ favicon made by : https://realfavicongenerator.net/

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roman Ring - Curriculum Vitae</title>
+    <!-- Favicon Markups from RealFaviconGenerator -->
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <!-- Uicons by Flaticon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <style>
+        :root {
+            --paper-color: #fbf9f4; /* Creamy paper */
+            --ink-color: #3d3d3d;   /* Dark charcoal */
+            --accent-color: #c5b358; /* Gold */
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            margin: 0;
+            padding: 0; /* Removed padding */
+            background-color: var(--paper-color); /* Consistent background */
+            color: var(--ink-color);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 20px auto;
+            background: var(--paper-color);
+            border: 1px solid var(--accent-color);
+            padding: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.15);
+        }
+        
+        .page-border {
+            border: 3px double var(--accent-color);
+            padding: 30px;
+            position: relative;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 30px; /* Add padding to not overlap with pic */
+        }
+
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid var(--accent-color);
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            z-index: 5; /* Ensure it's above other elements */
+        }
+
+        .header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5em;
+            margin: 0;
+            font-weight: 700;
+            color: var(--ink-color);
+        }
+
+        .header h2 {
+            font-family: 'Lora', serif;
+            font-size: 1.5em;
+            font-style: italic;
+            color: var(--accent-color);
+            margin: 5px 0 20px 0;
+        }
+
+        .contact-info {
+            text-align: center;
+            font-size: 0.95em;
+            margin-bottom: 30px;
+            border-top: 1px solid #e0d9c0;
+            border-bottom: 1px solid #e0d9c0;
+            padding: 15px 0;
+        }
+        .contact-info span {
+            margin: 0 15px;
+        }
+        .contact-info a {
+            color: var(--ink-color);
+            text-decoration: none;
+        }
+        .contact-info a:hover {
+            color: var(--accent-color);
+        }
+        .contact-info i {
+            color: var(--accent-color);
+            margin-right: 8px;
+        }
+
+        .section {
+            margin-bottom: 35px;
+        }
+
+        h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8em;
+            color: var(--ink-color);
+            text-align: center;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+
+        h3::before, h3::after {
+            content: '';
+            display: inline-block;
+            width: 50px;
+            height: 1px;
+            background-color: var(--accent-color);
+            vertical-align: middle;
+            margin: 0 15px;
+        }
+
+        ul {
+            padding-left: 20px;
+            list-style: none;
+        }
+        ul li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 25px;
+        }
+        ul li::before {
+            content: '⚜';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-size: 1em;
+        }
+
+        .experience-item, .education-item {
+            margin-bottom: 30px;
+        }
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 2px;
+        }
+        .item-header h4 {
+            font-family: 'Lora', serif;
+            font-weight: 700;
+            font-size: 1.15em;
+            margin: 0;
+        }
+        .date {
+            font-style: italic;
+            color: #555;
+            white-space: nowrap;
+            font-size: 0.9em;
+        }
+        .item-sub-heading {
+             font-style: italic;
+             color: #777;
+             margin: 0 0 10px 0;
+        }
+        .experience-item ul {
+            padding-left: 15px;
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 40px;
+        }
+
+        .skills-grid h4 {
+             font-family: 'Cormorant Garamond', serif;
+             font-weight: 700;
+             font-size: 1.2em;
+             margin-bottom: 10px;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e0d9c0;
+        }
+
+        .qr-code {
+            width: 100px;
+            height: 100px;
+        }
+
+        .signature {
+            height: 100px; /* Adjusted height to match QR code */
+            width: auto;   /* Maintain aspect ratio */
+        }
+
+        .download-btn, .toggle-view-btn {
+            padding: 10px 20px;
+            background-color: var(--accent-color);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-family: 'Lora', serif;
+            position: absolute;
+            z-index: 10;
+        }
+
+        .download-btn {
+            top: 20px;
+            right: 20px;
+        }
+
+        .download-btn:hover, .toggle-view-btn:hover {
+            background-color: #a4a23c;
+        }
+        
+        .toggle-view-btn {
+            top: 70px;
+            right: 20px;
+        }
+
+        #card-view {
+            display: none;
+            text-align: center;
+        }
+        
+        .linktree-links {
+            margin-top: 40px;
+        }
+
+        .linktree-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            max-width: 90%;
+            margin: 15px auto;
+            padding: 15px;
+            border: 2px solid var(--accent-color);
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: var(--ink-color);
+            background-color: transparent;
+            transition: all 0.3s ease;
+        }
+        .linktree-link i {
+            font-size: 1.5em;
+            width: 25px; /* To align text nicely */
+        }
+        .linktree-link:hover {
+            background: var(--accent-color);
+            color: var(--paper-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body { /* Applied to body directly */
+                padding: 0;
+            }
+            .container {
+                margin: 0; /* Removed margin */
+                border: none;
+                box-shadow: none;
+                padding: 0; /* Removed padding */
+            }
+            .page-border {
+                border: none;
+                padding: 15px;
+            }
+            .profile-pic {
+                position: static; /* In mobile, let it be part of the flow */
+                display: block;
+                margin: 0 auto 20px;
+            }
+            .header {
+                 padding-top: 0;
+            }
+            .header h1 {
+                font-size: 2.5em;
+            }
+            .header h2 {
+                font-size: 1.2em;
+            }
+            #card-view .profile-pic {
+                position: static; /* Card view should follow mobile rules too */
+            }
+            #card-view .header {
+                padding-top: 0;
+            }
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            .download-btn {
+                top: 10px;
+                right: 10px; 
+            }
+            .toggle-view-btn {
+                top: 60px;
+                right: 10px;
+            }
+        }
+        @media print {
+            .download-btn, .toggle-view-btn {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-border">
+            <button class="download-btn" id="downloadBtn">Download as PDF</button>
+            <button class="toggle-view-btn" id="toggle-view">View Card</button>
+            <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-pic">
+
+            <div id="cv-view">
+                <header class="header">
+                    <h1>Roman Ring</h1>
+                    <h2>Research Engineer</h2>
+                </header>
+                <div class="contact-info">
+                    <span><a href="tel:+212000000000"><i class="fas fa-phone"></i> +212 000000000</a></span>
+                    <span><a href="mailto:prenom.nom@example.com"><i class="fas fa-envelope"></i> prenom.nom@example.com</a></span>
+                    <span><i class="fas fa-map-marker-alt"></i> Marrakech-Safi, Maroc</span>
+                </div>
+
+                <main class="main-content">
+                    <!-- CV sections remain here -->
+                    <div class="section">
+                        <h3>Education</h3>
+                        <div class="education-item">
+                            <div class="item-header">
+                                <h4>M.S., Computer Science</h4>
+                                <span class="date">September 2018</span>
+                            </div>
+                            <p class="item-sub-heading">University of Tartu, Estonia</p>
+                            <ul>
+                                <li>Thesis: <a href="http://dspace.ut.ee/handle/10062/61039">Replicating DeepMind StarCraft II RL Benchmark with Actor-Critic Methods</a></li>
+                            </ul>
+                        </div>
+                        <div class="education-item">
+                            <div class="item-header">
+                                <h4>B.S., Mathematical Statistics</h4>
+                                <span class="date">September 2014 - July 2018</span>
+                            </div>
+                            <p class="item-sub-heading">University of Tartu, Estonia</p>
+                        </div>
+                    </div>
+                     <div class="section">
+                        <h3>Employment</h3>
+                        <div class="experience-item">
+                            <div class="item-header">
+                                <h4>Research Engineer</h4>
+                                <span class="date">March 2020</span>
+                            </div>
+                            <p class="item-sub-heading">DeepMind, London, UK</p>
+                        </div>
+                        <div class="experience-item">
+                            <div class="item-header">
+                                <h4>Research Engineer Intern</h4>
+                                <span class="date">June 2019 - September 2019</span>
+                            </div>
+                            <p class="item-sub-heading">DeepMind, London, UK</p>
+                            <ul>
+                                <li>Contributed to AlphaStar's league system development and launch on the Battle.net</li>
+                                <li>Created proof-of-concept ML framework in JAX, showcased with CV and NLP models</li>
+                            </ul>
+                        </div>
+                    </div>
+                </main>
+
+                <footer class="footer">
+                    <div class="qr-code" id="qrcode-cv"></div>
+                    <img src="https://raw.githubusercontent.com/achma-learning/cv/refs/heads/master/signature.png" alt="Signature" class="signature">
+                </footer>
+            </div>
+            
+            <div id="card-view">
+                <header class="header">
+                    <h1>Roman Ring</h1>
+                    <h2>Research Engineer</h2>
+                </header>
+                <div class="linktree-links">
+                    <a href="mailto:example@mail.com" class="linktree-link"><i class="fas fa-envelope"></i><span>example@mail.com</span></a>
+                    <a href="tel:+212600000000" class="linktree-link"><i class="fas fa-phone"></i><span>+212 600 000 000</span></a>
+                    <div class="linktree-link" style="cursor: default;"><i class="fas fa-map-marker-alt"></i><span>Marrakech-Safi, Maroc</span></div>
+                    <a href="https://website.com" target="_blank" class="linktree-link"><i class="fas fa-globe"></i><span>website.com</span></a>
+                    <a href="#" target="_blank" class="linktree-link"><i class="fas fa-graduation-cap"></i><span>Google Scholar</span></a>
+                    <a href="#" target="_blank" class="linktree-link"><i class="fab fa-orcid"></i><span>ORCID</span></a>
+                    <a href="#" target="_blank" class="linktree-link"><i class="fas fa-book"></i><span>PubMed</span></a>
+                    <a href="#" target="_blank" class="linktree-link"><i class="fab fa-researchgate"></i><span>ResearchGate</span></a>
+                    <a href="#" target="_blank" class="linktree-link"><i class="fab fa-linkedin"></i><span>LinkedIn</span></a>
+                    <a href="https://github.com/achma-learning" target="_blank" class="linktree-link"><i class="fab fa-github"></i><span>achma-learning</span></a>
+                </div>
+                 <footer class="footer">
+                    <div class="qr-code" id="qrcode-card"></div>
+                    <img src="https://raw.githubusercontent.com/achma-learning/cv/refs/heads/master/signature.png" alt="Signature" class="signature">
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cvView = document.getElementById('cv-view');
+        const cardView = document.getElementById('card-view');
+        const toggleBtn = document.getElementById('toggle-view');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const profilePic = document.querySelector('.profile-pic');
+        const pageBorder = document.querySelector('.page-border');
+
+        // Store original position
+        const profilePicOriginalParent = profilePic.parentNode;
+
+        toggleBtn.addEventListener('click', () => {
+            const isCvView = cvView.style.display !== 'none';
+            if (isCvView) {
+                cvView.style.display = 'none';
+                cardView.style.display = 'block';
+                toggleBtn.textContent = 'View Full CV';
+                downloadBtn.style.display = 'none';
+                // In card view, if on mobile, the pic is static inside the header
+                if (window.innerWidth <= 768) {
+                    cardView.querySelector('.header').prepend(profilePic);
+                }
+            } else {
+                cvView.style.display = 'block';
+                cardView.style.display = 'none';
+                toggleBtn.textContent = 'View Card';
+                downloadBtn.style.display = 'block';
+                 // Return pic to original position
+                if (window.innerWidth <= 768) {
+                    pageBorder.prepend(profilePic);
+                }
+            }
+        });
+
+        // Generate QR Code for both views
+        const qrUrl = window.location.href;
+        QRCode.toDataURL(qrUrl, { errorCorrectionLevel: 'H' }, function (err, url) {
+            if (err) throw err;
+            const qrImgCv = document.createElement('img');
+            qrImgCv.src = url;
+            qrImgCv.style.width = '100px'; // Adjust QR code size
+            qrImgCv.style.height = '100px';
+            document.getElementById('qrcode-cv').appendChild(qrImgCv);
+            
+            const qrImgCard = document.createElement('img');
+            qrImgCard.src = url;
+            qrImgCard.style.width = '100px'; // Adjust QR code size
+            qrImgCard.style.height = '100px';
+            document.getElementById('qrcode-card').appendChild(qrImgCard);
+        });
+
+        // Download CV as PDF
+        document.getElementById("downloadBtn").addEventListener("click", function () {
+            window.print();
+        });
+    </script>
+</body>
+</html>
