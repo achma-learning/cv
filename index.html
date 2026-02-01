@@ -267,14 +267,26 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
+            html, body {
+                overflow-x: hidden; /* Prevent horizontal scrolling */
+            }
             body { /* Applied to body directly */
                 padding: 0;
+                margin: 0; /* Ensured margin is 0 */
+                display: flex; /* Use flexbox to center content */
+                flex-direction: column; /* Stack elements vertically */
+                justify-content: center; /* Horizontally center the content */
+                align-items: center; /* Vertically center the content */
+                height: auto; /* Height is auto to allow scrolling */
+                text-align: center; /* Ensure text is centered inside */
             }
             .container {
                 margin: 0; /* Removed margin */
                 border: none;
                 box-shadow: none;
-                padding: 0; /* Removed padding */
+                padding: 10px; /* Adjusted padding */
+                width: 100%;
+                box-sizing: border-box; /* Ensure padding doesn't affect layout */
             }
             .page-border {
                 border: none;
@@ -289,10 +301,15 @@
                  padding-top: 0;
             }
             .header h1 {
-                font-size: 2.5em;
+                font-size: 1.8em; /* Adjusted font size */
             }
             .header h2 {
-                font-size: 1.2em;
+                font-size: 1.5em; /* Adjusted font size */
+            }
+            p {
+                margin: 0; /* Remove margin to prevent unnecessary space */
+                font-size: 1em;
+                line-height: 1.5;
             }
             #card-view .profile-pic {
                 position: static; /* Card view should follow mobile rules too */
@@ -306,10 +323,12 @@
             .download-btn {
                 top: 10px;
                 right: 10px; 
+                width: 100%; /* Make buttons full-width on mobile */
             }
             .toggle-view-btn {
                 top: 60px;
                 right: 10px;
+                width: 100%; /* Make buttons full-width on mobile */
             }
         }
         @media print {
