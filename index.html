@@ -19,8 +19,8 @@
         body {
             font-family: 'Lora', serif;
             margin: 0;
-            padding: 20px;
-            background-color: #e0e0e0;
+            padding: 0; /* Removed padding */
+            background-color: var(--paper-color); /* Consistent background */
             color: var(--ink-color);
             font-size: 16px;
             line-height: 1.6;
@@ -189,21 +189,14 @@
             border-top: 1px solid #e0d9c0;
         }
 
+        .qr-code {
+            width: 100px;
+            height: 100px;
+        }
+
         .signature {
             height: 100px; /* Adjusted height to match QR code */
             width: auto;   /* Maintain aspect ratio */
-        }
-        
-        .show-qr-btn {
-            padding: 10px 20px;
-            background-color: var(--accent-color);
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            font-family: 'Lora', serif;
-        }
-        .show-qr-btn:hover {
-            background-color: #a4a23c;
         }
 
         .download-btn, .toggle-view-btn {
@@ -265,73 +258,17 @@
             color: var(--paper-color);
         }
 
-        /* Modal Styles */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1000; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: var(--paper-color);
-            margin: auto;
-            padding: 30px;
-            border: 1px solid var(--accent-color);
-            width: 80%; /* Could be more specific */
-            max-width: 350px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            position: relative;
-            text-align: center;
-            border-radius: 8px;
-        }
-
-        .modal-content h3 {
-            margin-top: 0;
-            font-size: 1.5em;
-            color: var(--ink-color);
-        }
-        
-        #modal-qrcode-container {
-            padding: 10px;
-            background-color: #fff; /* White background for QR code */
-            display: inline-block; /* To center the container */
-            border-radius: 4px;
-        }
-
-        #modal-qrcode-container img {
-            width: 200px; /* Adjust QR code size in modal */
-            height: 200px;
-            display: block; /* Remove extra space below image */
-        }
-
-        .close-button {
-            color: #aaa;
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close-button:hover,
-        .close-button:focus {
-            color: var(--ink-color);
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-
         /* Responsive Design */
         @media (max-width: 768px) {
+            body { /* Applied to body directly */
+                padding: 0;
+            }
+            .container {
+                margin: 0; /* Removed margin */
+                border: none;
+                box-shadow: none;
+                padding: 0; /* Removed padding */
+            }
             .page-border {
                 border: none;
                 padding: 15px;
@@ -369,7 +306,7 @@
             }
         }
         @media print {
-            .download-btn, .toggle-view-btn, .show-qr-btn, .modal {
+            .download-btn, .toggle-view-btn {
                 display: none !important;
             }
         }
@@ -388,7 +325,9 @@
                     <h2>Research Engineer</h2>
                 </header>
                 <div class="contact-info">
-                    <span><a href="mailto:inoryy@gmail.com"><i class="fas fa-envelope"></i> inoryy@gmail.com</a></span>
+                    <span><a href="tel:+212000000000"><i class="fas fa-phone"></i> +212 000000000</a></span>
+                    <span><a href="mailto:prenom.nom@example.com"><i class="fas fa-envelope"></i> prenom.nom@example.com</a></span>
+                    <span><i class="fas fa-map-marker-alt"></i> Marrakech-Safi, Maroc</span>
                 </div>
 
                 <main class="main-content">
@@ -437,7 +376,7 @@
                 </main>
 
                 <footer class="footer">
-                    <button class="show-qr-btn" id="showQrCodeBtnCv">Show QR Code</button>
+                    <div class="qr-code" id="qrcode-cv"></div>
                     <img src="https://raw.githubusercontent.com/achma-learning/cv/refs/heads/master/signature.png" alt="Signature" class="signature">
                 </footer>
             </div>
@@ -460,19 +399,10 @@
                     <a href="https://github.com/achma-learning" target="_blank" class="linktree-link"><i class="fab fa-github"></i><span>achma-learning</span></a>
                 </div>
                  <footer class="footer">
-                    <button class="show-qr-btn" id="showQrCodeBtnCard">Show QR Code</button>
+                    <div class="qr-code" id="qrcode-card"></div>
                     <img src="https://raw.githubusercontent.com/achma-learning/cv/refs/heads/master/signature.png" alt="Signature" class="signature">
                 </footer>
             </div>
-        </div>
-    </div>
-
-    <!-- QR Code Modal -->
-    <div id="qrCodeModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h3>Scan to view my CV</h3>
-            <div id="modal-qrcode-container"></div>
         </div>
     </div>
 
@@ -483,14 +413,6 @@
         const downloadBtn = document.getElementById('downloadBtn');
         const profilePic = document.querySelector('.profile-pic');
         const pageBorder = document.querySelector('.page-border');
-
-        const qrCodeModal = document.getElementById('qrCodeModal');
-        const closeButton = document.querySelector('.close-button');
-        const modalQrcodeContainer = document.getElementById('modal-qrcode-container');
-        const showQrCodeBtnCv = document.getElementById('showQrCodeBtnCv');
-        const showQrCodeBtnCard = document.getElementById('showQrCodeBtnCard');
-
-        let qrCodeGenerated = false; // Flag to prevent re-generating QR code
 
         // Store original position
         const profilePicOriginalParent = profilePic.parentNode;
@@ -518,38 +440,21 @@
             }
         });
 
-        // Generate QR Code once
+        // Generate QR Code for both views
         const qrUrl = window.location.href;
-        let qrCodeImgUrl = '';
-        QRCode.toDataURL(qrUrl, { errorCorrectionLevel: 'H', width: 200, margin: 1 }, function (err, url) {
+        QRCode.toDataURL(qrUrl, { errorCorrectionLevel: 'H' }, function (err, url) {
             if (err) throw err;
-            qrCodeImgUrl = url;
-        });
-
-        // Show QR Code Modal
-        function showQrCodeModal() {
-            qrCodeModal.style.display = 'flex'; // Use flex to center
-            if (!qrCodeGenerated) {
-                const qrImg = document.createElement('img');
-                qrImg.src = qrCodeImgUrl;
-                modalQrcodeContainer.appendChild(qrImg);
-                qrCodeGenerated = true;
-            }
-        }
-
-        // Hide QR Code Modal
-        function hideQrCodeModal() {
-            qrCodeModal.style.display = 'none';
-        }
-
-        // Event Listeners for showing/hiding QR Code Modal
-        showQrCodeBtnCv.addEventListener('click', showQrCodeModal);
-        showQrCodeBtnCard.addEventListener('click', showQrCodeModal);
-        closeButton.addEventListener('click', hideQrCodeModal);
-        window.addEventListener('click', (event) => {
-            if (event.target == qrCodeModal) {
-                hideQrCodeModal();
-            }
+            const qrImgCv = document.createElement('img');
+            qrImgCv.src = url;
+            qrImgCv.style.width = '100px'; // Adjust QR code size
+            qrImgCv.style.height = '100px';
+            document.getElementById('qrcode-cv').appendChild(qrImgCv);
+            
+            const qrImgCard = document.createElement('img');
+            qrImgCard.src = url;
+            qrImgCard.style.width = '100px'; // Adjust QR code size
+            qrImgCard.style.height = '100px';
+            document.getElementById('qrcode-card').appendChild(qrImgCard);
         });
 
         // Download CV as PDF
