@@ -27,7 +27,7 @@ Both versions are optimized for easy deployment on GitHub Pages and mobile acces
     *   The profile picture (`.profile-pic`) transitions from absolute positioning on desktop to static and centered within the flow on mobile.
     *   The desktop version uses a two-column layout with the profile picture on the left and detailed information on the right. Both layouts support easy scrolling and smooth transitions.
 *   **Interactive Features**:
-    *   **PDF Download**: An "Download as PDF" button implements the browser’s native print functionality to generate a PDF version of the CV.
+    *   **PDF Download**: An "Download as PDF" button uses the `html2pdf.js` library to generate a PDF version of the CV, prompting the user for a filename. The PDF is generated in A4 size, maintaining styling, images, and the QR code.
     *   **QR Code**: A dynamic QR code is generated in the footer for easy mobile access to the website.
 *   **Content Optimization**: Content is tailored to highlight achievements, experience, and skills effectively.
 

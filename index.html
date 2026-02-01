@@ -50,9 +50,7 @@
         }
         
         .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            text-align: center;
             margin-bottom: 30px;
         }
 
@@ -61,12 +59,12 @@
             height: 150px;
             border-radius: 50%;
             border: 3px solid var(--accent-color);
-            margin-right: 30px;
+            display: block;
+            margin: 0 auto 30px auto; /* Centered with bottom margin */
         }
 
         .header-text {
             text-align: center;
-            flex-grow: 1;
         }
 
         .header h1 {
@@ -274,6 +272,18 @@
             color: var(--paper-color);
         }
 
+        #card-view .header {
+            text-align: center;
+        }
+
+        #card-view .header-placeholder {
+            display: none;
+        }
+
+        #card-view .header-text {
+            text-align: center;
+        }
+
         .fade-in {
             opacity: 0;
             transform: translateY(20px);
@@ -347,6 +357,16 @@
                 font-size: 1.5em; /* Adjusted font size */
             }
 
+            #card-view .header {
+                text-align: center; /* Ensure header content is centered */
+            }
+            #card-view .header-placeholder {
+                display: none;
+            }
+            #card-view .header-text {
+                margin-left: 0;
+            }
+
             .download-btn, .toggle-view-btn {
                 position: static; /* Remove absolute positioning on mobile */
                 width: 100%; /* Make buttons full-width on mobile */
@@ -408,8 +428,8 @@
             <button class="download-btn" id="downloadBtn">Download as PDF</button>
             <button class="toggle-view-btn" id="toggle-view">View Card</button>
             <div id="cv-view">
+                <img src="https://raw.githubusercontent.com/achma-learning/cv/refs/heads/master/img.jpg" alt="Profile Picture" class="profile-pic">
                 <header class="header">
-                    <img src="https://raw.githubusercontent.com/achma-learning/cv/refs/heads/master/img.jpg" alt="Profile Picture" class="profile-pic">
                     <div class="header-text">
                         <h1>Roman Ring</h1>
                         <h2>Research Engineer</h2>
@@ -596,8 +616,11 @@
             
             <div id="card-view">
                 <header class="header">
-                    <h1>Roman Ring</h1>
-                    <h2>Research Engineer</h2>
+                    <div class="header-placeholder"></div> <!-- Placeholder for alignment -->
+                    <div class="header-text">
+                        <h1>Roman Ring</h1>
+                        <h2>Research Engineer</h2>
+                    </div>
                 </header>
                 <div class="linktree-links">
                     <a href="mailto:example@mail.com" class="linktree-link"><i class="fas fa-envelope"></i><span>example@mail.com</span></a>
@@ -680,7 +703,7 @@
                     filename:     `${name} CV.pdf`,
                     image:        { type: 'jpeg', quality: 0.98 },
                     html2canvas:  { scale: 2 },
-                    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
                 };
                 html2pdf().from(element).set(opt).save();
             }
