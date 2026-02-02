@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AKAOUI WALID - Curriculum Vitae</title>
+    <!-- Favicon Markups from RealFaviconGenerator -->
+    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
+    <!-- Uicons by Flaticon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght @700&family=Lora:ital,wght @old/v0-cv.html,400;0,700;1,400&display=swap&font-display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <style>
+        :root {
+            --paper-color: #fbf9f4; /* Creamy paper */
+            --ink-color: #3d3d3d; /* Dark charcoal */
+            --accent-color: #a28b46; /* Gold */
+        }
+        body {
+            font-family: 'Lora', serif;
+            margin: 0;
+            padding: 0; /* Removed padding */
+            background-color: var(--paper-color); /* Consistent background */
+            color: var(--ink-color);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 850px;
+            margin: 20px auto;
+            background: var(--paper-color);
+            border: 1px solid var(--accent-color);
+            padding: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.15);
+        }
+       
+        .page-border {
+            border: 3px double var(--accent-color);
+            padding: 30px;
+            position: relative;
+        }
+       
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid var(--accent-color);
+            display: block;
+            margin: 0 auto 30px auto; /* Centered with bottom margin */
+        }
+        .header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5em;
+            margin: 0;
+            font-weight: 700;
+            color: var(--ink-color);
+        }
+        .header h2 {
+            font-family: 'Lora', serif;
+            font-size: 1.5em;
+            font-style: italic;
+            color: var(--accent-color);
+            margin: 5px 0 20px 0;
+        }
+        .contact-info {
+            text-align: center;
+            font-size: 0.95em;
+            margin-bottom: 30px;
+            border-top: 1px solid #e0d9c0;
+            border-bottom: 1px solid #e0d9c0;
+            padding: 15px 0;
+            display: flex; /* Added for desktop one-row layout */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            flex-wrap: wrap; /* Allow items to wrap */
+            gap: 15px; /* Spacing between items */
+        }
+        .contact-info > div { /* Styling for individual contact items */
+            margin: 5px 0;
+        }
+        .contact-info a {
+            color: var(--ink-color);
+            text-decoration: none;
+        }
+        .contact-info a:hover {
+            color: var(--accent-color);
+        }
+        .contact-info i {
+            color: var(--accent-color);
+            margin-right: 8px;
+        }
+        .section {
+            margin-bottom: 35px;
+        }
+        h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8em;
+            color: var(--ink-color);
+            text-align: center;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+        h3::before, h3::after {
+            content: '';
+            display: inline-block;
+            width: 50px;
+            height: 1px;
+            background-color: var(--accent-color);
+            vertical-align: middle;
+            margin: 0 15px;
+        }
+        ul {
+            padding-left: 20px;
+            list-style: none;
+        }
+        ul li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 25px;
+        }
+        ul li::before {
+            content: '⚜';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-size: 1em;
+        }
+        .experience-item, .education-item {
+            margin-bottom: 30px;
+        }
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 2px;
+        }
+        .item-header h4 {
+            font-family: 'Lora', serif;
+            font-weight: 700;
+            font-size: 1.15em;
+            margin: 0;
+        }
+        .date {
+            font-style: italic;
+            color: #555;
+            white-space: nowrap;
+            font-size: 0.9em;
+        }
+        .item-sub-heading {
+             font-style: italic;
+             color: #777;
+             margin: 0 0 10px 0;
+        }
+        .experience-item ul {
+            padding-left: 15px;
+        }
+       
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 40px;
+        }
+        .skills-grid h4 {
+             font-family: 'Cormorant Garamond', serif;
+             font-weight: 700;
+             font-size: 1.2em;
+             margin-bottom: 10px;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e0d9c0;
+        }
+        .qr-code {
+            width: 100px;
+            height: 100px;
+        }
+        .signature {
+            height: 100px; /* Adjusted height to match QR code */
+            width: auto; /* Maintain aspect ratio */
+        }
+        .download-btn, .toggle-view-btn {
+            padding: 10px 20px;
+            background-color: var(--accent-color);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-family: 'Lora', serif;
+            position: absolute;
+            z-index: 10;
+        }
+        .download-btn {
+            top: 20px;
+            right: 20px;
+        }
+       
+        .toggle-view-btn {
+            top: 70px;
+            right: 20px;
+        }
+        #card-view {
+            display: none;
+            text-align: center;
+        }
+       
+        .linktree-links {
+            margin-top: 40px;
+        }
+        .linktree-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            max-width: 90%;
+            margin: 15px auto;
+            padding: 15px;
+            border: 2px solid var(--accent-color);
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: var(--ink-color);
+            background-color: transparent;
+            transition: all 0.3s ease;
+        }
+        .linktree-link i {
+            font-size: 1.5em;
+            width: 25px; /* To align text nicely */
+        }
+        .linktree-link:hover {
+            background: var(--accent-color);
+            color: var(--paper-color);
+        }
+        /* PDF-specific: Simplify border for cleaner PDF output */
+        .page-border.pdf-mode {
+            border: 2px solid var(--accent-color);
+        }
+        /* Loading Indicator for PDF Generation */
+        .pdf-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .pdf-loading-overlay.active {
+            display: flex;
+        }
+        .pdf-loading-content {
+            background: var(--paper-color);
+            padding: 40px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            max-width: 300px;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--accent-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .pdf-loading-content h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.3em;
+        }
+        .pdf-loading-content h3::before,
+        .pdf-loading-content h3::after {
+            display: none;
+        }
+        .pdf-loading-content p {
+            margin: 0;
+            color: #666;
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .download-btn, .toggle-view-btn, .linktree-link, .contact-info a {
+            transition: all 0.3s ease;
+        }
+        .download-btn:hover, .toggle-view-btn:hover, .linktree-link:hover {
+            transform: scale(1.05);
+        }
+        body {
+            animation: fadeInPage 1s ease-in-out;
+        }
+        @keyframes fadeInPage {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            html, body {
+                overflow-x: hidden; /* Prevent horizontal scrolling */
+            }
+            body { /* Applied to body directly */
+                padding: 0;
+                margin: 0; /* Ensured margin is 0 */
+                display: flex; /* Use flexbox to center content */
+                flex-direction: column; /* Stack elements vertically */
+                justify-content: center; /* Horizontally center the content */
+                align-items: center; /* Vertically center the content */
+                height: auto; /* Height is auto to allow scrolling */
+                text-align: center; /* Ensure text is centered inside */
+            }
+            .container {
+                margin: 0;
+                border: none;
+                box-shadow: none;
+                padding: 10px;
+                width: 100%;
+                box-sizing: border-box; /* Ensure padding doesn't affect layout */
+            }
+            .profile-pic {
+                position: static; /* Allow it to flow with the layout */
+                display: block;
+                width: 120px; /* Adjusted size for mobile */
+                height: 120px; /* Adjusted size for mobile */
+                margin: 0 auto 20px; /* Center the profile picture */
+            }
+            .header {
+                padding-top: 0;
+            }
+            .header h1 {
+                font-size: 1.8em; /* Adjusted font size */
+            }
+            .header h2 {
+                font-size: 1.5em; /* Adjusted font size */
+            }
+            .download-btn, .toggle-view-btn {
+                position: static; /* Remove absolute positioning on mobile */
+                width: 100%; /* Make buttons full-width on mobile */
+                padding: 15px;
+                font-size: 1.2em;
+                margin-top: 10px; /* Add margin to separate buttons */
+                min-height: 44px;
+                box-sizing: border-box;
+            }
+            .contact-info {
+                flex-direction: column;
+                gap: 10px; /* Adjust gap for mobile stacking */
+                padding: 10px;
+            }
+            .contact-info > div {
+                margin: 5px 0;
+                text-align: center; /* Center text in mobile */
+            }
+            .linktree-link {
+                min-height: 44px;
+                box-sizing: border-box;
+                margin: 15px auto; /* Add margin to separate links */
+            }
+            .contact-info a {
+                font-size: 1.1em; /* Increase font size for better readability */
+                display: inline-block;
+                padding: 10px;
+                min-height: 44px;
+                box-sizing: border-box;
+            }
+            .footer {
+                flex-direction: column;
+                align-items: center;
+                margin-top: 20px;
+                padding-top: 10px;
+            }
+            .qr-code, .signature {
+                width: 100px;
+                height: auto; /* Lock aspect ratio */
+                margin-bottom: 10px;
+            }
+        }
+        @media print {
+            .no-pdf {
+                display: none !important;
+            }
+            /* html2pdf.js handles most styling, but some basics help */
+            body {
+                margin: 0;
+                padding: 0;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .contact-info {
+                flex-direction: row !important;
+                flex-wrap: nowrap !important;
+                justify-content: center !important;
+                gap: 15px !important;
+            }
+
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="page-border" id="pdfContent">
+            <button class="download-btn no-pdf" id="downloadBtn">Download as PDF</button>
+            <button class="toggle-view-btn no-pdf" id="toggle-view">View Card</button>
+            <div id="cv-view">
+                <img src="https://raw.githubusercontent.com/akaouiwalid20-cpu/cv/refs/heads/main/img%20pro.jpeg"
+                         alt="AKAOUI WALID Profile Picture"
+                         class="profile-pic"
+                         crossorigin="anonymous">
+                <header class="header">
+                    <h1>AKAOUI WALID</h1>
+                    <h2>Technicien en Gestion des Entreprises - Option Commerce et Marketing</h2>
+                </header>
+                <div class="contact-info">
+                    <div><a href="tel:+212774004524"><i class="fas fa-phone"></i> +212 774004524</a></div>
+                    <div><a href="mailto:akaouiwalid20 @gmail.com"><i class="fas fa-envelope"></i> akaouiwalid20 @gmail.com</a></div>
+                    <div><a href="https://maps.google.com/?q=Maroc" target="_blank"><i class="fas fa-map-marker-alt"></i> Maroc</a></div>
+                </div>
+                <main class="main-content">
+                    <div class="section">
+                        <h3>Expériences Professionnelles</h3>
+                        <div class="experience-item">
+                            <div class="item-header">
+                                <h4>Stage dans une compagnie d assurance</h4>
+                                <span class="date">2025</span>
+                            </div>
+                            <p class="item-sub-heading">Sanlam, Agadir</p>
+                            <ul>
+                                <li>Répondre aux appels téléphoniques</li>
+                                <li>Recevoir les clients</li>
+                                <li>Fournir des informations de base sur les produits</li>
+                            </ul>
+                        </div>
+                        <div class="experience-item">
+                            <div class="item-header">
+                                <h4>Stage dans une entreprise automobile</h4>
+                                <span class="date">2024</span>
+                            </div>
+                            <p class="item-sub-heading">Dacia & Renault, Errachidia</p>
+                            <ul>
+                                <li>Prospection active pour identifier de nouveaux clients sur le marché</li>
+                                <li>Analyse des besoins clients et proposition de solutions adaptées</li>
+                                <li>Gestion des réclamations clients et suivi de la satisfaction</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <h3>Formation Académique</h3>
+                        <div class="education-item">
+                            <div class="item-header">
+                                <h4>Diplôme en Gestion des Entreprises-Option Commerce et Marketing</h4>
+                                <span class="date">2022-2025</span>
+                            </div>
+                            <p class="item-sub-heading">Institut Spécialisé en Technologie Appliquée (ISTA), Erfoud</p>
+                        </div>
+                        <div class="education-item">
+                            <div class="item-header">
+                                <h4>Baccalauréat en Sciences de Gestion Comptable</h4>
+                                <span class="date">2020-2021</span>
+                            </div>
+                            <p class="item-sub-heading">Lycée Manarat Tafilalt, Errachidia</p>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <h3>Compétences</h3>
+                        <div class="skills-grid">
+                            <div>
+                                 <h4>Techniques</h4>
+                                 <ul>
+                                    <li>Gestion commerciale et administrative</li>
+                                    <li>Analyse et suivi des ventes</li>
+                                    <li>Techniques de prospection et de négociation</li>
+                                    <li>Gestion des stocks et approvisionnement</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4>Transversales</h4>
+                                <ul>
+                                    <li>Communication et relation client</li>
+                                    <li>Esprit d analyse et résolution de problèmes</li>
+                                    <li>Travail en équipe et collaboration</li>
+                                    <li>Adaptabilité et autonomie</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <h3>Langues</h3>
+                        <ul>
+                            <li>Arabe: langue maternelle</li>
+                            <li>Français: Courant</li>
+                            <li>Anglais: Intermédiaire</li>
+                        </ul>
+                    </div>
+                    <div class="section">
+                        <h3>Activités Parascolaires</h3>
+                        <ul>
+                            <li>Acteur dans un film international-Arfoud</li>
+                        </ul>
+                    </div>
+                </main>
+                <footer class="footer">
+                    <div class="qr-code" id="qrcode-cv"></div>
+                </footer>
+            </div>
+           
+            <div id="card-view">
+                <header class="header">
+                    <h1>AKAOUI WALID</h1>
+                    <h2>Technicien en Gestion des Entreprises - Option Commerce et Marketing</h2>
+                </header>
+                <div class="linktree-links">
+                    <a href="mailto:akaouiwalid20 @gmail.com" class="linktree-link"><i class="fas fa-envelope"></i><span>akaouiwalid20 @gmail.com</span></a>
+                    <a href="tel:+212774004524" class="linktree-link"><i class="fas fa-phone"></i><span>+212 774004524</span></a>
+                    <a href="https://maps.google.com/?q=Maroc" target="_blank" class="linktree-link"><i class="fas fa-map-marker-alt"></i><span>Maroc</span></a>
+                    <a href="https://akaouiwalid20-cpu.github.io/cv/" target="_blank" class="linktree-link"><i class="fas fa-globe"></i><span>Website</span></a>
+                    <a href="https://github.com/akaouiwalid20-cpu" target="_blank" class="linktree-link"><i class="fab fa-github"></i><span>GitHub</span></a>
+                </div>
+                 <footer class="footer">
+                    <div class="qr-code" id="qrcode-card"></div>
+                </footer>
+            </div>
+        </div>
+    </div>
+    <script>
+        const cvView = document.getElementById('cv-view');
+        const cardView = document.getElementById('card-view');
+        const toggleBtn = document.getElementById('toggle-view');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const profilePic = document.querySelector('.profile-pic');
+        const pageBorder = document.querySelector('.page-border');
+        // Store original position
+        const profilePicOriginalParent = profilePic.parentNode;
+        toggleBtn.addEventListener('click', () => {
+            const isCvView = cvView.style.display !== 'none';
+            if (isCvView) {
+                cvView.style.display = 'none';
+                cardView.style.display = 'block';
+                toggleBtn.textContent = 'View Full CV';
+                downloadBtn.style.display = 'none';
+                // In card view, if on mobile, the pic is static inside the header
+                if (window.innerWidth <= 768) {
+                    cardView.querySelector('.header').prepend(profilePic);
+                }
+            } else {
+                cvView.style.display = 'block';
+                cardView.style.display = 'none';
+                toggleBtn.textContent = 'View Card';
+                downloadBtn.style.display = 'block';
+                 // Return pic to original position
+                if (window.innerWidth <= 768) {
+                    pageBorder.insertBefore(profilePic, cvView);
+                }
+            }
+        });
+        // Generate QR Code for both views
+        const qrUrl = window.location.href;
+        QRCode.toDataURL(qrUrl, { errorCorrectionLevel: 'H' }, function (err, url) {
+            if (err) throw err;
+            const qrImgCv = document.createElement('img');
+            qrImgCv.src = url;
+            qrImgCv.style.width = '100px'; // Adjust QR code size
+            qrImgCv.style.height = '100px';
+            document.getElementById('qrcode-cv').appendChild(qrImgCv);
+           
+            const qrImgCard = document.createElement('img');
+            qrImgCard.src = url;
+            qrImgCard.style.width = '100px'; // Adjust QR code size
+            qrImgCard.style.height = '100px';
+            document.getElementById('qrcode-card').appendChild(qrImgCard);
+        });
+        // Download CV as PDF
+        document.getElementById("downloadBtn").addEventListener("click", function () {
+            window.print();
+        });
+        // Fade in sections on scroll
+        const sections = document.querySelectorAll('.section');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+        sections.forEach(section => {
+            section.classList.add('fade-in');
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
