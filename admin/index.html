@@ -186,12 +186,42 @@
         .signature-preview {
             height: 50px;
             width: auto;
-            max-width: 200px;
+            max-width: 220px;
             display: block;
             margin-bottom: 6px;
             opacity: 0.85;
         }
         .signature-preview[src=""] { display: none; }
+
+        /* -------- Signature draw pad -------- */
+        .sig-tabs { display: flex; gap: 0; margin-bottom: 0; border-bottom: 1px solid var(--rule); }
+        .sig-tab {
+            padding: 7px 18px;
+            font: inherit;
+            font-size: 0.88em;
+            cursor: pointer;
+            background: none;
+            border: 1px solid var(--rule);
+            border-bottom: none;
+            margin-bottom: -1px;
+            color: var(--muted);
+        }
+        .sig-tab.active { background: var(--paper); color: var(--ink); font-weight: 600; border-bottom: 1px solid var(--paper); }
+        .sig-panel { display: none; padding: 14px 0 4px; }
+        .sig-panel.active { display: block; }
+        #sig-canvas {
+            display: block;
+            border: 1px solid var(--rule);
+            border-radius: 2px;
+            background: #fff;
+            cursor: crosshair;
+            touch-action: none;
+            width: 100%;
+            max-width: 500px;
+            height: 110px;
+        }
+        .sig-canvas-actions { display: flex; gap: 8px; margin-top: 8px; align-items: center; }
+        .sig-canvas-actions .form-note { margin: 0; }
 
         /* -------- Dynamic entry cards -------- */
         .entry-card {
@@ -377,11 +407,43 @@
         <!-- ===== Signature ===== -->
         <div class="form-section">
             <h3>Signature</h3>
-            <img id="sig-preview" class="signature-preview" src="" alt="Signature preview">
-            <label class="form-note" style="display:block;margin-bottom:6px">Upload signature image (PNG with transparent background works best)</label>
-            <input type="file" id="f-signature" accept="image/*">
-            <p class="form-note">Or enter a URL:</p>
-            <input type="url" id="f-signatureUrl" placeholder="https://... or leave blank to use signature.png from the repo">
+            <p class="form-note" style="margin-bottom:14px">Draw, upload, or link your signature. It appears at the bottom of your CV.</p>
+
+            <div class="sig-tabs">
+                <button class="sig-tab active" data-tab="draw">✍️ Draw</button>
+                <button class="sig-tab" data-tab="upload">📁 Upload image</button>
+                <button class="sig-tab" data-tab="url">🔗 Image URL</button>
+            </div>
+
+            <!-- Draw -->
+            <div class="sig-panel active" id="sig-panel-draw">
+                <p class="form-note">Sign with your mouse or finger in the box below, then click <strong>Use this signature</strong>.</p>
+                <canvas id="sig-canvas" width="800" height="220"></canvas>
+                <div class="sig-canvas-actions">
+                    <button class="btn btn-primary" id="sig-use-btn">Use this signature</button>
+                    <button class="btn" id="sig-clear-btn">Clear</button>
+                    <span class="form-note">Hold Shift to draw thinner lines.</span>
+                </div>
+            </div>
+
+            <!-- Upload -->
+            <div class="sig-panel" id="sig-panel-upload">
+                <p class="form-note">PNG with a transparent background looks best. JPG also works.</p>
+                <input type="file" id="f-signature" accept="image/*">
+            </div>
+
+            <!-- URL -->
+            <div class="sig-panel" id="sig-panel-url">
+                <p class="form-note">Paste a direct link to your signature image (must be publicly accessible).</p>
+                <input type="url" id="f-signatureUrl" placeholder="https://... or leave blank to use signature.png from the repo">
+            </div>
+
+            <!-- Shared preview (shown after any method) -->
+            <div id="sig-result" style="margin-top:14px;display:none">
+                <label style="font-size:0.85em;color:var(--muted);display:block;margin-bottom:4px">Preview</label>
+                <img id="sig-preview" class="signature-preview" src="" alt="Signature preview" style="max-height:70px">
+                <button class="btn" id="sig-remove-btn" style="margin-top:6px;font-size:0.82em">Remove signature</button>
+            </div>
         </div>
 
         <!-- ===== Education ===== -->
@@ -721,9 +783,12 @@
             document.getElementById('f-photoUrl').value = photoVal.startsWith('data:') ? '' : photoVal;
             document.getElementById('photo-preview').src = photoVal;
 
+            // Signature preview is populated by the self-contained signature
+            // section on DOMContentLoaded; fillForm only needs to handle URL input.
             const sigVal = data.signaturePhoto || '';
-            document.getElementById('f-signatureUrl').value = sigVal.startsWith('data:') ? '' : sigVal;
-            document.getElementById('sig-preview').src = sigVal;
+            if (sigVal && !sigVal.startsWith('data:')) {
+                document.getElementById('f-signatureUrl').value = sigVal;
+            }
 
             // Skills
             document.getElementById('f-skills-expert').value      = (data.skills && data.skills.expert)      ? data.skills.expert      : '';
@@ -863,6 +928,110 @@
         }
 
         // ================================================================
+        // SIGNATURE SECTION: TABS + DRAW PAD
+        // ================================================================
+        (function () {
+            // --- Tabs ---
+            document.querySelectorAll('.sig-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.sig-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.sig-panel').forEach(p => p.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById('sig-panel-' + tab.dataset.tab).classList.add('active');
+                });
+            });
+
+            // --- Draw pad ---
+            const canvas  = document.getElementById('sig-canvas');
+            const ctx     = canvas.getContext('2d');
+            let drawing   = false;
+            let lastX = 0, lastY = 0;
+
+            // Map client coordinates to canvas logical coordinates.
+            function canvasXY(e) {
+                const r  = canvas.getBoundingClientRect();
+                const sx = canvas.width  / r.width;
+                const sy = canvas.height / r.height;
+                const src = e.touches ? e.touches[0] : e;
+                return [(src.clientX - r.left) * sx, (src.clientY - r.top) * sy];
+            }
+
+            function startDraw(e) {
+                e.preventDefault();
+                drawing = true;
+                [lastX, lastY] = canvasXY(e);
+            }
+            function draw(e) {
+                e.preventDefault();
+                if (!drawing) return;
+                const [x, y] = canvasXY(e);
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(x, y);
+                ctx.lineWidth  = e.shiftKey ? 1.5 : 2.8;
+                ctx.lineCap    = 'round';
+                ctx.lineJoin   = 'round';
+                ctx.strokeStyle = '#1a1a1a';
+                ctx.stroke();
+                [lastX, lastY] = [x, y];
+            }
+            function stopDraw() { drawing = false; }
+
+            canvas.addEventListener('mousedown',  startDraw);
+            canvas.addEventListener('mousemove',  draw);
+            canvas.addEventListener('mouseup',    stopDraw);
+            canvas.addEventListener('mouseleave', stopDraw);
+            canvas.addEventListener('touchstart', startDraw, { passive: false });
+            canvas.addEventListener('touchmove',  draw,      { passive: false });
+            canvas.addEventListener('touchend',   stopDraw);
+
+            document.getElementById('sig-clear-btn').addEventListener('click', () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            });
+
+            // "Use this signature" — export canvas as transparent PNG.
+            document.getElementById('sig-use-btn').addEventListener('click', () => {
+                const dataUrl = canvas.toDataURL('image/png');
+                showSigPreview(dataUrl);
+            });
+
+            // --- Upload ---
+            document.getElementById('f-signature').addEventListener('change', function () {
+                const file = this.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = e => showSigPreview(e.target.result);
+                reader.readAsDataURL(file);
+            });
+
+            // --- URL ---
+            document.getElementById('f-signatureUrl').addEventListener('input', function () {
+                if (this.value.trim()) showSigPreview(this.value.trim());
+            });
+
+            // --- Shared preview & remove ---
+            function showSigPreview(src) {
+                const img = document.getElementById('sig-preview');
+                img.src = src;
+                document.getElementById('sig-result').style.display = 'block';
+                // Clear URL input if it's a base64 value (so readForm picks preview)
+                if (!src.startsWith('http')) document.getElementById('f-signatureUrl').value = '';
+            }
+
+            document.getElementById('sig-remove-btn').addEventListener('click', () => {
+                document.getElementById('sig-preview').src = '';
+                document.getElementById('sig-result').style.display = 'none';
+                document.getElementById('f-signatureUrl').value = '';
+                document.getElementById('f-signature').value = '';
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            });
+
+            // On page load: if there's an existing signature in storage, show it.
+            const existing = (loadData().signaturePhoto || '').trim();
+            if (existing) showSigPreview(existing);
+        })();
+
+        // ================================================================
         // PHOTO UPLOAD HANDLERS
         // ================================================================
         function handlePhotoUpload(inputId, previewId, urlInputId) {
@@ -909,8 +1078,8 @@
         // INIT
         // ================================================================
         fillForm(loadData());
+        // Profile photo only — signature is handled by the draw-pad section above.
         handlePhotoUpload('f-photo', 'photo-preview', 'f-photoUrl');
-        handlePhotoUpload('f-signature', 'sig-preview', 'f-signatureUrl');
         wireAddButtons();
 
         // Save buttons
