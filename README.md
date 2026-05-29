@@ -10,12 +10,12 @@ GitHub Pages** in a few minutes.
 
 ## Features
 
-- **One file.** Everything lives in `index.html`: structure, styles, and behaviour.
+- **No-code editor at `/admin`.** Edit every field — personal info, photo, experience, skills, etc. — through a form. No HTML editing required. Changes save to your browser and apply instantly to your CV. Works on any fork automatically (each fork's GitHub Pages domain has its own private storage).
 - **LaTeX-inspired typography.** EB Garamond serif, small-caps section headers, thin horizontal rules — sober and print-ready.
 - **Two views in one page.**
   - *Full CV* — the long-form document.
   - *Card view* — a Linktree-style page for quick sharing.
-- **PDF export.** A single click renders the CV to A4 PDF (via `html2pdf.js`).
+- **A4-optimised PDF export.** One click renders the CV to a clean A4 PDF (the standard format in Morocco and Europe) with proper margins and no sections split across pages.
 - **QR code.** Auto-generated from the current page URL, ideal for printed copies or business cards.
 - **Signature & photo.** Optional, easy to remove.
 - **Responsive.** Reads well on phones; collapses gracefully.
@@ -42,22 +42,32 @@ python3 -m http.server 8000
 # then visit http://localhost:8000
 ```
 
-### 3. Edit your content
+### 3. Edit your content — the easy way (recommended)
 
-Open `index.html` and replace the sample content. The file is annotated with
-`<!-- ===== Section ===== -->` comments so each block is easy to find:
+After deploying (step 4), open the built-in editor in your browser:
 
-- `<h1>Your Name</h1>` and the tagline
-- `.contact-info` block
-- Education / Employment / Skills / etc. sections
-- `profile-pic` `src` and `signature` `src` (or remove them entirely)
+```
+https://<your-handle>.github.io/cv/admin/
+```
+
+Or locally: visit `http://localhost:8000/admin/`. Fill in the form, upload a
+photo, add/remove/reorder entries, then click **Save Changes**. Your CV updates
+immediately.
+
+- Data is stored in your browser's `localStorage` — **private to you and your
+  device**. Nothing is uploaded to a server, so it works on any fork with zero
+  configuration.
+- To share the same content across devices, edit the `DEFAULT_DATA` object near
+  the top of the `<script>` block in `index.html` (and `admin/index.html`) and
+  commit it. **Reset to Defaults** in the editor reverts to those values.
 
 ### 4. Deploy on GitHub Pages
 
 1. Push your fork.
 2. Go to **Settings → Pages**.
 3. Source: *Deploy from a branch*, branch: `master` (or `main`), folder: `/ (root)`.
-4. Your CV will be live at `https://<your-handle>.github.io/cv/`.
+4. Your CV will be live at `https://<your-handle>.github.io/cv/`, and the editor
+   at `https://<your-handle>.github.io/cv/admin/`.
 
 ---
 
@@ -126,6 +136,7 @@ needed. To hard-code a URL, edit the `qrUrl` variable in the `<script>` block.
 | File                       | Purpose                                                       |
 | -------------------------- | ------------------------------------------------------------- |
 | `index.html`               | The CV (full view + card view, styles and scripts inlined).   |
+| `admin/index.html`         | No-code editor for all CV fields (saves to browser storage).  |
 | `index-no-card.html`       | Earlier variant without the card view (kept for reference).   |
 | `roman_ring_cv.tex` / `.pdf` | The LaTeX CV that inspired the typography.                  |
 | `img.jpg`                  | Profile photo — replace with your own.                        |

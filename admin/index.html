@@ -289,18 +289,18 @@
                 </div>
                 <div class="form-group">
                     <label for="f-phone">Phone</label>
-                    <input type="tel" id="f-phone" placeholder="+1 000 000 0000">
+                    <input type="tel" id="f-phone" placeholder="+212 6 00 00 00 00">
                 </div>
             </div>
 
             <div class="form-row-2">
                 <div class="form-group">
                     <label for="f-location">Location (display text)</label>
-                    <input type="text" id="f-location" placeholder="City, Country">
+                    <input type="text" id="f-location" placeholder="Casablanca, Morocco">
                 </div>
                 <div class="form-group">
                     <label for="f-locationUrl">Location URL (Google Maps link)</label>
-                    <input type="url" id="f-locationUrl" placeholder="https://maps.google.com/?q=City,Country">
+                    <input type="url" id="f-locationUrl" placeholder="https://maps.google.com/?q=Casablanca,Morocco">
                 </div>
             </div>
 
@@ -484,9 +484,9 @@
             name: "Your Name",
             tagline: "Your Title / Role",
             email: "you@example.com",
-            phone: "+1 000 000 0000",
-            location: "City, Country",
-            locationUrl: "https://maps.google.com/?q=City,Country",
+            phone: "+212 6 00 00 00 00",
+            location: "Casablanca, Morocco",
+            locationUrl: "https://maps.google.com/?q=Casablanca,Morocco",
             website: "https://your-site.example",
             websiteLabel: "your-site.example",
             github: "https://github.com/your-handle",
@@ -775,13 +775,10 @@
             data.orcid        = document.getElementById('f-orcid').value.trim();
             data.orcidLabel   = document.getElementById('f-orcidLabel').value.trim();
 
-            // Photos — keep base64 if already stored, otherwise use URL field
-            const currentData = loadData();
-            const photoUrl = document.getElementById('f-photoUrl').value.trim();
-            data.profilePhoto = photoUrl || (currentData.profilePhoto && currentData.profilePhoto.startsWith('data:') ? currentData.profilePhoto : photoUrl || 'img.jpg');
-
-            const sigUrl = document.getElementById('f-signatureUrl').value.trim();
-            data.signaturePhoto = sigUrl || (currentData.signaturePhoto && currentData.signaturePhoto.startsWith('data:') ? currentData.signaturePhoto : sigUrl || 'signature.png');
+            // Photos — the live preview src is the source of truth. It holds
+            // either an uploaded base64 image, a typed URL, or the default.
+            data.profilePhoto   = resolvePhoto('f-photoUrl', 'photo-preview', 'img.jpg');
+            data.signaturePhoto = resolvePhoto('f-signatureUrl', 'sig-preview', 'signature.png');
 
             data.skills = {
                 expert:     document.getElementById('f-skills-expert').value.trim(),
@@ -804,6 +801,16 @@
             data.awards      = readSimpleList('awards-list');
 
             return data;
+        }
+
+        // Decide which photo value to store: typed URL wins, then the
+        // current preview (base64 upload), then the repo default fallback.
+        function resolvePhoto(urlInputId, previewId, fallback) {
+            const typed = document.getElementById(urlInputId).value.trim();
+            if (typed) return typed;
+            const preview = document.getElementById(previewId).getAttribute('src') || '';
+            if (preview) return preview;
+            return fallback;
         }
 
         function readComplexList(containerId, type) {
@@ -842,7 +849,14 @@
         // ================================================================
         function saveData() {
             const data = readForm();
-            localStorage.setItem('cv_data', JSON.stringify(data));
+            try {
+                localStorage.setItem('cv_data', JSON.stringify(data));
+            } catch (e) {
+                alert('Could not save — your browser storage is full. This usually '
+                    + 'happens with very large uploaded images. Try a smaller photo '
+                    + '(under ~1 MB) or use an image URL instead.');
+                return;
+            }
             const notice = document.getElementById('save-notice');
             notice.style.display = 'block';
             setTimeout(() => { notice.style.display = 'none'; }, 2500);
@@ -857,13 +871,9 @@
                 if (!file) return;
                 const reader = new FileReader();
                 reader.onload = function (e) {
+                    // Preview holds the base64 image; it's persisted on Save.
                     document.getElementById(previewId).src = e.target.result;
                     document.getElementById(urlInputId).value = '';
-                    // Store base64 immediately so it persists across form interactions
-                    const key = inputId === 'f-photo' ? 'profilePhoto' : 'signaturePhoto';
-                    const current = loadData();
-                    current[key] = e.target.result;
-                    localStorage.setItem('cv_data', JSON.stringify(current));
                 };
                 reader.readAsDataURL(file);
             });

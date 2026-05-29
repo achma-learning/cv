@@ -260,12 +260,13 @@
             .row { grid-template-columns: 1fr; }
         }
 
-        /* -------- Print -------- */
+        /* -------- Print / PDF (A4) -------- */
+        @page { size: A4; margin: 12mm; }
         @media print {
             html, body { background: #fff; }
             .container { box-shadow: none; margin: 0; padding: 0; max-width: none; }
             .toolbar { display: none !important; }
-            .section { page-break-inside: avoid; }
+            .section, .entry, .footer { page-break-inside: avoid; }
         }
     </style>
 </head>
@@ -321,9 +322,9 @@
             name: "Your Name",
             tagline: "Your Title / Role",
             email: "you@example.com",
-            phone: "+1 000 000 0000",
-            location: "City, Country",
-            locationUrl: "https://maps.google.com/?q=City,Country",
+            phone: "+212 6 00 00 00 00",
+            location: "Casablanca, Morocco",
+            locationUrl: "https://maps.google.com/?q=Casablanca,Morocco",
             website: "https://your-site.example",
             websiteLabel: "your-site.example",
             github: "https://github.com/your-handle",
@@ -583,20 +584,55 @@
         });
 
         // ================================================================
-        // PDF DOWNLOAD
+        // PDF DOWNLOAD — optimised for A4 (standard in Morocco / Europe)
         // ================================================================
-        downloadBtn.addEventListener('click', () => {
-            const defaultName = document.getElementById('cv-name').textContent.trim() || 'CV';
-            const name = prompt('Filename for the PDF:', defaultName);
-            if (!name) return;
+
+        // Wait until all images inside an element have finished loading so
+        // they don't render blank in the PDF (QR code loads asynchronously,
+        // photo/signature may be remote).
+        function waitForImages(element) {
+            const imgs = Array.from(element.querySelectorAll('img'));
+            return Promise.all(imgs.map(img => {
+                if (img.complete && img.naturalHeight !== 0) return Promise.resolve();
+                return new Promise(resolve => {
+                    img.addEventListener('load', resolve, { once: true });
+                    img.addEventListener('error', resolve, { once: true });
+                });
+            }));
+        }
+
+        downloadBtn.addEventListener('click', async () => {
+            const name = (document.getElementById('cv-name').textContent.trim() || 'CV');
             const element = document.getElementById('cv-view');
-            html2pdf().from(element).set({
-                margin: 0.5,
-                filename: `${name} CV.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            }).save();
+
+            const original = downloadBtn.textContent;
+            downloadBtn.textContent = 'Preparing…';
+            downloadBtn.disabled = true;
+
+            try {
+                await waitForImages(element);
+                await html2pdf().from(element).set({
+                    // A4 = 210 × 297 mm. 12 mm margins keep content clear of
+                    // printer non-printable edges on standard A4 printers.
+                    margin: [12, 12, 12, 12],
+                    filename: `${name} - CV.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: {
+                        scale: 2,
+                        useCORS: true,        // allow remote photo / signature
+                        allowTaint: false,
+                        backgroundColor: '#ffffff'
+                    },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                    // Never split a section across two pages.
+                    pagebreak: { mode: ['css', 'legacy'], avoid: ['.section', '.entry', '.footer'] }
+                }).save();
+            } catch (e) {
+                alert('Sorry, the PDF could not be generated. Please try again.');
+            } finally {
+                downloadBtn.textContent = original;
+                downloadBtn.disabled = false;
+            }
         });
     </script>
 </body>
