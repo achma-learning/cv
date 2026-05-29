@@ -85,6 +85,7 @@
             margin: 0 auto 18px auto;
             border: 1px solid var(--rule);
         }
+        .profile-pic[src=""] { display: none; }
 
         .contact-info {
             text-align: center;
@@ -189,6 +190,7 @@
             width: auto;
             opacity: 0.9;
         }
+        .signature[src=""] { display: none; }
 
         /* -------- Toolbar (download / toggle) -------- */
         .toolbar {
@@ -209,6 +211,8 @@
             border: 1px solid var(--ink);
             cursor: pointer;
             transition: background 0.15s ease, color 0.15s ease;
+            text-decoration: none;
+            display: inline-block;
         }
         .btn:hover {
             background: var(--ink);
@@ -248,7 +252,7 @@
             html, body { font-size: 16px; }
             .container { margin: 0; padding: 28px 22px; box-shadow: none; }
             .toolbar { padding: 0 22px; flex-direction: column; }
-            .btn { width: 100%; padding: 12px; }
+            .btn { width: 100%; padding: 12px; text-align: center; }
             .header h1 { font-size: 2em; }
             .entry-header { flex-direction: column; align-items: flex-start; gap: 0; }
             .contact-info { flex-direction: column; gap: 4px; }
@@ -269,6 +273,7 @@
 
     <!-- Toolbar -->
     <div class="toolbar">
+        <a href="admin/" class="btn" id="adminBtn">Edit CV</a>
         <button class="btn" id="toggle-view">View as Card</button>
         <button class="btn" id="downloadBtn">Download PDF</button>
     </div>
@@ -277,245 +282,293 @@
 
         <!-- ========================= FULL CV ========================= -->
         <div id="cv-view">
-
-            <!-- Optional profile photo. Delete the <img> if you want a purely text CV. -->
-            <img src="https://raw.githubusercontent.com/achma-learning/cv/refs/heads/master/img.jpg" alt="Profile photo" class="profile-pic">
-
+            <img id="cv-photo" src="" alt="Profile photo" class="profile-pic">
             <header class="header">
-                <h1>Your Name</h1>
-                <p class="tagline">Your Title / Role</p>
+                <h1 id="cv-name"></h1>
+                <p class="tagline" id="cv-tagline"></p>
             </header>
-
-            <div class="contact-info">
-                <a href="mailto:you@example.com"><i class="fas fa-envelope"></i>you@example.com</a>
-                <a href="tel:+10000000000"><i class="fas fa-phone"></i>+1 000 000 0000</a>
-                <a href="https://maps.google.com/?q=City,Country" target="_blank"><i class="fas fa-map-marker-alt"></i>City, Country</a>
-                <a href="https://your-site.example" target="_blank"><i class="fas fa-globe"></i>your-site.example</a>
-                <a href="https://github.com/your-handle" target="_blank"><i class="fab fa-github"></i>your-handle</a>
-            </div>
-
-            <main>
-
-                <!-- ===== Education ===== -->
-                <section class="section">
-                    <h3>Education</h3>
-
-                    <div class="entry">
-                        <div class="entry-header">
-                            <h4>M.S., Computer Science</h4>
-                            <span class="date">September 2018</span>
-                        </div>
-                        <p class="entry-sub">University of Tartu, Estonia</p>
-                        <ul>
-                            <li>Thesis: Replicating DeepMind StarCraft II RL Benchmark with Actor-Critic Methods</li>
-                        </ul>
-                    </div>
-
-                    <div class="entry">
-                        <div class="entry-header">
-                            <h4>B.S., Mathematical Statistics</h4>
-                            <span class="date">September 2014 – July 2018</span>
-                        </div>
-                        <p class="entry-sub">University of Tartu, Estonia</p>
-                    </div>
-                </section>
-
-                <!-- ===== Employment ===== -->
-                <section class="section">
-                    <h3>Employment</h3>
-
-                    <div class="entry">
-                        <div class="entry-header">
-                            <h4>Research Engineer</h4>
-                            <span class="date">March 2020 – Present</span>
-                        </div>
-                        <p class="entry-sub">DeepMind, London, UK</p>
-                    </div>
-
-                    <div class="entry">
-                        <div class="entry-header">
-                            <h4>Research Engineer Intern</h4>
-                            <span class="date">June 2019 – September 2019</span>
-                        </div>
-                        <p class="entry-sub">DeepMind, London, UK</p>
-                        <ul>
-                            <li>Contributed to AlphaStar's league system development and launch on Battle.net.</li>
-                            <li>Created proof-of-concept ML framework in JAX, showcased with CV and NLP models.</li>
-                        </ul>
-                    </div>
-
-                    <div class="entry">
-                        <div class="entry-header">
-                            <h4>Research Assistant</h4>
-                            <span class="date">February 2018 – February 2020</span>
-                        </div>
-                        <p class="entry-sub">Computational Neuroscience Research Group</p>
-                        <ul>
-                            <li>Assisted with research and engineering in deep reinforcement learning.</li>
-                        </ul>
-                    </div>
-
-                    <div class="entry">
-                        <div class="entry-header">
-                            <h4>Research Assistant</h4>
-                            <span class="date">June 2018 – December 2018</span>
-                        </div>
-                        <p class="entry-sub">PerkinElmer</p>
-                        <ul>
-                            <li>Improved instance segmentation pipeline in fluorescent medical imaging.</li>
-                        </ul>
-                    </div>
-
-                    <div class="entry">
-                        <div class="entry-header">
-                            <h4>Senior Web Developer</h4>
-                            <span class="date">September 2011 – February 2015</span>
-                        </div>
-                        <p class="entry-sub">KNP Labs</p>
-                        <ul>
-                            <li>Developed and supported complex web applications (banking, education, retail).</li>
-                            <li>Coached junior developers via workshops, pair programming, and PR reviews.</li>
-                        </ul>
-                    </div>
-
-                    <div class="entry">
-                        <div class="entry-header">
-                            <h4>Web Developer</h4>
-                            <span class="date">September 2010 – September 2011</span>
-                        </div>
-                        <p class="entry-sub">Attitude OÜ</p>
-                        <ul>
-                            <li>Developed and supported web-based applications.</li>
-                        </ul>
-                    </div>
-                </section>
-
-                <!-- ===== Skills ===== -->
-                <section class="section">
-                    <h3>Skills</h3>
-                    <div class="row between-rows">
-                        <span class="label">Expert in:</span>
-                        <span>Python, PHP, JavaScript; Keras, Symfony, Doctrine, Angular; git</span>
-                    </div>
-                    <div class="row between-rows">
-                        <span class="label">Proficient in:</span>
-                        <span>C++, R, Java, HTML, CSS; TensorFlow, PyTorch, NumPy, SciPy; AWS</span>
-                    </div>
-                    <div class="row">
-                        <span class="label">Experience in:</span>
-                        <span>Bash, MATLAB, SAS, LaTeX; Caffe, Theano, OpenCV; vim</span>
-                    </div>
-                </section>
-
-                <!-- ===== Open Source ===== -->
-                <section class="section">
-                    <h3>Open Source</h3>
-                    <p>Symfony Web Framework, Doctrine ORM <em>(contributor)</em></p>
-                    <p>TensorFlow, PySC2, SciPy, StatsModels <em>(minor contributor)</em></p>
-                    <p>
-                        <a href="https://github.com/Inoryy/reaver-pysc2">Reaver: SC2 DRL Agent</a>,
-                        <a href="https://github.com/Inoryy/csb-ai-starter">CSB AI Starter</a>,
-                        <a href="https://github.com/KnpLabs/mailjet-api-php">Mailjet PHP API</a>
-                        <em>(creator)</em>
-                    </p>
-                </section>
-
-                <!-- ===== Talks ===== -->
-                <section class="section">
-                    <h3>Talks</h3>
-                    <div class="entry-header"><span>Reinforcement Learning — Guest Lecture, University of Tartu</span><span class="date">December 2018</span></div>
-                    <div class="entry-header"><span>Deep Reinforcement Learning — DevClub, Tallinn</span><span class="date">June 2018</span></div>
-                    <div class="entry-header"><span>Behavior Driven Development with Behat and Mink — DevClub, Tallinn</span><span class="date">January 2013</span></div>
-                </section>
-
-                <!-- ===== Teaching ===== -->
-                <section class="section">
-                    <h3>Teaching</h3>
-                    <div class="entry-header"><span>Neural Networks, TA — University of Tartu</span><span class="date">Spring 2019</span></div>
-                    <div class="entry-header"><span>Deep Reinforcement Learning, TA — University of Tartu</span><span class="date">Autumn 2018</span></div>
-                </section>
-
-                <!-- ===== Competitions ===== -->
-                <section class="section">
-                    <h3>Competitions</h3>
-                    <div class="entry-header"><span>Kaggle 2018 Data Science Bowl (277 / 3634, team)</span><span class="date">April 2018</span></div>
-                    <div class="entry-header"><span>Codingame AI Contest, Coders of the Caribbean (28 / 3623)</span><span class="date">April 2017</span></div>
-                    <div class="entry-header"><span>Hackerrank University World Cup (22 / 4466, team)</span><span class="date">September 2015</span></div>
-                    <div class="entry-header"><span>IEEEXtreme 8.0 (208 / 1853, team)</span><span class="date">September 2014</span></div>
-                </section>
-
-                <!-- ===== Awards ===== -->
-                <section class="section">
-                    <h3>Awards</h3>
-                    <div class="entry-header"><span>Estonian National Contest for University Students, B.S. programme, 2nd prize</span><span class="date">December 2018</span></div>
-                    <div class="entry-header"><span>DevClub Best Talk Award</span><span class="date">December 2018</span></div>
-                    <div class="entry-header"><span>Cybernetica AS Master's Fellowship</span><span class="date">October 2018</span></div>
-                </section>
-
-                <!-- ===== Coursework ===== -->
-                <section class="section">
-                    <h3>Relevant Coursework</h3>
-                    <p>Information Theory, Stochastic Processes, Matrix Calculus, Monte-Carlo Methods, Machine Learning, Neural Networks, Data Analysis I–II, Numerical Analysis, Mathematical Analysis I–III, Probability Theory &amp; Statistics I–II, Algebra (Abstract &amp; Linear).</p>
-                    <p><em>Online:</em> Machine Learning (Stanford CS229), CNNs for Visual Recognition (Stanford CS231n), Deep Learning for NLP (Stanford CS224d), Intro to AI (Berkeley CS188), DRL Bootcamp (Berkeley), Reinforcement Learning (UCL), Deep RL (Berkeley CS294).</p>
-                </section>
-            </main>
-
+            <div class="contact-info" id="cv-contacts"></div>
+            <main id="cv-main"></main>
             <footer class="footer">
                 <div class="qr-code" id="qrcode-cv"></div>
-                <img src="https://raw.githubusercontent.com/achma-learning/cv/refs/heads/master/signature.png" alt="Signature" class="signature">
+                <img id="cv-signature" src="" alt="Signature" class="signature">
             </footer>
         </div>
 
         <!-- ========================= CARD VIEW ========================= -->
         <div id="card-view">
-            <img src="https://raw.githubusercontent.com/achma-learning/cv/refs/heads/master/img.jpg" alt="Profile photo" class="profile-pic">
+            <img id="card-photo" src="" alt="Profile photo" class="profile-pic">
             <header class="header">
-                <h1>Your Name</h1>
-                <p class="tagline">Your Title / Role</p>
+                <h1 id="card-name"></h1>
+                <p class="tagline" id="card-tagline"></p>
             </header>
-
-            <div class="linktree-links">
-                <a href="mailto:you@example.com" class="linktree-link"><i class="fas fa-envelope"></i><span>you@example.com</span></a>
-                <a href="tel:+10000000000" class="linktree-link"><i class="fas fa-phone"></i><span>+1 000 000 0000</span></a>
-                <a href="https://maps.google.com/?q=City,Country" target="_blank" class="linktree-link"><i class="fas fa-map-marker-alt"></i><span>City, Country</span></a>
-                <a href="https://your-site.example" target="_blank" class="linktree-link"><i class="fas fa-globe"></i><span>your-site.example</span></a>
-                <a href="#" target="_blank" class="linktree-link"><i class="fas fa-graduation-cap"></i><span>Google Scholar</span></a>
-                <a href="#" target="_blank" class="linktree-link"><i class="fab fa-orcid"></i><span>ORCID</span></a>
-                <a href="#" target="_blank" class="linktree-link"><i class="fab fa-linkedin"></i><span>LinkedIn</span></a>
-                <a href="https://github.com/your-handle" target="_blank" class="linktree-link"><i class="fab fa-github"></i><span>your-handle</span></a>
-            </div>
-
+            <div class="linktree-links" id="card-links"></div>
             <footer class="footer">
                 <div class="qr-code" id="qrcode-card"></div>
-                <img src="https://raw.githubusercontent.com/achma-learning/cv/refs/heads/master/signature.png" alt="Signature" class="signature">
+                <img id="card-signature" src="" alt="Signature" class="signature">
             </footer>
         </div>
 
     </div>
 
     <script>
-        // -------- View toggle --------
-        const cvView = document.getElementById('cv-view');
-        const cardView = document.getElementById('card-view');
+        // ================================================================
+        // DEFAULT DATA — template placeholder values.
+        // Edit these directly or use the /admin page to override via
+        // localStorage (no server required, works on any fork).
+        // ================================================================
+        const DEFAULT_DATA = {
+            name: "Your Name",
+            tagline: "Your Title / Role",
+            email: "you@example.com",
+            phone: "+1 000 000 0000",
+            location: "City, Country",
+            locationUrl: "https://maps.google.com/?q=City,Country",
+            website: "https://your-site.example",
+            websiteLabel: "your-site.example",
+            github: "https://github.com/your-handle",
+            githubLabel: "your-handle",
+            scholar: "",
+            scholarLabel: "Google Scholar",
+            orcid: "",
+            orcidLabel: "ORCID",
+            linkedin: "",
+            linkedinLabel: "LinkedIn",
+            profilePhoto: "img.jpg",
+            signaturePhoto: "signature.png",
+            education: [
+                {
+                    degree: "M.S., Computer Science",
+                    date: "September 2018",
+                    institution: "University of Tartu, Estonia",
+                    details: ["Thesis: Replicating DeepMind StarCraft II RL Benchmark with Actor-Critic Methods"]
+                },
+                {
+                    degree: "B.S., Mathematical Statistics",
+                    date: "September 2014 – July 2018",
+                    institution: "University of Tartu, Estonia",
+                    details: []
+                }
+            ],
+            employment: [
+                { title: "Research Engineer", date: "March 2020 – Present", org: "DeepMind, London, UK", details: [] },
+                { title: "Research Engineer Intern", date: "June 2019 – September 2019", org: "DeepMind, London, UK", details: ["Contributed to AlphaStar’s league system development and launch on Battle.net.", "Created proof-of-concept ML framework in JAX, showcased with CV and NLP models."] },
+                { title: "Research Assistant", date: "February 2018 – February 2020", org: "Computational Neuroscience Research Group", details: ["Assisted with research and engineering in deep reinforcement learning."] },
+                { title: "Research Assistant", date: "June 2018 – December 2018", org: "PerkinElmer", details: ["Improved instance segmentation pipeline in fluorescent medical imaging."] },
+                { title: "Senior Web Developer", date: "September 2011 – February 2015", org: "KNP Labs", details: ["Developed and supported complex web applications (banking, education, retail).", "Coached junior developers via workshops, pair programming, and PR reviews."] },
+                { title: "Web Developer", date: "September 2010 – September 2011", org: "Attitude OÜ", details: ["Developed and supported web-based applications."] }
+            ],
+            skills: {
+                expert: "Python, PHP, JavaScript; Keras, Symfony, Doctrine, Angular; git",
+                proficient: "C++, R, Java, HTML, CSS; TensorFlow, PyTorch, NumPy, SciPy; AWS",
+                experience: "Bash, MATLAB, SAS, LaTeX; Caffe, Theano, OpenCV; vim"
+            },
+            openSource: "<p>Symfony Web Framework, Doctrine ORM <em>(contributor)</em></p><p>TensorFlow, PySC2, SciPy, StatsModels <em>(minor contributor)</em></p><p><a href=\"https://github.com/Inoryy/reaver-pysc2\">Reaver: SC2 DRL Agent</a>, <a href=\"https://github.com/Inoryy/csb-ai-starter\">CSB AI Starter</a>, <a href=\"https://github.com/KnpLabs/mailjet-api-php\">Mailjet PHP API</a> <em>(creator)</em></p>",
+            talks: [
+                { text: "Reinforcement Learning — Guest Lecture, University of Tartu", date: "December 2018" },
+                { text: "Deep Reinforcement Learning — DevClub, Tallinn", date: "June 2018" },
+                { text: "Behavior Driven Development with Behat and Mink — DevClub, Tallinn", date: "January 2013" }
+            ],
+            teaching: [
+                { text: "Neural Networks, TA — University of Tartu", date: "Spring 2019" },
+                { text: "Deep Reinforcement Learning, TA — University of Tartu", date: "Autumn 2018" }
+            ],
+            competitions: [
+                { text: "Kaggle 2018 Data Science Bowl (277 / 3634, team)", date: "April 2018" },
+                { text: "Codingame AI Contest, Coders of the Caribbean (28 / 3623)", date: "April 2017" },
+                { text: "Hackerrank University World Cup (22 / 4466, team)", date: "September 2015" },
+                { text: "IEEEXtreme 8.0 (208 / 1853, team)", date: "September 2014" }
+            ],
+            awards: [
+                { text: "Estonian National Contest for University Students, B.S. programme, 2nd prize", date: "December 2018" },
+                { text: "DevClub Best Talk Award", date: "December 2018" },
+                { text: "Cybernetica AS Master’s Fellowship", date: "October 2018" }
+            ],
+            coursework: [
+                "Information Theory, Stochastic Processes, Matrix Calculus, Monte-Carlo Methods, Machine Learning, Neural Networks, Data Analysis I–II, Numerical Analysis, Mathematical Analysis I–III, Probability Theory &amp; Statistics I–II, Algebra (Abstract &amp; Linear).",
+                "<em>Online:</em> Machine Learning (Stanford CS229), CNNs for Visual Recognition (Stanford CS231n), Deep Learning for NLP (Stanford CS224d), Intro to AI (Berkeley CS188), DRL Bootcamp (Berkeley), Reinforcement Learning (UCL), Deep RL (Berkeley CS294)."
+            ]
+        };
+
+        // ================================================================
+        // DATA LAYER — merge defaults with localStorage overrides
+        // ================================================================
+        function loadData() {
+            try {
+                const stored = localStorage.getItem('cv_data');
+                if (!stored) return DEFAULT_DATA;
+                const parsed = JSON.parse(stored);
+                return Object.assign({}, DEFAULT_DATA, parsed, {
+                    skills: Object.assign({}, DEFAULT_DATA.skills, parsed.skills)
+                });
+            } catch (e) {
+                return DEFAULT_DATA;
+            }
+        }
+
+        // ================================================================
+        // RENDER HELPERS
+        // ================================================================
+        function h(s) {
+            return String(s)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        function renderContacts(d) {
+            let parts = [];
+            if (d.email)    parts.push(`<a href="mailto:${h(d.email)}"><i class="fas fa-envelope"></i>${h(d.email)}</a>`);
+            if (d.phone)    parts.push(`<a href="tel:${h(d.phone)}"><i class="fas fa-phone"></i>${h(d.phone)}</a>`);
+            if (d.location) parts.push(`<a href="${h(d.locationUrl || '#')}" target="_blank"><i class="fas fa-map-marker-alt"></i>${h(d.location)}</a>`);
+            if (d.website)  parts.push(`<a href="${h(d.website)}" target="_blank"><i class="fas fa-globe"></i>${h(d.websiteLabel || d.website)}</a>`);
+            if (d.github)   parts.push(`<a href="${h(d.github)}" target="_blank"><i class="fab fa-github"></i>${h(d.githubLabel || d.github)}</a>`);
+            return parts.join('');
+        }
+
+        function renderCardLinks(d) {
+            let links = [];
+            if (d.email)    links.push(`<a href="mailto:${h(d.email)}" class="linktree-link"><i class="fas fa-envelope"></i><span>${h(d.email)}</span></a>`);
+            if (d.phone)    links.push(`<a href="tel:${h(d.phone)}" class="linktree-link"><i class="fas fa-phone"></i><span>${h(d.phone)}</span></a>`);
+            if (d.location) links.push(`<a href="${h(d.locationUrl || '#')}" target="_blank" class="linktree-link"><i class="fas fa-map-marker-alt"></i><span>${h(d.location)}</span></a>`);
+            if (d.website)  links.push(`<a href="${h(d.website)}" target="_blank" class="linktree-link"><i class="fas fa-globe"></i><span>${h(d.websiteLabel || d.website)}</span></a>`);
+            if (d.scholar)  links.push(`<a href="${h(d.scholar)}" target="_blank" class="linktree-link"><i class="fas fa-graduation-cap"></i><span>${h(d.scholarLabel || 'Google Scholar')}</span></a>`);
+            if (d.orcid)    links.push(`<a href="${h(d.orcid)}" target="_blank" class="linktree-link"><i class="fab fa-orcid"></i><span>${h(d.orcidLabel || 'ORCID')}</span></a>`);
+            if (d.linkedin) links.push(`<a href="${h(d.linkedin)}" target="_blank" class="linktree-link"><i class="fab fa-linkedin"></i><span>${h(d.linkedinLabel || 'LinkedIn')}</span></a>`);
+            if (d.github)   links.push(`<a href="${h(d.github)}" target="_blank" class="linktree-link"><i class="fab fa-github"></i><span>${h(d.githubLabel || d.github)}</span></a>`);
+            return links.join('');
+        }
+
+        function renderEducation(entries) {
+            return entries.map(e => `
+                <div class="entry">
+                    <div class="entry-header">
+                        <h4>${h(e.degree)}</h4>
+                        <span class="date">${h(e.date)}</span>
+                    </div>
+                    <p class="entry-sub">${h(e.institution)}</p>
+                    ${e.details && e.details.length ? `<ul>${e.details.map(d => `<li>${h(d)}</li>`).join('')}</ul>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function renderEmployment(entries) {
+            return entries.map(e => `
+                <div class="entry">
+                    <div class="entry-header">
+                        <h4>${h(e.title)}</h4>
+                        <span class="date">${h(e.date)}</span>
+                    </div>
+                    <p class="entry-sub">${h(e.org)}</p>
+                    ${e.details && e.details.length ? `<ul>${e.details.map(d => `<li>${h(d)}</li>`).join('')}</ul>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function renderSimpleList(entries) {
+            return entries.map(e => `
+                <div class="entry-header">
+                    <span>${h(e.text)}</span>
+                    <span class="date">${h(e.date)}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderMain(d) {
+            const sections = [];
+
+            if (d.education && d.education.length) {
+                sections.push(`<section class="section"><h3>Education</h3>${renderEducation(d.education)}</section>`);
+            }
+            if (d.employment && d.employment.length) {
+                sections.push(`<section class="section"><h3>Employment</h3>${renderEmployment(d.employment)}</section>`);
+            }
+            if (d.skills && (d.skills.expert || d.skills.proficient || d.skills.experience)) {
+                let rows = '';
+                if (d.skills.expert)     rows += `<div class="row between-rows"><span class="label">Expert in:</span><span>${h(d.skills.expert)}</span></div>`;
+                if (d.skills.proficient) rows += `<div class="row between-rows"><span class="label">Proficient in:</span><span>${h(d.skills.proficient)}</span></div>`;
+                if (d.skills.experience) rows += `<div class="row"><span class="label">Experience in:</span><span>${h(d.skills.experience)}</span></div>`;
+                sections.push(`<section class="section"><h3>Skills</h3>${rows}</section>`);
+            }
+            if (d.openSource) {
+                sections.push(`<section class="section"><h3>Open Source</h3>${d.openSource}</section>`);
+            }
+            if (d.talks && d.talks.length) {
+                sections.push(`<section class="section"><h3>Talks</h3>${renderSimpleList(d.talks)}</section>`);
+            }
+            if (d.teaching && d.teaching.length) {
+                sections.push(`<section class="section"><h3>Teaching</h3>${renderSimpleList(d.teaching)}</section>`);
+            }
+            if (d.competitions && d.competitions.length) {
+                sections.push(`<section class="section"><h3>Competitions</h3>${renderSimpleList(d.competitions)}</section>`);
+            }
+            if (d.awards && d.awards.length) {
+                sections.push(`<section class="section"><h3>Awards</h3>${renderSimpleList(d.awards)}</section>`);
+            }
+            if (d.coursework && d.coursework.length) {
+                const paras = d.coursework.map(p => `<p>${p}</p>`).join('');
+                sections.push(`<section class="section"><h3>Relevant Coursework</h3>${paras}</section>`);
+            }
+
+            return sections.join('');
+        }
+
+        // ================================================================
+        // APPLY DATA TO DOM
+        // ================================================================
+        function applyData(d) {
+            document.title = (d.name || 'Your Name') + ' — Curriculum Vitae';
+
+            // Photos
+            document.getElementById('cv-photo').src    = d.profilePhoto  || '';
+            document.getElementById('card-photo').src  = d.profilePhoto  || '';
+            document.getElementById('cv-signature').src   = d.signaturePhoto || '';
+            document.getElementById('card-signature').src = d.signaturePhoto || '';
+
+            // Name & tagline
+            document.getElementById('cv-name').textContent     = d.name    || '';
+            document.getElementById('card-name').textContent   = d.name    || '';
+            document.getElementById('cv-tagline').textContent   = d.tagline || '';
+            document.getElementById('card-tagline').textContent = d.tagline || '';
+
+            // Contact info
+            document.getElementById('cv-contacts').innerHTML = renderContacts(d);
+            document.getElementById('card-links').innerHTML  = renderCardLinks(d);
+
+            // CV sections
+            document.getElementById('cv-main').innerHTML = renderMain(d);
+        }
+
+        // Render on load
+        applyData(loadData());
+
+        // ================================================================
+        // VIEW TOGGLE
+        // ================================================================
+        const cvView    = document.getElementById('cv-view');
+        const cardView  = document.getElementById('card-view');
         const toggleBtn = document.getElementById('toggle-view');
         const downloadBtn = document.getElementById('downloadBtn');
 
         toggleBtn.addEventListener('click', () => {
             const showingCV = cvView.style.display !== 'none';
             if (showingCV) {
-                cvView.style.display = 'none';
+                cvView.style.display   = 'none';
                 cardView.style.display = 'block';
-                toggleBtn.textContent = 'View Full CV';
+                toggleBtn.textContent  = 'View Full CV';
                 downloadBtn.style.display = 'none';
             } else {
-                cvView.style.display = 'block';
+                cvView.style.display   = 'block';
                 cardView.style.display = 'none';
-                toggleBtn.textContent = 'View as Card';
+                toggleBtn.textContent  = 'View as Card';
                 downloadBtn.style.display = 'inline-block';
             }
         });
 
-        // -------- QR code (current page URL) --------
+        // ================================================================
+        // QR CODE (current page URL)
+        // ================================================================
         const qrUrl = window.location.href;
         QRCode.toDataURL(qrUrl, { errorCorrectionLevel: 'H', margin: 1 }, function (err, url) {
             if (err) return;
@@ -529,9 +582,11 @@
             });
         });
 
-        // -------- PDF download --------
+        // ================================================================
+        // PDF DOWNLOAD
+        // ================================================================
         downloadBtn.addEventListener('click', () => {
-            const defaultName = document.querySelector('.header h1').textContent.trim() || 'CV';
+            const defaultName = document.getElementById('cv-name').textContent.trim() || 'CV';
             const name = prompt('Filename for the PDF:', defaultName);
             if (!name) return;
             const element = document.getElementById('cv-view');
