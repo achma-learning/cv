@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit CV — Admin</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --paper: #ffffff;
+            --ink:   #1a1a1a;
+            --muted: #555555;
+            --rule:  #cccccc;
+            --link:  #1a1a1a;
+            --accent: #2c5aa0;
+            --max-width: 800px;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: #f4f4f1;
+            color: var(--ink);
+            font-family: 'EB Garamond', Garamond, Georgia, serif;
+            font-size: 17px;
+            line-height: 1.45;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 32px auto;
+            background: var(--paper);
+            padding: 56px 64px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
+        }
+
+        .toolbar {
+            max-width: var(--max-width);
+            margin: 24px auto 0 auto;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            padding: 0 64px;
+        }
+
+        .btn {
+            font-family: inherit;
+            font-size: 0.85em;
+            letter-spacing: 0.05em;
+            padding: 8px 16px;
+            background: var(--paper);
+            color: var(--ink);
+            border: 1px solid var(--ink);
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover { background: var(--ink); color: var(--paper); }
+        .btn-primary {
+            background: var(--ink);
+            color: var(--paper);
+        }
+        .btn-primary:hover { opacity: 0.8; }
+        .btn-danger { border-color: #c0392b; color: #c0392b; }
+        .btn-danger:hover { background: #c0392b; color: var(--paper); }
+
+        /* -------- Page header -------- */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--rule);
+        }
+        .page-header h1 {
+            font-weight: 500;
+            font-size: 2em;
+            letter-spacing: 0.02em;
+            margin: 0 0 6px 0;
+        }
+        .page-header p {
+            font-style: italic;
+            color: var(--muted);
+            margin: 0;
+            font-size: 0.95em;
+        }
+
+        /* -------- Section headings -------- */
+        h3 {
+            font-size: 0.95em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            margin: 0 0 16px 0;
+            padding-bottom: 4px;
+            border-bottom: 1px solid var(--ink);
+        }
+
+        .form-section { margin-top: 36px; }
+
+        /* -------- Form elements -------- */
+        .form-group {
+            margin-bottom: 14px;
+        }
+        .form-group label {
+            display: block;
+            font-style: italic;
+            color: var(--muted);
+            font-size: 0.88em;
+            margin-bottom: 4px;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"],
+        .form-group input[type="url"],
+        .form-group textarea {
+            width: 100%;
+            font-family: inherit;
+            font-size: 0.95em;
+            padding: 8px 10px;
+            border: 1px solid var(--rule);
+            background: var(--paper);
+            color: var(--ink);
+            outline: none;
+            transition: border-color 0.15s;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--ink);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .form-note {
+            font-size: 0.82em;
+            color: var(--muted);
+            font-style: italic;
+            margin-top: 3px;
+        }
+
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 12px;
+        }
+
+        /* -------- Photo upload -------- */
+        .photo-upload {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 14px;
+        }
+        .photo-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--rule);
+            flex-shrink: 0;
+            background: #f4f4f1;
+        }
+        .photo-preview[src=""] { display: none; }
+        .photo-upload-controls { flex: 1; }
+        .photo-upload-controls label {
+            font-style: italic;
+            color: var(--muted);
+            font-size: 0.88em;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .signature-preview {
+            height: 50px;
+            width: auto;
+            max-width: 220px;
+            display: block;
+            margin-bottom: 6px;
+            opacity: 0.85;
+        }
+        .signature-preview[src=""] { display: none; }
+
+        /* -------- Signature draw pad -------- */
+        .sig-tabs { display: flex; gap: 0; margin-bottom: 0; border-bottom: 1px solid var(--rule); }
+        .sig-tab {
+            padding: 7px 18px;
+            font: inherit;
+            font-size: 0.88em;
+            cursor: pointer;
+            background: none;
+            border: 1px solid var(--rule);
+            border-bottom: none;
+            margin-bottom: -1px;
+            color: var(--muted);
+        }
+        .sig-tab.active { background: var(--paper); color: var(--ink); font-weight: 600; border-bottom: 1px solid var(--paper); }
+        .sig-panel { display: none; padding: 14px 0 4px; }
+        .sig-panel.active { display: block; }
+        #sig-canvas {
+            display: block;
+            border: 1px solid var(--rule);
+            border-radius: 2px;
+            background: #fff;
+            cursor: crosshair;
+            touch-action: none;
+            width: 100%;
+            max-width: 500px;
+            height: 110px;
+        }
+        .sig-canvas-actions { display: flex; gap: 8px; margin-top: 8px; align-items: center; }
+        .sig-canvas-actions .form-note { margin: 0; }
+
+        /* -------- Dynamic entry cards -------- */
+        .entry-card {
+            border: 1px solid var(--rule);
+            padding: 16px;
+            margin-bottom: 12px;
+            position: relative;
+            background: #fafaf8;
+        }
+        .entry-card-handle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .entry-card-title {
+            font-style: italic;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        .entry-card-actions { display: flex; gap: 6px; }
+
+        /* -------- Save notice -------- */
+        #save-notice {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--ink);
+            color: var(--paper);
+            padding: 10px 20px;
+            font-size: 0.9em;
+            z-index: 999;
+        }
+
+        /* -------- Bottom actions -------- */
+        .bottom-actions {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--rule);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* -------- Responsive -------- */
+        @media (max-width: 720px) {
+            html, body { font-size: 16px; }
+            .container { margin: 0; padding: 28px 22px; box-shadow: none; }
+            .toolbar { padding: 0 22px; flex-direction: column; }
+            .btn { width: 100%; padding: 12px; text-align: center; }
+            .form-row-2, .form-row-3 { grid-template-columns: 1fr; }
+            .photo-upload { flex-direction: column; align-items: flex-start; }
+            .bottom-actions { flex-direction: column; gap: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="save-notice">Changes saved!</div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <a href="../" class="btn">← Back to CV</a>
+        <button class="btn btn-danger" id="resetBtn">Reset to Defaults</button>
+        <button class="btn btn-primary" id="saveBtn">Save Changes</button>
+    </div>
+
+    <div class="container">
+
+        <div class="page-header">
+            <h1>Edit Your CV</h1>
+            <p>Changes are stored in your browser and applied automatically when you visit the CV page.</p>
+        </div>
+
+        <!-- ===== Personal Information ===== -->
+        <div class="form-section">
+            <h3>Personal Information</h3>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label for="f-name">Full Name</label>
+                    <input type="text" id="f-name" placeholder="Your Name">
+                </div>
+                <div class="form-group">
+                    <label for="f-tagline">Title / Role (tagline)</label>
+                    <input type="text" id="f-tagline" placeholder="Your Title / Role">
+                </div>
+            </div>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label for="f-email">Email</label>
+                    <input type="email" id="f-email" placeholder="you@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="f-phone">Phone</label>
+                    <input type="tel" id="f-phone" placeholder="+212 6 00 00 00 00">
+                </div>
+            </div>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label for="f-location">Location (display text)</label>
+                    <input type="text" id="f-location" placeholder="Casablanca, Morocco">
+                </div>
+                <div class="form-group">
+                    <label for="f-locationUrl">Location URL (Google Maps link)</label>
+                    <input type="url" id="f-locationUrl" placeholder="https://maps.google.com/?q=Casablanca,Morocco">
+                </div>
+            </div>
+
+            <div class="form-row-3">
+                <div class="form-group">
+                    <label for="f-website">Website URL</label>
+                    <input type="url" id="f-website" placeholder="https://your-site.example">
+                </div>
+                <div class="form-group">
+                    <label for="f-websiteLabel">Website display label</label>
+                    <input type="text" id="f-websiteLabel" placeholder="your-site.example">
+                </div>
+            </div>
+
+            <div class="form-row-3">
+                <div class="form-group">
+                    <label for="f-github">GitHub URL</label>
+                    <input type="url" id="f-github" placeholder="https://github.com/your-handle">
+                </div>
+                <div class="form-group">
+                    <label for="f-githubLabel">GitHub display label</label>
+                    <input type="text" id="f-githubLabel" placeholder="your-handle">
+                </div>
+            </div>
+
+            <div class="form-row-3">
+                <div class="form-group">
+                    <label for="f-linkedin">LinkedIn URL <em style="font-size:0.9em">(optional)</em></label>
+                    <input type="url" id="f-linkedin" placeholder="https://linkedin.com/in/your-profile">
+                </div>
+                <div class="form-group">
+                    <label for="f-linkedinLabel">LinkedIn display label</label>
+                    <input type="text" id="f-linkedinLabel" placeholder="LinkedIn">
+                </div>
+            </div>
+
+            <div class="form-row-3">
+                <div class="form-group">
+                    <label for="f-scholar">Google Scholar URL <em style="font-size:0.9em">(optional)</em></label>
+                    <input type="url" id="f-scholar" placeholder="https://scholar.google.com/...">
+                </div>
+                <div class="form-group">
+                    <label for="f-scholarLabel">Scholar display label</label>
+                    <input type="text" id="f-scholarLabel" placeholder="Google Scholar">
+                </div>
+            </div>
+
+            <div class="form-row-3">
+                <div class="form-group">
+                    <label for="f-orcid">ORCID URL <em style="font-size:0.9em">(optional)</em></label>
+                    <input type="url" id="f-orcid" placeholder="https://orcid.org/0000-0000-0000-0000">
+                </div>
+                <div class="form-group">
+                    <label for="f-orcidLabel">ORCID display label</label>
+                    <input type="text" id="f-orcidLabel" placeholder="ORCID">
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== Profile Photo ===== -->
+        <div class="form-section">
+            <h3>Profile Photo</h3>
+            <div class="photo-upload">
+                <img id="photo-preview" class="photo-preview" src="" alt="Photo preview">
+                <div class="photo-upload-controls">
+                    <label>Upload a photo (stored in your browser)</label>
+                    <input type="file" id="f-photo" accept="image/*">
+                    <p class="form-note">Or enter a URL:</p>
+                    <input type="url" id="f-photoUrl" placeholder="https://... or leave blank to use img.jpg from the repo">
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== Signature ===== -->
+        <div class="form-section">
+            <h3>Signature</h3>
+            <p class="form-note" style="margin-bottom:14px">Draw, upload, or link your signature. It appears at the bottom of your CV.</p>
+
+            <div class="sig-tabs">
+                <button class="sig-tab active" data-tab="draw">✍️ Draw</button>
+                <button class="sig-tab" data-tab="upload">📁 Upload image</button>
+                <button class="sig-tab" data-tab="url">🔗 Image URL</button>
+            </div>
+
+            <!-- Draw -->
+            <div class="sig-panel active" id="sig-panel-draw">
+                <p class="form-note">Sign with your mouse or finger in the box below, then click <strong>Use this signature</strong>.</p>
+                <canvas id="sig-canvas" width="800" height="220"></canvas>
+                <div class="sig-canvas-actions">
+                    <button class="btn btn-primary" id="sig-use-btn">Use this signature</button>
+                    <button class="btn" id="sig-clear-btn">Clear</button>
+                    <span class="form-note">Hold Shift to draw thinner lines.</span>
+                </div>
+            </div>
+
+            <!-- Upload -->
+            <div class="sig-panel" id="sig-panel-upload">
+                <p class="form-note">PNG with a transparent background looks best. JPG also works.</p>
+                <input type="file" id="f-signature" accept="image/*">
+            </div>
+
+            <!-- URL -->
+            <div class="sig-panel" id="sig-panel-url">
+                <p class="form-note">Paste a direct link to your signature image (must be publicly accessible).</p>
+                <input type="url" id="f-signatureUrl" placeholder="https://... or leave blank to use signature.png from the repo">
+            </div>
+
+            <!-- Shared preview (shown after any method) -->
+            <div id="sig-result" style="margin-top:14px;display:none">
+                <label style="font-size:0.85em;color:var(--muted);display:block;margin-bottom:4px">Preview</label>
+                <img id="sig-preview" class="signature-preview" src="" alt="Signature preview" style="max-height:70px">
+                <button class="btn" id="sig-remove-btn" style="margin-top:6px;font-size:0.82em">Remove signature</button>
+            </div>
+        </div>
+
+        <!-- ===== Education ===== -->
+        <div class="form-section">
+            <h3>Education</h3>
+            <div id="education-list"></div>
+            <button class="btn" id="add-education">+ Add Entry</button>
+        </div>
+
+        <!-- ===== Employment ===== -->
+        <div class="form-section">
+            <h3>Employment</h3>
+            <div id="employment-list"></div>
+            <button class="btn" id="add-employment">+ Add Entry</button>
+        </div>
+
+        <!-- ===== Skills ===== -->
+        <div class="form-section">
+            <h3>Skills</h3>
+            <div class="form-group">
+                <label for="f-skills-expert">Expert in</label>
+                <input type="text" id="f-skills-expert" placeholder="Python, JavaScript, ...">
+            </div>
+            <div class="form-group">
+                <label for="f-skills-proficient">Proficient in</label>
+                <input type="text" id="f-skills-proficient" placeholder="C++, R, ...">
+            </div>
+            <div class="form-group">
+                <label for="f-skills-experience">Experience in</label>
+                <input type="text" id="f-skills-experience" placeholder="Bash, MATLAB, ...">
+            </div>
+        </div>
+
+        <!-- ===== Open Source ===== -->
+        <div class="form-section">
+            <h3>Open Source</h3>
+            <div class="form-group">
+                <label for="f-openSource">Content (HTML allowed — use &lt;p&gt;, &lt;a&gt;, &lt;em&gt; tags)</label>
+                <textarea id="f-openSource" rows="5" placeholder="&lt;p&gt;Project Name &lt;em&gt;(contributor)&lt;/em&gt;&lt;/p&gt;"></textarea>
+            </div>
+        </div>
+
+        <!-- ===== Talks ===== -->
+        <div class="form-section">
+            <h3>Talks</h3>
+            <div id="talks-list"></div>
+            <button class="btn" id="add-talks">+ Add Entry</button>
+        </div>
+
+        <!-- ===== Teaching ===== -->
+        <div class="form-section">
+            <h3>Teaching</h3>
+            <div id="teaching-list"></div>
+            <button class="btn" id="add-teaching">+ Add Entry</button>
+        </div>
+
+        <!-- ===== Competitions ===== -->
+        <div class="form-section">
+            <h3>Competitions</h3>
+            <div id="competitions-list"></div>
+            <button class="btn" id="add-competitions">+ Add Entry</button>
+        </div>
+
+        <!-- ===== Awards ===== -->
+        <div class="form-section">
+            <h3>Awards</h3>
+            <div id="awards-list"></div>
+            <button class="btn" id="add-awards">+ Add Entry</button>
+        </div>
+
+        <!-- ===== Coursework ===== -->
+        <div class="form-section">
+            <h3>Relevant Coursework</h3>
+            <div class="form-group">
+                <label for="f-coursework-1">Coursework paragraph</label>
+                <textarea id="f-coursework-1" rows="3" placeholder="Information Theory, Stochastic Processes, ..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="f-coursework-2">Online courses paragraph (HTML allowed)</label>
+                <textarea id="f-coursework-2" rows="3" placeholder="&lt;em&gt;Online:&lt;/em&gt; Machine Learning (Stanford CS229), ..."></textarea>
+            </div>
+        </div>
+
+        <!-- ===== Bottom Actions ===== -->
+        <div class="bottom-actions">
+            <button class="btn btn-danger" id="resetBtn2">Reset to Defaults</button>
+            <div style="display:flex;gap:10px;">
+                <a href="../" class="btn">← Back to CV</a>
+                <button class="btn btn-primary" id="saveBtn2">Save Changes</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ================================================================
+        // DEFAULT DATA (must match index.html)
+        // ================================================================
+        const DEFAULT_DATA = {
+            name: "Your Name",
+            tagline: "Your Title / Role",
+            email: "you@example.com",
+            phone: "+212 6 00 00 00 00",
+            location: "Casablanca, Morocco",
+            locationUrl: "https://maps.google.com/?q=Casablanca,Morocco",
+            website: "https://your-site.example",
+            websiteLabel: "your-site.example",
+            github: "https://github.com/your-handle",
+            githubLabel: "your-handle",
+            scholar: "",
+            scholarLabel: "Google Scholar",
+            orcid: "",
+            orcidLabel: "ORCID",
+            linkedin: "",
+            linkedinLabel: "LinkedIn",
+            profilePhoto: "img.jpg",
+            signaturePhoto: "signature.png",
+            education: [
+                {
+                    degree: "M.S., Computer Science",
+                    date: "September 2018",
+                    institution: "University of Tartu, Estonia",
+                    details: ["Thesis: Replicating DeepMind StarCraft II RL Benchmark with Actor-Critic Methods"]
+                },
+                {
+                    degree: "B.S., Mathematical Statistics",
+                    date: "September 2014 – July 2018",
+                    institution: "University of Tartu, Estonia",
+                    details: []
+                }
+            ],
+            employment: [
+                { title: "Research Engineer", date: "March 2020 – Present", org: "DeepMind, London, UK", details: [] },
+                { title: "Research Engineer Intern", date: "June 2019 – September 2019", org: "DeepMind, London, UK", details: ["Contributed to AlphaStar's league system development and launch on Battle.net.", "Created proof-of-concept ML framework in JAX, showcased with CV and NLP models."] },
+                { title: "Research Assistant", date: "February 2018 – February 2020", org: "Computational Neuroscience Research Group", details: ["Assisted with research and engineering in deep reinforcement learning."] },
+                { title: "Research Assistant", date: "June 2018 – December 2018", org: "PerkinElmer", details: ["Improved instance segmentation pipeline in fluorescent medical imaging."] },
+                { title: "Senior Web Developer", date: "September 2011 – February 2015", org: "KNP Labs", details: ["Developed and supported complex web applications (banking, education, retail).", "Coached junior developers via workshops, pair programming, and PR reviews."] },
+                { title: "Web Developer", date: "September 2010 – September 2011", org: "Attitude OÜ", details: ["Developed and supported web-based applications."] }
+            ],
+            skills: {
+                expert: "Python, PHP, JavaScript; Keras, Symfony, Doctrine, Angular; git",
+                proficient: "C++, R, Java, HTML, CSS; TensorFlow, PyTorch, NumPy, SciPy; AWS",
+                experience: "Bash, MATLAB, SAS, LaTeX; Caffe, Theano, OpenCV; vim"
+            },
+            openSource: "<p>Symfony Web Framework, Doctrine ORM <em>(contributor)</em></p><p>TensorFlow, PySC2, SciPy, StatsModels <em>(minor contributor)</em></p><p><a href=\"https://github.com/Inoryy/reaver-pysc2\">Reaver: SC2 DRL Agent</a>, <a href=\"https://github.com/Inoryy/csb-ai-starter\">CSB AI Starter</a>, <a href=\"https://github.com/KnpLabs/mailjet-api-php\">Mailjet PHP API</a> <em>(creator)</em></p>",
+            talks: [
+                { text: "Reinforcement Learning — Guest Lecture, University of Tartu", date: "December 2018" },
+                { text: "Deep Reinforcement Learning — DevClub, Tallinn", date: "June 2018" },
+                { text: "Behavior Driven Development with Behat and Mink — DevClub, Tallinn", date: "January 2013" }
+            ],
+            teaching: [
+                { text: "Neural Networks, TA — University of Tartu", date: "Spring 2019" },
+                { text: "Deep Reinforcement Learning, TA — University of Tartu", date: "Autumn 2018" }
+            ],
+            competitions: [
+                { text: "Kaggle 2018 Data Science Bowl (277 / 3634, team)", date: "April 2018" },
+                { text: "Codingame AI Contest, Coders of the Caribbean (28 / 3623)", date: "April 2017" },
+                { text: "Hackerrank University World Cup (22 / 4466, team)", date: "September 2015" },
+                { text: "IEEEXtreme 8.0 (208 / 1853, team)", date: "September 2014" }
+            ],
+            awards: [
+                { text: "Estonian National Contest for University Students, B.S. programme, 2nd prize", date: "December 2018" },
+                { text: "DevClub Best Talk Award", date: "December 2018" },
+                { text: "Cybernetica AS Master's Fellowship", date: "October 2018" }
+            ],
+            coursework: [
+                "Information Theory, Stochastic Processes, Matrix Calculus, Monte-Carlo Methods, Machine Learning, Neural Networks, Data Analysis I–II, Numerical Analysis, Mathematical Analysis I–III, Probability Theory &amp; Statistics I–II, Algebra (Abstract &amp; Linear).",
+                "<em>Online:</em> Machine Learning (Stanford CS229), CNNs for Visual Recognition (Stanford CS231n), Deep Learning for NLP (Stanford CS224d), Intro to AI (Berkeley CS188), DRL Bootcamp (Berkeley), Reinforcement Learning (UCL), Deep RL (Berkeley CS294)."
+            ]
+        };
+
+        // ================================================================
+        // LOAD DATA FROM LOCALSTORAGE
+        // ================================================================
+        function loadData() {
+            try {
+                const stored = localStorage.getItem('cv_data');
+                if (!stored) return JSON.parse(JSON.stringify(DEFAULT_DATA));
+                const parsed = JSON.parse(stored);
+                return Object.assign({}, DEFAULT_DATA, parsed, {
+                    skills: Object.assign({}, DEFAULT_DATA.skills, parsed.skills)
+                });
+            } catch (e) {
+                return JSON.parse(JSON.stringify(DEFAULT_DATA));
+            }
+        }
+
+        // ================================================================
+        // DYNAMIC ENTRY BUILDERS
+        // ================================================================
+
+        // Education / Employment (complex entries)
+        function makeComplexEntry(type, entry, index) {
+            const div = document.createElement('div');
+            div.className = 'entry-card';
+            div.dataset.type = type;
+
+            if (type === 'education') {
+                div.innerHTML = `
+                    <div class="entry-card-handle">
+                        <span class="entry-card-title">Education entry ${index + 1}</span>
+                        <div class="entry-card-actions">
+                            <button class="btn btn-danger move-up" title="Move up">↑</button>
+                            <button class="btn btn-danger move-down" title="Move down">↓</button>
+                            <button class="btn btn-danger remove-entry">Remove</button>
+                        </div>
+                    </div>
+                    <div class="form-row-3">
+                        <div class="form-group">
+                            <label>Degree / Title</label>
+                            <input type="text" class="e-degree" value="${escAttr(entry.degree || '')}">
+                        </div>
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="text" class="e-date" value="${escAttr(entry.date || '')}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Institution</label>
+                        <input type="text" class="e-institution" value="${escAttr(entry.institution || '')}">
+                    </div>
+                    <div class="form-group">
+                        <label>Details / bullet points <span class="form-note">(one per line)</span></label>
+                        <textarea class="e-details" rows="3">${escText((entry.details || []).join('\n'))}</textarea>
+                    </div>
+                `;
+            } else if (type === 'employment') {
+                div.innerHTML = `
+                    <div class="entry-card-handle">
+                        <span class="entry-card-title">Employment entry ${index + 1}</span>
+                        <div class="entry-card-actions">
+                            <button class="btn btn-danger move-up" title="Move up">↑</button>
+                            <button class="btn btn-danger move-down" title="Move down">↓</button>
+                            <button class="btn btn-danger remove-entry">Remove</button>
+                        </div>
+                    </div>
+                    <div class="form-row-3">
+                        <div class="form-group">
+                            <label>Job Title</label>
+                            <input type="text" class="e-title" value="${escAttr(entry.title || '')}">
+                        </div>
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="text" class="e-date" value="${escAttr(entry.date || '')}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Organization</label>
+                        <input type="text" class="e-org" value="${escAttr(entry.org || '')}">
+                    </div>
+                    <div class="form-group">
+                        <label>Details / bullet points <span class="form-note">(one per line)</span></label>
+                        <textarea class="e-details" rows="3">${escText((entry.details || []).join('\n'))}</textarea>
+                    </div>
+                `;
+            }
+
+            wireEntryButtons(div);
+            return div;
+        }
+
+        // Talks / Teaching / Competitions / Awards (simple entries: text + date)
+        function makeSimpleEntry(type, entry, index) {
+            const div = document.createElement('div');
+            div.className = 'entry-card';
+            div.dataset.type = type;
+            div.innerHTML = `
+                <div class="entry-card-handle">
+                    <span class="entry-card-title">Entry ${index + 1}</span>
+                    <div class="entry-card-actions">
+                        <button class="btn btn-danger move-up" title="Move up">↑</button>
+                        <button class="btn btn-danger move-down" title="Move down">↓</button>
+                        <button class="btn btn-danger remove-entry">Remove</button>
+                    </div>
+                </div>
+                <div class="form-row-3">
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" class="e-text" value="${escAttr(entry.text || '')}">
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="text" class="e-date" value="${escAttr(entry.date || '')}">
+                    </div>
+                </div>
+            `;
+            wireEntryButtons(div);
+            return div;
+        }
+
+        function wireEntryButtons(div) {
+            div.querySelector('.remove-entry').addEventListener('click', () => div.remove());
+            div.querySelector('.move-up').addEventListener('click', () => {
+                const prev = div.previousElementSibling;
+                if (prev && prev.classList.contains('entry-card')) div.parentNode.insertBefore(div, prev);
+            });
+            div.querySelector('.move-down').addEventListener('click', () => {
+                const next = div.nextElementSibling;
+                if (next && next.classList.contains('entry-card')) div.parentNode.insertBefore(next, div);
+            });
+        }
+
+        // ================================================================
+        // ESCAPE HELPERS
+        // ================================================================
+        function escAttr(s) {
+            return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+        function escText(s) {
+            return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        // ================================================================
+        // FILL FORM FROM DATA
+        // ================================================================
+        function fillForm(data) {
+            // Personal info
+            document.getElementById('f-name').value          = data.name || '';
+            document.getElementById('f-tagline').value       = data.tagline || '';
+            document.getElementById('f-email').value         = data.email || '';
+            document.getElementById('f-phone').value         = data.phone || '';
+            document.getElementById('f-location').value      = data.location || '';
+            document.getElementById('f-locationUrl').value   = data.locationUrl || '';
+            document.getElementById('f-website').value       = data.website || '';
+            document.getElementById('f-websiteLabel').value  = data.websiteLabel || '';
+            document.getElementById('f-github').value        = data.github || '';
+            document.getElementById('f-githubLabel').value   = data.githubLabel || '';
+            document.getElementById('f-linkedin').value      = data.linkedin || '';
+            document.getElementById('f-linkedinLabel').value = data.linkedinLabel || '';
+            document.getElementById('f-scholar').value       = data.scholar || '';
+            document.getElementById('f-scholarLabel').value  = data.scholarLabel || '';
+            document.getElementById('f-orcid').value         = data.orcid || '';
+            document.getElementById('f-orcidLabel').value    = data.orcidLabel || '';
+
+            // Photos
+            const photoVal = data.profilePhoto || '';
+            document.getElementById('f-photoUrl').value = photoVal.startsWith('data:') ? '' : photoVal;
+            document.getElementById('photo-preview').src = photoVal;
+
+            // Signature preview is populated by the self-contained signature
+            // section on DOMContentLoaded; fillForm only needs to handle URL input.
+            const sigVal = data.signaturePhoto || '';
+            if (sigVal && !sigVal.startsWith('data:')) {
+                document.getElementById('f-signatureUrl').value = sigVal;
+            }
+
+            // Skills
+            document.getElementById('f-skills-expert').value      = (data.skills && data.skills.expert)      ? data.skills.expert      : '';
+            document.getElementById('f-skills-proficient').value  = (data.skills && data.skills.proficient)  ? data.skills.proficient  : '';
+            document.getElementById('f-skills-experience').value  = (data.skills && data.skills.experience)  ? data.skills.experience  : '';
+
+            // Open source
+            document.getElementById('f-openSource').value = data.openSource || '';
+
+            // Coursework
+            document.getElementById('f-coursework-1').value = (data.coursework && data.coursework[0]) ? data.coursework[0] : '';
+            document.getElementById('f-coursework-2').value = (data.coursework && data.coursework[1]) ? data.coursework[1] : '';
+
+            // Dynamic lists
+            fillList('education-list', 'education', data.education || [], makeComplexEntry);
+            fillList('employment-list', 'employment', data.employment || [], makeComplexEntry);
+            fillList('talks-list', 'talks', data.talks || [], makeSimpleEntry);
+            fillList('teaching-list', 'teaching', data.teaching || [], makeSimpleEntry);
+            fillList('competitions-list', 'competitions', data.competitions || [], makeSimpleEntry);
+            fillList('awards-list', 'awards', data.awards || [], makeSimpleEntry);
+        }
+
+        function fillList(containerId, type, entries, makeEntry) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            entries.forEach((entry, i) => container.appendChild(makeEntry(type, entry, i)));
+        }
+
+        // ================================================================
+        // READ FORM DATA
+        // ================================================================
+        function readForm() {
+            const data = {};
+
+            data.name         = document.getElementById('f-name').value.trim();
+            data.tagline      = document.getElementById('f-tagline').value.trim();
+            data.email        = document.getElementById('f-email').value.trim();
+            data.phone        = document.getElementById('f-phone').value.trim();
+            data.location     = document.getElementById('f-location').value.trim();
+            data.locationUrl  = document.getElementById('f-locationUrl').value.trim();
+            data.website      = document.getElementById('f-website').value.trim();
+            data.websiteLabel = document.getElementById('f-websiteLabel').value.trim();
+            data.github       = document.getElementById('f-github').value.trim();
+            data.githubLabel  = document.getElementById('f-githubLabel').value.trim();
+            data.linkedin     = document.getElementById('f-linkedin').value.trim();
+            data.linkedinLabel= document.getElementById('f-linkedinLabel').value.trim();
+            data.scholar      = document.getElementById('f-scholar').value.trim();
+            data.scholarLabel = document.getElementById('f-scholarLabel').value.trim();
+            data.orcid        = document.getElementById('f-orcid').value.trim();
+            data.orcidLabel   = document.getElementById('f-orcidLabel').value.trim();
+
+            // Photos — the live preview src is the source of truth. It holds
+            // either an uploaded base64 image, a typed URL, or the default.
+            data.profilePhoto   = resolvePhoto('f-photoUrl', 'photo-preview', 'img.jpg');
+            data.signaturePhoto = resolvePhoto('f-signatureUrl', 'sig-preview', 'signature.png');
+
+            data.skills = {
+                expert:     document.getElementById('f-skills-expert').value.trim(),
+                proficient: document.getElementById('f-skills-proficient').value.trim(),
+                experience: document.getElementById('f-skills-experience').value.trim()
+            };
+
+            data.openSource = document.getElementById('f-openSource').value.trim();
+
+            const cw1 = document.getElementById('f-coursework-1').value.trim();
+            const cw2 = document.getElementById('f-coursework-2').value.trim();
+            data.coursework = [cw1, cw2].filter(Boolean);
+
+            // Dynamic lists
+            data.education   = readComplexList('education-list', 'education');
+            data.employment  = readComplexList('employment-list', 'employment');
+            data.talks       = readSimpleList('talks-list');
+            data.teaching    = readSimpleList('teaching-list');
+            data.competitions= readSimpleList('competitions-list');
+            data.awards      = readSimpleList('awards-list');
+
+            return data;
+        }
+
+        // Decide which photo value to store: typed URL wins, then the
+        // current preview (base64 upload), then the repo default fallback.
+        function resolvePhoto(urlInputId, previewId, fallback) {
+            const typed = document.getElementById(urlInputId).value.trim();
+            if (typed) return typed;
+            const preview = document.getElementById(previewId).getAttribute('src') || '';
+            if (preview) return preview;
+            return fallback;
+        }
+
+        function readComplexList(containerId, type) {
+            const cards = document.querySelectorAll(`#${containerId} .entry-card`);
+            return Array.from(cards).map(card => {
+                if (type === 'education') {
+                    const detailsRaw = card.querySelector('.e-details').value.trim();
+                    return {
+                        degree:      card.querySelector('.e-degree').value.trim(),
+                        date:        card.querySelector('.e-date').value.trim(),
+                        institution: card.querySelector('.e-institution').value.trim(),
+                        details:     detailsRaw ? detailsRaw.split('\n').map(s => s.trim()).filter(Boolean) : []
+                    };
+                } else {
+                    const detailsRaw = card.querySelector('.e-details').value.trim();
+                    return {
+                        title:   card.querySelector('.e-title').value.trim(),
+                        date:    card.querySelector('.e-date').value.trim(),
+                        org:     card.querySelector('.e-org').value.trim(),
+                        details: detailsRaw ? detailsRaw.split('\n').map(s => s.trim()).filter(Boolean) : []
+                    };
+                }
+            });
+        }
+
+        function readSimpleList(containerId) {
+            const cards = document.querySelectorAll(`#${containerId} .entry-card`);
+            return Array.from(cards).map(card => ({
+                text: card.querySelector('.e-text').value.trim(),
+                date: card.querySelector('.e-date').value.trim()
+            })).filter(e => e.text);
+        }
+
+        // ================================================================
+        // SAVE
+        // ================================================================
+        function saveData() {
+            const data = readForm();
+            try {
+                localStorage.setItem('cv_data', JSON.stringify(data));
+            } catch (e) {
+                alert('Could not save — your browser storage is full. This usually '
+                    + 'happens with very large uploaded images. Try a smaller photo '
+                    + '(under ~1 MB) or use an image URL instead.');
+                return;
+            }
+            const notice = document.getElementById('save-notice');
+            notice.style.display = 'block';
+            setTimeout(() => { notice.style.display = 'none'; }, 2500);
+        }
+
+        // ================================================================
+        // SIGNATURE SECTION: TABS + DRAW PAD
+        // ================================================================
+        (function () {
+            // --- Tabs ---
+            document.querySelectorAll('.sig-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.sig-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.sig-panel').forEach(p => p.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById('sig-panel-' + tab.dataset.tab).classList.add('active');
+                });
+            });
+
+            // --- Draw pad ---
+            const canvas  = document.getElementById('sig-canvas');
+            const ctx     = canvas.getContext('2d');
+            let drawing   = false;
+            let lastX = 0, lastY = 0;
+
+            // Map client coordinates to canvas logical coordinates.
+            function canvasXY(e) {
+                const r  = canvas.getBoundingClientRect();
+                const sx = canvas.width  / r.width;
+                const sy = canvas.height / r.height;
+                const src = e.touches ? e.touches[0] : e;
+                return [(src.clientX - r.left) * sx, (src.clientY - r.top) * sy];
+            }
+
+            function startDraw(e) {
+                e.preventDefault();
+                drawing = true;
+                [lastX, lastY] = canvasXY(e);
+            }
+            function draw(e) {
+                e.preventDefault();
+                if (!drawing) return;
+                const [x, y] = canvasXY(e);
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(x, y);
+                ctx.lineWidth  = e.shiftKey ? 1.5 : 2.8;
+                ctx.lineCap    = 'round';
+                ctx.lineJoin   = 'round';
+                ctx.strokeStyle = '#1a1a1a';
+                ctx.stroke();
+                [lastX, lastY] = [x, y];
+            }
+            function stopDraw() { drawing = false; }
+
+            canvas.addEventListener('mousedown',  startDraw);
+            canvas.addEventListener('mousemove',  draw);
+            canvas.addEventListener('mouseup',    stopDraw);
+            canvas.addEventListener('mouseleave', stopDraw);
+            canvas.addEventListener('touchstart', startDraw, { passive: false });
+            canvas.addEventListener('touchmove',  draw,      { passive: false });
+            canvas.addEventListener('touchend',   stopDraw);
+
+            document.getElementById('sig-clear-btn').addEventListener('click', () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            });
+
+            // "Use this signature" — export canvas as transparent PNG.
+            document.getElementById('sig-use-btn').addEventListener('click', () => {
+                const dataUrl = canvas.toDataURL('image/png');
+                showSigPreview(dataUrl);
+            });
+
+            // --- Upload ---
+            document.getElementById('f-signature').addEventListener('change', function () {
+                const file = this.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = e => showSigPreview(e.target.result);
+                reader.readAsDataURL(file);
+            });
+
+            // --- URL ---
+            document.getElementById('f-signatureUrl').addEventListener('input', function () {
+                if (this.value.trim()) showSigPreview(this.value.trim());
+            });
+
+            // --- Shared preview & remove ---
+            function showSigPreview(src) {
+                const img = document.getElementById('sig-preview');
+                img.src = src;
+                document.getElementById('sig-result').style.display = 'block';
+                // Clear URL input if it's a base64 value (so readForm picks preview)
+                if (!src.startsWith('http')) document.getElementById('f-signatureUrl').value = '';
+            }
+
+            document.getElementById('sig-remove-btn').addEventListener('click', () => {
+                document.getElementById('sig-preview').src = '';
+                document.getElementById('sig-result').style.display = 'none';
+                document.getElementById('f-signatureUrl').value = '';
+                document.getElementById('f-signature').value = '';
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            });
+
+            // On page load: if there's an existing signature in storage, show it.
+            const existing = (loadData().signaturePhoto || '').trim();
+            if (existing) showSigPreview(existing);
+        })();
+
+        // ================================================================
+        // PHOTO UPLOAD HANDLERS
+        // ================================================================
+        function handlePhotoUpload(inputId, previewId, urlInputId) {
+            document.getElementById(inputId).addEventListener('change', function () {
+                const file = this.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    // Preview holds the base64 image; it's persisted on Save.
+                    document.getElementById(previewId).src = e.target.result;
+                    document.getElementById(urlInputId).value = '';
+                };
+                reader.readAsDataURL(file);
+            });
+            document.getElementById(urlInputId).addEventListener('input', function () {
+                document.getElementById(previewId).src = this.value;
+            });
+        }
+
+        // ================================================================
+        // ADD ENTRY BUTTONS
+        // ================================================================
+        function wireAddButtons() {
+            document.getElementById('add-education').addEventListener('click', () => {
+                const list = document.getElementById('education-list');
+                const count = list.querySelectorAll('.entry-card').length;
+                list.appendChild(makeComplexEntry('education', {}, count));
+            });
+            document.getElementById('add-employment').addEventListener('click', () => {
+                const list = document.getElementById('employment-list');
+                const count = list.querySelectorAll('.entry-card').length;
+                list.appendChild(makeComplexEntry('employment', {}, count));
+            });
+            ['talks', 'teaching', 'competitions', 'awards'].forEach(type => {
+                document.getElementById(`add-${type}`).addEventListener('click', () => {
+                    const list = document.getElementById(`${type}-list`);
+                    const count = list.querySelectorAll('.entry-card').length;
+                    list.appendChild(makeSimpleEntry(type, {}, count));
+                });
+            });
+        }
+
+        // ================================================================
+        // INIT
+        // ================================================================
+        fillForm(loadData());
+        // Profile photo only — signature is handled by the draw-pad section above.
+        handlePhotoUpload('f-photo', 'photo-preview', 'f-photoUrl');
+        wireAddButtons();
+
+        // Save buttons
+        document.getElementById('saveBtn').addEventListener('click', saveData);
+        document.getElementById('saveBtn2').addEventListener('click', saveData);
+
+        // Reset buttons
+        function resetToDefaults() {
+            if (!confirm('Reset all CV data to the template defaults? This will remove any customizations stored in your browser.')) return;
+            localStorage.removeItem('cv_data');
+            fillForm(DEFAULT_DATA);
+        }
+        document.getElementById('resetBtn').addEventListener('click', resetToDefaults);
+        document.getElementById('resetBtn2').addEventListener('click', resetToDefaults);
+    </script>
+</body>
+</html>
