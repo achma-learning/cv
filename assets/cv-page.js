@@ -26,12 +26,19 @@
        grants anything: the editor still requires a GitHub sign-in, and GitHub
        still refuses to commit for anyone but the repository's owner. ?edit
        opens a door that is locked from the other side. */
-    if (adminLink) {
+    function updateEditorLink() {
+        if (!adminLink) return;
         var isLocal = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) || location.protocol === 'file:';
-        var wantsEditor = /(^|[?&])edit(=|&|$)/.test(location.search);
+        // The card view lives at #card, so asking for the editor from there
+        // lands the word on either side of the fragment — ?edit#card from the
+        // address bar, #card?edit from someone appending to a bookmark. Both
+        // mean the same thing, and neither grants anything.
+        var wantsEditor = /(^|[?&#])edit(=|&|#|$)/.test(location.search + location.hash);
         var signedInOwner = !!CVStore.editorHint();
         adminLink.hidden = !(signedInOwner || isLocal || wantsEditor || CVStore.hasOverride());
     }
+
+    updateEditorLink();
 
     /* -- View switching ----------------------------------------------------
        The card view is addressable as #card so it can be shared or bookmarked. */
@@ -45,11 +52,17 @@
     }
 
     function viewFromHash() {
-        return location.hash === '#card' ? 'card' : 'cv';
+        // Tolerate anything appended to the fragment, so #card?edit still shows
+        // the card rather than falling back to the full CV.
+        return /^#card\b/.test(location.hash) ? 'card' : 'cv';
     }
 
     showView(viewFromHash());
-    window.addEventListener('hashchange', function () { showView(viewFromHash()); });
+    window.addEventListener('hashchange', function () {
+        showView(viewFromHash());
+        // The fragment can carry ?edit, so it has to be reconsidered here too.
+        updateEditorLink();
+    });
 
     toggleBtn.addEventListener('click', function () {
         var next = viewFromHash() === 'card' ? 'cv' : 'card';

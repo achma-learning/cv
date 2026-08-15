@@ -273,6 +273,38 @@ export default async function (browser, log) {
         await page.waitForSelector('#cv-name');
         log(await page.isVisible('#adminBtn'), '?edit still opens the editor door');
 
+        // Asking for the editor from the card view, which lives behind a
+        // fragment, so the request lands on either side of the '#'.
+        for (const [address, note] of [
+            ['/cv/#card', 'the card view is reachable'],
+            ['/cv/?edit#card', 'the editor can be asked for before the fragment'],
+            ['/cv/#card?edit', 'and after it']
+        ]) {
+            await page.goto('https://jane.github.io' + address);
+            // On the card view #cv-name exists but is hidden, so wait for the
+            // markup rather than for it to be on screen.
+            await page.waitForSelector('#cv-name', { state: 'attached' });
+            await page.waitForSelector('#card-view');
+            log(await page.isVisible('#card-view') && await page.isHidden('#cv-view'),
+                `${address}: shows the card — ${note}`);
+            const wantsEditor = address.includes('edit');
+            log(await page.isVisible('#adminBtn') === wantsEditor,
+                `${address}: Edit CV ${wantsEditor ? 'offered' : 'stays hidden'}`);
+        }
+
+        // And once the owner is signed in, the control is there on both views.
+        await page.goto('https://jane.github.io/cv/');
+        await page.evaluate(() => localStorage.setItem('cv_editor_hint', JSON.stringify({
+            login: 'jane', repository: 'jane/cv',
+            site: 'https://jane.github.io/cv/', expires: Date.now() + 1e9
+        })));
+        await page.goto('https://jane.github.io/cv/#card');
+        await page.waitForSelector('#card-view');
+        log(await page.isVisible('#card-view'), 'signed in: the card view still shows');
+        log(await page.isVisible('#adminBtn'), 'signed in: Edit CV is offered from the card too');
+        log(await page.isHidden('#downloadBtn'), 'and the PDF button stays out of the card view');
+        await page.evaluate(() => localStorage.removeItem('cv_editor_hint'));
+
         await page.goto('https://jane.github.io/cv/admin/?edit=true');
         await page.waitForSelector('#gh-anon:not([hidden])', { timeout: 15000 });
         await page.click('.toolbar [data-action="publish"]');

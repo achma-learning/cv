@@ -400,13 +400,17 @@
         <div class="preview-bar no-print">
             <span class="preview-title">Preview — not published yet</span>
             <div class="action-group">
+                <button type="button" class="btn" data-action="preview-view" id="preview-view"
+                        aria-pressed="false">View as Card</button>
                 <button type="button" class="btn" data-action="close-preview">Close</button>
                 <button type="button" class="btn btn-primary" data-action="publish">Publish</button>
             </div>
         </div>
         <div class="preview-scroll">
             <div class="container">
-                <article>
+                <!-- The same two articles the public page has, so both are the
+                     real thing rather than an approximation of it. -->
+                <article id="preview-cv">
                     <img id="cv-photo" class="profile-pic" alt="" hidden>
                     <header class="header">
                         <h1 id="cv-name"></h1>
@@ -417,6 +421,19 @@
                     <footer class="footer">
                         <div class="qr-code"></div>
                         <img id="cv-signature" class="signature" alt="" hidden>
+                    </footer>
+                </article>
+
+                <article id="preview-card" hidden>
+                    <img id="card-photo" class="profile-pic" alt="" hidden>
+                    <header class="header">
+                        <h1 id="card-name"></h1>
+                        <p class="tagline" id="card-tagline"></p>
+                    </header>
+                    <nav class="linktree-links" id="card-links" aria-label="Contact links"></nav>
+                    <footer class="footer">
+                        <div class="qr-code"></div>
+                        <img id="card-signature" class="signature" alt="" hidden>
                     </footer>
                 </article>
             </div>

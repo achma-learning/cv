@@ -160,7 +160,11 @@ it with a mouse or a finger), education, employment, skills, open source, talks,
 teaching, competitions, awards and coursework. Entries can be added, removed and
 moved up or down.
 
-- **Preview** shows the real CV, rendered exactly as visitors will see it.
+- **Preview** shows the real CV, rendered exactly as visitors will see it, and
+  switches between the two views the public page has: the full CV and the
+  Linktree-style card at `#card`. Both are built from the same fields — editing
+  your name, tagline, photo, signature or contact links changes both at once,
+  so there is nothing separate to maintain for the card.
 - **Save Draft** keeps your work in this browser. It is *not* published — nobody
   else can see it, and it survives closing the tab so you can finish later.
 
@@ -187,7 +191,9 @@ Two things it will not do:
 
 Nobody, normally. Visitors get a CV, not a dashboard. The button appears once you
 have connected GitHub in that browser, while you are working on `localhost`,
-while you have an unpublished draft, or if you add `?edit` to the address.
+while you have an unpublished draft, or if you add `?edit` to the address. It is
+offered on the card view as well, so you can jump into the editor from
+`/#card` — either `…/?edit#card` or `…/#card?edit` works.
 
 `?edit` opens the editor; it does not unlock it. Publishing still needs a token,
 and GitHub still refuses anyone who does not own the repository. Hiding the
