@@ -17,13 +17,20 @@
     CVRender.apply(CVStore.load());
 
     /* -- Editor link -------------------------------------------------------
-       The editor only changes the copy of the CV stored in *this* browser, so
-       it is noise for anyone else reading the CV. Show it when you are working
-       locally, when you already have local edits, or on request via ?edit. */
+       A recruiter reading this CV should see a CV, so the link stays out of
+       sight unless it is useful: for the owner who has already signed in to the
+       editor, while working locally, while a draft is pending, or on request
+       via ?edit.
+
+       Every one of those is a matter of what the page *offers*. None of them
+       grants anything: the editor still requires a GitHub sign-in, and GitHub
+       still refuses to commit for anyone but the repository's owner. ?edit
+       opens a door that is locked from the other side. */
     if (adminLink) {
         var isLocal = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) || location.protocol === 'file:';
         var wantsEditor = /(^|[?&])edit(=|&|$)/.test(location.search);
-        adminLink.hidden = !(isLocal || wantsEditor || CVStore.hasOverride());
+        var signedInOwner = !!CVStore.editorHint();
+        adminLink.hidden = !(signedInOwner || isLocal || wantsEditor || CVStore.hasOverride());
     }
 
     /* -- View switching ----------------------------------------------------

@@ -11,17 +11,24 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&display=swap">
     <link rel="stylesheet" href="../assets/cv.css">
     <link rel="stylesheet" href="admin.css">
 
     <script>
         // Repo-relative images ("img.jpg") must resolve against the site root,
-        // not against /admin/, or every preview 404s.
+        // not against /admin/, or every preview 404s. It is also how the editor
+        // works out the address of the CV it belongs to.
         window.CV_ASSET_BASE = '../';
     </script>
     <script defer src="../assets/cv-data.js"></script>
+    <script defer src="../assets/cv-config.js"></script>
     <script defer src="../assets/cv-store.js"></script>
+    <script defer src="../assets/cv-repo.js"></script>
+    <script defer src="../assets/cv-github.js"></script>
+    <script defer src="../assets/cv-auth.js"></script>
+    <script defer src="../assets/cv-render.js"></script>
     <script defer src="admin.js"></script>
 </head>
 <body>
@@ -30,17 +37,113 @@
 
     <nav class="toolbar" aria-label="Editor actions">
         <a href="../" class="btn" data-leave>&larr; Back to CV</a>
-        <button type="button" class="btn btn-danger" id="resetBtn">Reset to Defaults</button>
-        <button type="button" class="btn btn-primary" id="saveBtn">Save Changes</button>
+        <button type="button" class="btn" data-action="preview">Preview</button>
+        <button type="button" class="btn" data-action="save">Save Draft</button>
+        <button type="button" class="btn btn-primary" data-action="publish">Publish</button>
     </nav>
 
     <div class="container">
 
         <div class="page-header">
             <h1>Edit Your CV</h1>
-            <p>Saved changes live in this browser only. Use <em>Export</em> to turn them into
-               a <code>cv-data.js</code> file you can commit and publish.</p>
+            <p>Drafts stay in this browser. Publishing puts them on your live CV.</p>
         </div>
+
+        <!-- ===== Publishing / GitHub =====
+             Kept at the top because it answers the two questions that matter
+             before any editing: who am I, and where does Publish send this? -->
+        <section class="form-section" id="gh-panel" data-no-dirty>
+            <h2 class="section-title">Publishing</h2>
+
+            <p class="gh-line" id="gh-busy">Checking your sign-in…</p>
+
+            <!-- Signed out -->
+            <div id="gh-anon" hidden>
+                <p class="gh-line">You are editing a local draft. Sign in to publish your CV
+                   so that everyone can see it.</p>
+                <div class="action-group">
+                    <button type="button" class="btn btn-primary" data-action="oauth" hidden id="gh-oauth-btn">Sign in with GitHub</button>
+                    <button type="button" class="btn" data-action="show-token-form" id="gh-token-btn">Sign in with GitHub</button>
+                </div>
+            </div>
+
+            <!-- Signed out → token form -->
+            <div id="gh-form" hidden>
+                <div class="form-group">
+                    <label for="gh-token">Paste your GitHub access token</label>
+                    <input type="password" id="gh-token" autocomplete="off" spellcheck="false"
+                           placeholder="github_pat_…">
+                </div>
+                <label class="gh-check">
+                    <input type="checkbox" id="gh-remember">
+                    Stay signed in on this device
+                </label>
+                <div class="action-group">
+                    <button type="button" class="btn btn-primary" data-action="connect">Continue</button>
+                    <button type="button" class="btn btn-quiet" data-action="cancel-signin">Cancel</button>
+                </div>
+
+                <details class="gh-help">
+                    <summary>Where do I get a token? (one minute, once)</summary>
+                    <ol>
+                        <li>Open
+                            <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">
+                            GitHub&nbsp;→ Settings → Developer settings → Fine-grained tokens → Generate new token</a>.</li>
+                        <li>Give it any name, and an expiry date you are comfortable with.</li>
+                        <li>Under <em>Repository access</em>, choose <strong>Only select repositories</strong>
+                            and pick the repository holding this CV.</li>
+                        <li>Under <em>Permissions → Repository permissions</em>, set
+                            <strong>Contents</strong> to <strong>Read and write</strong>. Nothing else is needed.</li>
+                        <li>Generate the token, copy it, and paste it above.</li>
+                    </ol>
+                    <p class="form-note">The token stays in this browser and is never added to your
+                       repository. Tick <em>Stay signed in</em> only on a device that is yours alone;
+                       otherwise it is forgotten as soon as you close the tab.</p>
+                </details>
+            </div>
+
+            <!-- Signed out → device flow, only if this fork configured one -->
+            <div id="gh-device" hidden>
+                <p class="gh-line">On GitHub, enter this code to finish signing in:</p>
+                <p class="gh-code" id="gh-device-code"></p>
+                <div class="action-group">
+                    <a class="btn btn-primary" id="gh-device-link" target="_blank" rel="noopener noreferrer">Open GitHub</a>
+                    <button type="button" class="btn btn-quiet" data-action="cancel-signin">Cancel</button>
+                </div>
+                <p class="form-note" id="gh-device-note">Waiting for you to approve it on GitHub…</p>
+            </div>
+
+            <!-- Signed in -->
+            <div id="gh-account" hidden>
+                <p class="gh-line" id="gh-identity"></p>
+                <p class="gh-line gh-target" id="gh-target"></p>
+                <div class="action-group">
+                    <button type="button" class="btn" data-action="reload">Load Published Version</button>
+                    <button type="button" class="btn btn-quiet" data-action="change-repo">Change Repository</button>
+                    <button type="button" class="btn btn-quiet" data-action="signout">Sign Out</button>
+                </div>
+            </div>
+
+            <!-- Signed in, but the repository behind this site is unclear -->
+            <div id="gh-choose" hidden>
+                <div class="form-group">
+                    <label for="gh-choice">Which repository holds this CV?</label>
+                    <select id="gh-choice"></select>
+                </div>
+                <div class="form-group">
+                    <label for="gh-manual">…or type it as <code>owner/repository</code></label>
+                    <input type="text" id="gh-manual" autocomplete="off" spellcheck="false" placeholder="your-handle/cv">
+                </div>
+                <div class="action-group">
+                    <button type="button" class="btn btn-primary" data-action="use-repo">Use This Repository</button>
+                    <button type="button" class="btn btn-quiet" data-action="cancel-choice" id="gh-choose-cancel" hidden>Cancel</button>
+                </div>
+                <p class="form-note">Only repositories you own are listed. Choosing one here decides
+                   where <em>Publish</em> writes; GitHub still decides whether it accepts the change.</p>
+            </div>
+
+            <div class="gh-note" id="gh-note" hidden></div>
+        </section>
 
         <!-- ===== Personal information ===== -->
         <section class="form-section">
@@ -269,24 +372,61 @@
         <section class="form-section">
             <h2 class="section-title">Publish</h2>
             <p class="form-note" style="margin-bottom:12px">
-                Saving keeps your CV in this browser. To make it the version everyone sees,
-                export <code>cv-data.js</code> and replace <code>assets/cv-data.js</code> in your repository.
+                <strong>Save Draft</strong> keeps your work in this browser — nobody else sees it.
+                <strong>Publish</strong> puts it on your live CV, where everybody does.
             </p>
             <div class="action-group">
-                <button type="button" class="btn" id="exportBtn">Export cv-data.js</button>
-                <button type="button" class="btn" id="importBtn">Import a file…</button>
+                <button type="button" class="btn" data-action="preview">Preview</button>
+                <button type="button" class="btn btn-primary" data-action="publish">Publish</button>
+            </div>
+
+            <p class="form-note" style="margin:22px 0 8px">Backups, or moving a draft between devices.</p>
+            <div class="action-group">
+                <button type="button" class="btn btn-quiet" id="exportBtn">Download a Copy</button>
+                <button type="button" class="btn btn-quiet" id="importBtn">Restore From a Copy…</button>
                 <input type="file" id="importInput" accept=".js,.json,application/json,text/javascript" hidden>
             </div>
         </section>
 
         <div class="bottom-actions">
-            <button type="button" class="btn btn-danger" id="resetBtn2">Reset to Defaults</button>
+            <button type="button" class="btn btn-danger" data-action="reset">Discard Draft</button>
             <div class="action-group">
                 <a href="../" class="btn" data-leave>&larr; Back to CV</a>
-                <button type="button" class="btn btn-primary" id="saveBtn2">Save Changes</button>
+                <button type="button" class="btn" data-action="save">Save Draft</button>
+                <button type="button" class="btn btn-primary" data-action="publish">Publish</button>
             </div>
         </div>
 
+    </div>
+
+    <!-- ===== Preview =====
+         The public CV's own renderer and stylesheet, so this is the CV itself
+         rather than a second impression of it. -->
+    <div class="preview-overlay" id="preview" hidden role="dialog" aria-modal="true" aria-label="CV preview">
+        <div class="preview-bar no-print">
+            <span class="preview-title">Preview — not published yet</span>
+            <div class="action-group">
+                <button type="button" class="btn" data-action="close-preview">Close</button>
+                <button type="button" class="btn btn-primary" data-action="publish">Publish</button>
+            </div>
+        </div>
+        <div class="preview-scroll">
+            <div class="container">
+                <article>
+                    <img id="cv-photo" class="profile-pic" alt="" hidden>
+                    <header class="header">
+                        <h1 id="cv-name"></h1>
+                        <p class="tagline" id="cv-tagline"></p>
+                    </header>
+                    <address class="contact-info" id="cv-contacts"></address>
+                    <main id="cv-main"></main>
+                    <footer class="footer">
+                        <div class="qr-code"></div>
+                        <img id="cv-signature" class="signature" alt="" hidden>
+                    </footer>
+                </article>
+            </div>
+        </div>
     </div>
 
 </body>
