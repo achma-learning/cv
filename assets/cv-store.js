@@ -184,10 +184,184 @@
         return base() + value;
     }
 
+    /* -- Reading and writing assets/cv-data.js -------------------------------
+       The editor rewrites this file, and somebody may well open it afterwards,
+       so it is written the way a person would write it: a header explaining
+       what it is, and the same section headings the CV itself has. Comments
+       are emitted rather than parsed out of the previous file — generating
+       them is exact, whereas preserving hand-written ones would mean carrying
+       a JavaScript parser around for the sake of cosmetics. */
+
+    var FILE_HEADER = [
+        '/* ============================================================================',
+        '   CV CONTENT — the single source of truth for this site.',
+        '',
+        '   Whatever is in this file is what visitors see. There are two ways to change',
+        '   it, and they end in the same place:',
+        '',
+        '     - Edit it here and commit.',
+        '     - Use the editor at /admin/ and press Publish, which commits this file for',
+        '       you. Signing in with GitHub is what makes that possible, and only the',
+        '       account that owns this repository can do it.',
+        '',
+        '   Fields left empty ("" or []) are simply not rendered.',
+        '   ========================================================================== */'
+    ].join('\n');
+
+    // Mirrors the order of the CV itself, so the file reads like the document.
+    var FILE_SECTIONS = [
+        { title: 'Identity', keys: ['name', 'tagline'] },
+        { title: 'Contact', keys: [
+            'email', 'phone', 'location', 'locationUrl', 'website', 'websiteLabel',
+            'github', 'githubLabel', 'linkedin', 'linkedinLabel',
+            'scholar', 'scholarLabel', 'orcid', 'orcidLabel'
+        ] },
+        { title: 'Images (repo-relative path, absolute URL, or empty to hide)',
+            keys: ['profilePhoto', 'signaturePhoto'] },
+        { title: 'Sections', keys: [
+            'education', 'employment', 'skills', 'openSource',
+            'talks', 'teaching', 'competitions', 'awards', 'coursework'
+        ] }
+    ];
+
+    function rule(title) {
+        var line = '    // -- ' + title + ' ';
+        return line + new Array(Math.max(2, 79 - line.length)).join('-');
+    }
+
+    function entry(key, value) {
+        // Indent the continuation lines of nested arrays and objects to sit
+        // under the key they belong to.
+        return '    ' + JSON.stringify(key) + ': '
+            + JSON.stringify(value, null, 4).split('\n').join('\n    ');
+    }
+
+    function withComments(data) {
+        var remaining = Object.keys(data);
+        var blocks = [];
+
+        FILE_SECTIONS.forEach(function (section) {
+            var present = section.keys.filter(function (key) { return remaining.indexOf(key) !== -1; });
+            if (!present.length) return;
+            present.forEach(function (key) { remaining.splice(remaining.indexOf(key), 1); });
+            blocks.push(rule(section.title) + '\n'
+                + present.map(function (key) { return entry(key, data[key]); }).join(',\n'));
+        });
+
+        // Anything the schema does not know about still gets written out.
+        if (remaining.length) {
+            blocks.push(remaining.map(function (key) { return entry(key, data[key]); }).join(',\n'));
+        }
+
+        return FILE_HEADER + '\nwindow.CV_DEFAULT_DATA = {\n' + blocks.join(',\n\n') + '\n};\n';
+    }
+
+    function plain(data) {
+        return FILE_HEADER + '\nwindow.CV_DEFAULT_DATA = ' + JSON.stringify(data, null, 4) + ';\n';
+    }
+
     /** Render a `data` object as the text of assets/cv-data.js, ready to commit. */
     function serialize(data) {
-        return '/* Written by the CV editor at /admin. This file is the published CV. */\n'
-            + 'window.CV_DEFAULT_DATA = ' + JSON.stringify(data, null, 4) + ';\n';
+        var text = withComments(data);
+        // Never publish something this file cannot read back. If the commented
+        // form is not perfectly faithful, fall back to plain JSON rather than
+        // commit a file that might not parse.
+        try {
+            if (same(deserialize(text), data)) return text;
+        } catch (e) { /* fall through */ }
+        return plain(data);
+    }
+
+    /**
+     * Turn a JavaScript object literal into JSON.
+     *
+     * cv-data.js is meant to be edited by hand as well as by the editor, so
+     * what comes back from GitHub may be JSON, or may be perfectly ordinary
+     * JavaScript: unquoted keys, single quotes, comments, a trailing comma.
+     * All of those have to load, or the editor cannot read a file somebody
+     * wrote themselves — including the one this project ships with.
+     *
+     * This rewrites those into JSON rather than evaluating anything.
+     */
+    function toJson(source) {
+        var out = '';
+        var i = 0;
+
+        /** The next character that is not whitespace or a comment. */
+        function peek(from) {
+            while (from < source.length) {
+                var c = source.charAt(from);
+                if (c === '/' && source.charAt(from + 1) === '/') {
+                    while (from < source.length && source.charAt(from) !== '\n') from++;
+                } else if (c === '/' && source.charAt(from + 1) === '*') {
+                    var close = source.indexOf('*/', from + 2);
+                    from = close === -1 ? source.length : close + 2;
+                } else if (/\s/.test(c)) {
+                    from++;
+                } else {
+                    return c;
+                }
+            }
+            return '';
+        }
+
+        while (i < source.length) {
+            var ch = source.charAt(i);
+
+            // Strings, in either quote style, come out double-quoted.
+            if (ch === '"' || ch === "'") {
+                var quote = ch;
+                out += '"';
+                i++;
+                while (i < source.length && source.charAt(i) !== quote) {
+                    var c = source.charAt(i);
+                    if (c === '\\') {
+                        var escaped = source.charAt(i + 1);
+                        // \' is not valid JSON; the character speaks for itself.
+                        out += escaped === "'" ? "'" : '\\' + escaped;
+                        i += 2;
+                    } else {
+                        out += c === '"' ? '\\"' : c;   // a " inside '…' must be escaped
+                        i++;
+                    }
+                }
+                out += '"';
+                i++;
+                continue;
+            }
+
+            if (ch === '/' && source.charAt(i + 1) === '/') {
+                while (i < source.length && source.charAt(i) !== '\n') i++;
+                continue;
+            }
+            if (ch === '/' && source.charAt(i + 1) === '*') {
+                var end = source.indexOf('*/', i + 2);
+                i = end === -1 ? source.length : end + 2;
+                continue;
+            }
+
+            // A bare word: a key to be quoted, or a literal to be left alone.
+            if (/[A-Za-z_$]/.test(ch)) {
+                var word = '';
+                while (i < source.length && /[A-Za-z0-9_$]/.test(source.charAt(i))) {
+                    word += source.charAt(i++);
+                }
+                out += peek(i) === ':' ? JSON.stringify(word) : word;
+                continue;
+            }
+
+            // A comma with nothing after it but a closing bracket.
+            if (ch === ',') {
+                var after = peek(i + 1);
+                i++;
+                if (after !== '}' && after !== ']') out += ',';
+                continue;
+            }
+
+            out += ch;
+            i++;
+        }
+        return out;
     }
 
     /** Parse either raw JSON or the contents of a cv-data.js file. */
@@ -201,7 +375,13 @@
             }
             source = source.slice(start, end + 1);
         }
-        var parsed = JSON.parse(source);
+
+        var parsed;
+        try {
+            parsed = JSON.parse(toJson(source));
+        } catch (e) {
+            throw new Error('That file could not be read as CV data.');
+        }
         if (!isPlainObject(parsed)) throw new Error('That file does not contain a CV data object.');
         return parsed;
     }

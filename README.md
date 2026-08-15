@@ -79,9 +79,9 @@ repository — but you never have to think about that. There is no database and 
 server; your repository stays the only copy of your CV.
 
 **Only you can publish.** The editor asks GitHub who you are and who owns the
-repository the CV is being served from, and the two have to be the same person.
-That check is GitHub's, not this page's: someone who tampers with the page in
-their browser gets an error from GitHub, not a published CV.
+repository serving the CV, and the two have to match. That check is GitHub's, not
+this page's — someone who tampers with the page in their browser gets an error
+from GitHub, not a published CV.
 
 ### Fork it
 
@@ -98,28 +98,45 @@ to make that true; there is no owner's name written down anywhere.
 
 ### Give the editor permission
 
-Once, on each device you edit from, you tell GitHub it is really you. Open your
-CV, add `?edit` to the address, and click **Edit CV** — or go straight to
-`https://<your-handle>.github.io/cv/admin/`. Then click **Sign in with GitHub**
-and follow the steps it lists:
+Once per device, you prove to GitHub that it is really you. Open your CV, add
+`?edit` to the address and click **Edit CV** — or go straight to
+`https://<your-handle>.github.io/cv/admin/`. Click **Connect GitHub**, and the
+editor walks you through it:
 
 1. Open
    [Settings → Developer settings → Fine-grained tokens → **Generate new token**](https://github.com/settings/personal-access-tokens/new).
-2. Give it any name, and an expiry date you are comfortable with.
+2. Give it any name and an expiry date you are comfortable with.
 3. Under **Repository access**, choose *Only select repositories* and pick your
    CV repository.
-4. Under **Permissions → Repository permissions**, set **Contents** to
-   *Read and write*. Nothing else is needed.
-5. Generate it, copy it, and paste it into the editor.
+4. Under **Permissions → Repository permissions**, set:
 
-That token is a key to one repository and nothing else. It stays in your browser
-and is **never** added to your repository — this project has no place to put a
-credential, by design. It is forgotten when you close the tab unless you tick
-*Stay signed in on this device*, so tick that only on a computer that is yours.
+   > **Contents** → **Read and write**
 
-> Prefer a real **Sign in with GitHub** button to pasting a token? That is
-> possible, and it is your own to set up rather than something you inherit from
-> this repository — see [Optional: a Sign in with GitHub button](#optional-a-sign-in-with-github-button).
+   That is the only permission needed. Leave everything else alone — the editor
+   never asks for Administration, Actions, Workflows, Secrets or anything to do
+   with your organisations.
+5. Press *Generate token*, copy it, and paste it into the editor.
+
+**Where the token lives.** In your browser, and nowhere else. It is never added
+to your repository, never put in a web address, and never sent to any server
+other than GitHub's own API. Close the tab and it is gone — unless you tick
+*Stay signed in on this device*, which keeps it on that computer until you press
+**Sign Out**. Tick it only on a machine that is yours alone. **Sign Out** deletes
+the token and hides the Edit button again; your draft is untouched.
+
+If the token expires or you delete it on GitHub, the editor notices, forgets it
+and asks you to connect again. You can revoke it at any time from
+[GitHub's token settings](https://github.com/settings/tokens?type=beta) — nothing
+in this project can outlive that.
+
+> **Why not a "Sign in with GitHub" button?** Because it would not be yours. A
+> sign-in button needs an OAuth application, an OAuth application belongs to one
+> GitHub account, and forking a repository does not hand it over. If this project
+> shipped one of mine, every fork would quietly depend on an application I own
+> and could switch off tomorrow — and a static site cannot keep the secret such a
+> button usually needs, so it would want a small server as well. A token you
+> create yourself costs one extra minute and leaves your fork answerable to
+> nobody. That trade is the whole reason this project has no backend.
 
 ### Edit your CV
 
@@ -134,9 +151,15 @@ moved up or down.
 
 ### Publish changes
 
-Press **Publish**. The editor commits `assets/cv-data.js` to your repository with
-the message *Update CV from web editor*, links you to the commit, and GitHub Pages
-puts it online shortly afterwards.
+Press **Publish**. Behind the scenes that is a normal Git commit to
+`assets/cv-data.js` in your repository, with the message *Update CV from web
+editor* — the editor links you to it, so your CV keeps a full history and you can
+undo anything from GitHub in the usual way.
+
+Publishing is not instant: GitHub Pages rebuilds the site, which usually takes
+under a minute. The editor says so rather than pretending the change is already
+live. Your own browser shows the new version immediately; everyone else sees it
+once the rebuild finishes.
 
 Two things it will not do:
 
@@ -148,27 +171,42 @@ Two things it will not do:
 ### Who sees the Edit button
 
 Nobody, normally. Visitors get a CV, not a dashboard. The button appears once you
-have signed in on that browser, while you are working on `localhost`, while you
-have an unpublished draft, or if you add `?edit` to the address.
+have connected GitHub in that browser, while you are working on `localhost`,
+while you have an unpublished draft, or if you add `?edit` to the address.
 
-`?edit` opens the editor; it does not unlock it. Publishing still needs a GitHub
-sign-in, and GitHub still refuses anyone but the repository's owner.
+`?edit` opens the editor; it does not unlock it. Publishing still needs a token,
+and GitHub still refuses anyone who does not own the repository. Hiding the
+button is tidiness, not security.
 
-### Optional: a Sign in with GitHub button
+### Forks own themselves
 
-Pasting a token once per device is the price of having no server. If you would
-rather have a proper sign-in button, you can add one: register your own OAuth App
-(one minute, no client secret involved) and deploy the small relay in
-[`oauth-relay.example.js`](oauth-relay.example.js), then fill in
-[`assets/cv-config.js`](assets/cv-config.js). Both files explain the whole thing.
+Editing rights follow the repository, automatically. Nobody's username is written
+down anywhere in this project — the editor asks GitHub who owns the repository
+serving the page, and compares that to who is signed in.
 
-Worth being clear about why it is not the default: an OAuth App belongs to a
-GitHub account, and forking a repository does not hand over its owner's OAuth App.
-If this project shipped one of mine, every fork would quietly depend on an
-application I control and could switch off. The token route makes your fork
-answerable to nobody, which matters more than the extra minute it costs — and if
-you set up an OAuth App, the same applies to anyone who forks *you*: they can use
-their own, or ignore it and use a token.
+So if you fork this CV, your copy is yours: you can publish to it and the person
+you forked from cannot. If somebody forks *yours*, the same applies to them, and
+you get no say over their copy. This holds however many times it is forked.
+
+### Limitations worth knowing
+
+- **You need a token.** There is no way around this for a site with no server;
+  see the note above. It takes a minute, once per device.
+- **Organisation repositories** need *admin* rights on the repository, not just
+  write access, because an organisation cannot sign in and click things. A
+  collaborator who can push is deliberately not treated as the CV's owner. On a
+  personal repository the rule is stricter still: only the account that owns it
+  can publish, even if others have push access.
+- **Custom domains** hide which repository is serving the page. The editor works
+  it out by asking GitHub which of your repositories publishes to this address,
+  which needs no configuration but does show you a short list to confirm if it
+  cannot tell. You can skip that by setting `repository` in
+  [`assets/cv-config.js`](assets/cv-config.js).
+- **Publishing from `/docs` or a `gh-pages` branch** works, and so does a CV kept
+  in a subfolder of a personal site. The editor finds the file rather than
+  assuming where it is.
+- **GitHub Pages takes a moment** to rebuild after each publish, as above.
+- **A shared computer** is a bad place to tick *Stay signed in*.
 
 ---
 
@@ -187,7 +225,6 @@ their own, or ignore it and use a token.
 | `assets/cv-github.js`   | The GitHub API calls the editor makes.                           |
 | `assets/cv-auth.js`     | Who is signed in, and what they may publish.                     |
 | `admin/`                | The editor (`index.html`, `admin.css`, `admin.js`).              |
-| `oauth-relay.example.js`| Optional. Only for the *Sign in with GitHub* button.             |
 | `test/`                 | Editor tests. Optional — see below.                              |
 | `img.jpg`               | Profile photo — replace with your own.                           |
 | `signature.png`/`.svg`  | Optional signature image.                                        |
@@ -249,11 +286,21 @@ node test/run.mjs
 
 They run offline: the working tree is mounted at an invented `github.io` address
 and a stand-in answers `api.github.com`, enforcing the same rules the real one
-does. Covered: a visitor sees no editor, a signed-in stranger cannot publish, the
-owner can, a fork answers to whoever forked it, the original author gets nothing
-on somebody's fork, tampering with the page in the browser changes nothing, and a
-concurrent commit is detected rather than overwritten — plus custom domains, user
-sites, `/docs` deployments, `localhost`, and a round trip of every field.
+does — a token is one person, only their own repositories accept a write, and a
+stale version is refused.
+
+Three suites:
+
+- **Who may publish** — a visitor sees no editor; a signed-in stranger cannot
+  publish; the owner can; a fork answers to whoever forked it; the original
+  author gets nothing on somebody else's fork; a concurrent commit is detected
+  rather than overwritten; the token lives where it should and is dropped on
+  sign-out.
+- **Where the CV lives** — project sites, user sites, custom domains, `/docs`,
+  a CV in a subfolder, `localhost`, and a round trip of every field.
+- **Hardening** — a fork of a fork, organisation repositories at each permission
+  level, a token that can only read repository contents, every browser-side lever
+  pulled at once, and a check that no original owner is hard-coded anywhere.
 
 ---
 

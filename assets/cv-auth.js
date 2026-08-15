@@ -27,10 +27,6 @@
 
     var current = null;
 
-    function config() {
-        return (global.CV_CONFIG && global.CV_CONFIG.oauth) || {};
-    }
-
     function fail(message, code) {
         var error = new Error(message);
         error.code = code || 'auth';
@@ -260,6 +256,7 @@
             siteUrl: '',
             isOwner: false,
             canWrite: false,
+            isAdmin: false,
             mayPublish: false
         };
 
@@ -274,11 +271,24 @@
             // author of the original has no standing here at all.
             session.isOwner = session.repository.owner.toLowerCase() === user.login.toLowerCase();
 
-            // What GitHub says this token can do. Both must hold, and GitHub
-            // enforces the second one again on every write.
+            // What GitHub says this token can do here.
             session.canWrite = !!(session.repository.permissions.push
                 || session.repository.permissions.admin);
-            session.mayPublish = session.isOwner && session.canWrite;
+            session.isAdmin = session.repository.permissions.admin === true;
+
+            if (session.repository.ownerType === 'Organization') {
+                // An organisation cannot sign in, so "the owner" has to mean
+                // the people who administer the repository on its behalf —
+                // otherwise an organisation-hosted CV could never be edited.
+                // Administration, not mere write access: a contributor with
+                // push rights is not the owner of the CV.
+                session.mayPublish = session.isAdmin;
+            } else {
+                // A personal repository stays strict. Collaborators with push
+                // access are deliberately excluded: this is somebody's CV, and
+                // the account it belongs to is the one that may change it.
+                session.mayPublish = session.isOwner && session.canWrite;
+            }
         }
 
         return session;
@@ -340,6 +350,72 @@
         });
     }
 
+    /**
+     * Find assets/cv-data.js when it is not where we expected.
+     *
+     * The token we ask people to create covers repository contents and nothing
+     * else, which means the Pages settings — the authoritative word on which
+     * branch and folder the site is built from — are often unreadable. Rather
+     * than ask for a second permission, look for the file: a site published
+     * from /docs or from gh-pages gives itself away by where the file sits.
+     *
+     * Resolves to true when the session was corrected.
+     */
+    function locate() {
+        var session = current;
+        if (!session || !session.repository) return Promise.resolve(false);
+
+        var owner = session.repository.owner;
+        var name = session.repository.name;
+
+        // What the site's own address suggests the folder should be, e.g. the
+        // CV at jane.github.io/cv/ inside a user-site repository lives in cv/.
+        var wanted = '';
+        try {
+            wanted = new URL(CVStore.siteUrl()).pathname.split('/').filter(Boolean).join('/');
+        } catch (e) { /* no hint available */ }
+
+        return session.api.branches(owner, name).then(function (list) {
+            var names = (list || []).map(function (branch) { return branch.name; });
+            var order = [session.branch, session.repository.defaultBranch, 'gh-pages', 'main', 'master']
+                .concat(names)
+                .filter(function (branch, index, all) {
+                    return branch && all.indexOf(branch) === index
+                        && (!names.length || names.indexOf(branch) !== -1);
+                })
+                .slice(0, 4);
+
+            var index = 0;
+
+            function next() {
+                if (index >= order.length) return false;
+                var branch = order[index++];
+
+                return session.api.tree(owner, name, branch).then(function (entries) {
+                    var matches = entries.filter(function (item) {
+                        return item.type === 'blob' && /(^|\/)assets\/cv-data\.js$/.test(item.path);
+                    }).map(function (item) { return item.path; });
+
+                    if (!matches.length) return next();
+
+                    // Prefer the copy whose folder matches this page's address;
+                    // otherwise the shallowest, which is the site root.
+                    matches.sort(function (a, b) {
+                        var aWanted = wanted && a.indexOf(wanted + '/') === 0 ? 0 : 1;
+                        var bWanted = wanted && b.indexOf(wanted + '/') === 0 ? 0 : 1;
+                        return aWanted - bWanted || a.split('/').length - b.split('/').length;
+                    });
+
+                    session.branch = branch;
+                    session.dataPath = matches[0];
+                    return true;
+                });
+            }
+
+            return next();
+        }).catch(function () { return false; });
+    }
+
     function signOut() {
         current = null;
         forgetToken();
@@ -350,84 +426,6 @@
         return current;
     }
 
-    /* -- Optional: "Sign in with GitHub" -------------------------------------
-       GitHub's device flow needs no client secret, which makes it safe for a
-       page anyone can read. What it does need is a relay: github.com refuses
-       cross-origin browser requests, unlike api.github.com. A fork that has not
-       set one up simply uses a token instead, and everything below stays dark.
-       See the README for the twenty lines of relay involved. */
-
-    function relay(path, params) {
-        var base = String(config().relay || '').replace(/\/+$/, '');
-        return global.fetch(base + path, {
-            method: 'POST',
-            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-            body: JSON.stringify(params)
-        }).then(function (response) {
-            return response.json().catch(function () { return null; }).then(function (body) {
-                if (!body) throw fail('The sign-in relay returned something unreadable.', 'relay');
-                return body;
-            });
-        }, function () {
-            throw fail('Could not reach the sign-in relay. You can sign in with a token instead.', 'relay');
-        });
-    }
-
-    function delay(seconds) {
-        return new Promise(function (done) { global.setTimeout(done, seconds * 1000); });
-    }
-
-    var oauth = {
-        available: function () {
-            return !!(config().clientId && config().relay);
-        },
-
-        /** Ask GitHub for a code the owner types into github.com/login/device. */
-        start: function () {
-            return relay('/login/device/code', {
-                client_id: config().clientId,
-                scope: config().scope || 'public_repo'
-            }).then(function (body) {
-                if (!body.device_code) {
-                    throw fail(body.error_description || 'GitHub would not start the sign-in.', 'relay');
-                }
-                return body;
-            });
-        },
-
-        /** Wait for them to approve it, then hand back an access token. */
-        wait: function (device) {
-            var interval = Math.max(Number(device.interval) || 5, 1);
-            var deadline = Date.now() + (Number(device.expires_in) || 900) * 1000;
-
-            function attempt() {
-                if (Date.now() > deadline) {
-                    throw fail('That sign-in code expired. Please start again.', 'expired');
-                }
-                return delay(interval).then(function () {
-                    return relay('/login/oauth/access_token', {
-                        client_id: config().clientId,
-                        device_code: device.device_code,
-                        grant_type: 'urn:ietf:params:oauth:grant-type:device_code'
-                    });
-                }).then(function (body) {
-                    if (body.access_token) return body.access_token;
-                    if (body.error === 'authorization_pending') return attempt();
-                    if (body.error === 'slow_down') {
-                        interval = Math.max(interval + 5, Number(body.interval) || interval);
-                        return attempt();
-                    }
-                    if (body.error === 'access_denied') {
-                        throw fail('Sign-in was cancelled on GitHub.', 'denied');
-                    }
-                    throw fail(body.error_description || 'GitHub declined the sign-in.', 'denied');
-                });
-            }
-
-            return attempt();
-        }
-    };
-
     global.CVAuth = {
         DATA_PATH: DATA_PATH,
         storedToken: storedToken,
@@ -435,8 +433,8 @@
         signIn: signIn,
         restore: restore,
         chooseRepository: chooseRepository,
+        locate: locate,
         signOut: signOut,
-        session: session,
-        oauth: oauth
+        session: session
     };
 })(window);

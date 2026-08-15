@@ -11,12 +11,12 @@ import { chromium } from 'playwright';
 
 import authorization from './authorization.test.mjs';
 import deployment from './deployment.test.mjs';
-import deviceFlow from './device-flow.test.mjs';
+import hardening from './hardening.test.mjs';
 
 const SUITES = [
     ['Who may publish', authorization],
     ['Where the CV lives', deployment],
-    ['Sign in with GitHub (optional)', deviceFlow]
+    ['Hardening', hardening]
 ];
 
 let passed = 0;

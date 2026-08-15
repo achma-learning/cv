@@ -126,6 +126,24 @@
             return request('GET', '/user/repos?affiliation=owner&sort=pushed&per_page=100');
         }
 
+        function branches(owner, name) {
+            return request('GET', '/repos/' + encodeURIComponent(owner) + '/' + encodeURIComponent(name)
+                + '/branches?per_page=100').catch(function () { return []; });
+        }
+
+        /**
+         * Every file on a branch. Used to find the CV data file when the Pages
+         * settings are not readable — a token limited to Contents cannot see
+         * them, which is the token we ask people for.
+         */
+        function tree(owner, name, ref) {
+            return request('GET', '/repos/' + encodeURIComponent(owner) + '/' + encodeURIComponent(name)
+                + '/git/trees/' + encodeURIComponent(ref) + '?recursive=1'
+            ).then(function (result) {
+                return (result && result.tree) || [];
+            }).catch(function () { return []; });
+        }
+
         /** File contents plus the version marker GitHub needs back on write. */
         function getFile(owner, name, path, ref) {
             var url = '/repos/' + encodeURIComponent(owner) + '/' + encodeURIComponent(name)
@@ -173,6 +191,8 @@
             repo: repo,
             pages: pages,
             ownedRepos: ownedRepos,
+            branches: branches,
+            tree: tree,
             getFile: getFile,
             putFile: putFile
         };

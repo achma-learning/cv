@@ -163,13 +163,6 @@
 .entry-card-actions { display: flex; gap: 6px; }
 .entry-card-actions .btn { padding: 4px 10px; font-size: 0.8em; }
 
-.empty-note {
-    font-style: italic;
-    color: var(--muted);
-    font-size: 0.88em;
-    margin-bottom: 10px;
-}
-
 /* -------- Publishing panel ------------------------------------------------ */
 .gh-line { margin: 0 0 12px 0; font-size: 0.95em; }
 .gh-line:last-of-type { margin-bottom: 14px; }
@@ -197,17 +190,27 @@
 }
 #gh-token { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85em; }
 
-.gh-code {
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 1.6em;
-    letter-spacing: 0.22em;
-    margin: 0 0 14px 0;
+.gh-heading {
+    font-size: 1.05em;
+    font-weight: 700;
+    margin: 0 0 8px 0;
 }
+.gh-steps {
+    margin: 0 0 18px 0;
+    padding-left: 20px;
+    font-size: 0.93em;
+}
+.gh-steps li { margin-bottom: 8px; }
 
-.gh-help { margin-top: 18px; font-size: 0.9em; }
-.gh-help summary { cursor: pointer; color: var(--muted); font-style: italic; }
-.gh-help ol { margin: 12px 0 0 0; padding-left: 20px; }
-.gh-help li { margin-bottom: 6px; }
+/* The one permission being asked for, stated so it cannot be misread. */
+.gh-permission {
+    margin: 8px 0;
+    padding: 8px 12px;
+    background: #fafaf8;
+    border-left: 3px solid var(--ink);
+    font-size: 1em;
+}
+.gh-storage { max-width: 60ch; margin-bottom: 14px; }
 
 /* A notice that needs reading, unlike the toast that fades away. */
 .gh-note {

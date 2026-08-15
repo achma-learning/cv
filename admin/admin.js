@@ -499,7 +499,7 @@
 
     var esc = CVStore.escape;
 
-    var VIEWS = ['gh-busy', 'gh-anon', 'gh-form', 'gh-device', 'gh-account', 'gh-choose'];
+    var VIEWS = ['gh-busy', 'gh-anon', 'gh-form', 'gh-account', 'gh-choose'];
 
     var gh = {
         session: null,
@@ -528,44 +528,59 @@
         });
     }
 
+    // What to do next, for the failures that have an obvious answer.
+    var ADVICE = {
+        unauthorized: 'Sign in again with a new token.',
+        forbidden: 'Check that the token covers this repository and has '
+            + '<strong>Contents: Read and write</strong>.',
+        rate_limited: 'This clears by itself — nothing is wrong with your CV or your token.',
+        network: 'Your draft is safe here. Check your connection and press Publish again.',
+        not_found: 'Check that the repository still exists and that the token can see it.'
+    };
+
     function ghFailed(error) {
+        var code = error && error.code;
+
         // A token that has expired or been revoked is worse than useless: drop
         // it, so the next visit offers a clean sign-in rather than the error.
-        if (error && error.code === 'unauthorized') {
+        if (code === 'unauthorized') {
             CVAuth.signOut();
             gh.session = null;
             gh.published = null;
             renderSession();
         }
-        ghNote(esc((error && error.message) || 'Something went wrong.'), 'error');
+
+        var message = esc((error && error.message) || 'Something went wrong.');
+        ghNote(message + (ADVICE[code] ? ' ' + ADVICE[code] : ''), 'error');
     }
 
     /** Why this account cannot publish here, in terms that suggest a fix. */
     function deniedMessage(session) {
         var repo = session.repository;
-        if (!session.isOwner) {
-            return 'This CV is published from <strong>' + esc(repo.fullName) + '</strong>, which belongs to '
-                + '<strong>@' + esc(repo.owner) + '</strong>. You are signed in as <strong>@'
-                + esc(session.user.login) + '</strong>, so you can read it and try things out here, '
-                + 'but not publish.'
-                + (repo.ownerType === 'Organization'
-                    ? ' The editor authorises the account that owns the repository.'
-                    : ' To have a CV of your own, fork it — your fork will be yours to publish.');
+        var you = '<strong>@' + esc(session.user.login) + '</strong>';
+        var where = '<strong>' + esc(repo.fullName) + '</strong>';
+
+        if (repo.ownerType === 'Organization') {
+            return 'This CV is published from ' + where + ', which belongs to the '
+                + '<strong>' + esc(repo.owner) + '</strong> organisation. Publishing needs admin '
+                + 'rights on that repository, and GitHub does not give ' + you + ' those.';
         }
-        return 'Your token can read <strong>' + esc(repo.fullName) + '</strong> but not write to it. '
-            + 'Create a token with <em>Contents: Read and write</em> for this repository, then sign in again.';
+        if (!session.isOwner) {
+            return 'This CV is published from ' + where + ', which belongs to <strong>@'
+                + esc(repo.owner) + '</strong>. You are signed in as ' + you + ', so you can look '
+                + 'around and try things out here, but not publish. To have a CV of your own, fork '
+                + 'it — your fork will be yours to publish.';
+        }
+        // The right person, the wrong token.
+        return 'This is your repository, but the token you signed in with cannot write to it. '
+            + 'Create a new one for ' + where + ' with <strong>Contents</strong> set to '
+            + '<strong>Read and write</strong>, then sign in again.';
     }
 
     function renderSession() {
         var session = gh.session;
 
         if (!session) {
-            var oauth = CVAuth.oauth.available();
-            $('gh-oauth-btn').hidden = !oauth;
-            // With a proper sign-in button available, the token becomes the
-            // fallback rather than the headline.
-            $('gh-token-btn').textContent = oauth ? 'Use a token instead' : 'Sign in with GitHub';
-            $('gh-token-btn').className = oauth ? 'btn btn-quiet' : 'btn btn-primary';
             ghView(['gh-anon']);
             return;
         }
@@ -573,8 +588,10 @@
         $('gh-identity').innerHTML = 'Signed in as <strong>@' + esc(session.user.login) + '</strong>.';
 
         if (!session.repository) {
-            $('gh-target').textContent = 'Which repository this CV belongs to is not obvious from its '
-                + 'address, so please confirm it below.';
+            $('gh-target').textContent = session.candidates.length
+                ? 'This address does not say which repository the CV comes from, so please confirm it.'
+                : 'No GitHub Pages site on your account matches this address. Check that your token '
+                    + 'covers the right repository, or type the repository below.';
             renderChoices(false);
             ghView(['gh-account', 'gh-choose']);
             return;
@@ -627,28 +644,6 @@
         }
         ghNote('Checking with GitHub…');
         adopt(CVAuth.signIn(token, $('gh-remember').checked));
-    }
-
-    function startDeviceFlow() {
-        var attempt = ++gh.attempt;
-        ghNote('');
-        ghView(['gh-device']);
-        $('gh-device-code').textContent = '…';
-        $('gh-device-note').textContent = 'Waiting for you to approve it on GitHub…';
-
-        CVAuth.oauth.start().then(function (device) {
-            if (attempt !== gh.attempt) return null;
-            $('gh-device-code').textContent = device.user_code;
-            $('gh-device-link').href = device.verification_uri;
-            return CVAuth.oauth.wait(device);
-        }).then(function (token) {
-            if (!token || attempt !== gh.attempt) return;
-            adopt(CVAuth.signIn(token, true));
-        }).catch(function (error) {
-            if (attempt !== gh.attempt) return;
-            renderSession();
-            ghFailed(error);
-        });
     }
 
     /** Take a freshly signed-in session and settle the editor around it. */
@@ -740,6 +735,16 @@
      */
     function loadPublished() {
         return fetchPublished().then(function (file) {
+            // Not where we looked. The site may be published from a folder or a
+            // branch the token cannot ask about, so go and find the file before
+            // concluding there isn't one.
+            if (!file) {
+                return CVAuth.locate().then(function (moved) {
+                    return moved ? fetchPublished() : null;
+                });
+            }
+            return file;
+        }).then(function (file) {
             gh.published = file;
             return file;
         });
@@ -804,9 +809,9 @@
         var session = gh.session;
 
         if (!session) {
-            // Open the sign-in first: both of those clear the notice area.
-            if (CVAuth.oauth.available()) startDeviceFlow(); else showTokenForm();
-            ghNote('Sign in with GitHub to publish. Your draft is safe here in the meantime.');
+            // Open the form first: it clears the notice area.
+            showTokenForm();
+            ghNote('Connect GitHub to publish. Your draft is safe here in the meantime.');
             return;
         }
         if (!session.repository) {
@@ -923,7 +928,6 @@
         'publish-force': function () { publish(true); },
         reload: reloadPublished,
         signout: signOut,
-        oauth: startDeviceFlow,
         'show-token-form': showTokenForm,
         'cancel-signin': cancelSignIn,
         connect: connect,
