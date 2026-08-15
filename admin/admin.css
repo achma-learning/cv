@@ -1,0 +1,204 @@
+/* ============================================================================
+   Editor-only styles. Everything shared with the CV lives in assets/cv.css.
+   ========================================================================== */
+
+.page-header {
+    text-align: center;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--rule);
+}
+.page-header h1 {
+    font-weight: 500;
+    font-size: 2em;
+    letter-spacing: 0.02em;
+    margin: 0 0 6px 0;
+}
+.page-header p {
+    font-style: italic;
+    color: var(--muted);
+    margin: 0;
+    font-size: 0.95em;
+}
+
+.form-section { margin-top: 36px; }
+
+/* -------- Form controls ------------------------------------------------- */
+.form-group { margin-bottom: 14px; }
+.form-group label {
+    display: block;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 0.88em;
+    margin-bottom: 4px;
+}
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="url"],
+.form-group textarea {
+    width: 100%;
+    font-family: inherit;
+    font-size: 0.95em;
+    padding: 8px 10px;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+}
+.form-group input:focus,
+.form-group textarea:focus { border-color: var(--ink); }
+.form-group textarea { resize: vertical; min-height: 80px; }
+
+.form-note {
+    font-size: 0.82em;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 3px;
+}
+
+.form-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+.form-pair-wide { grid-template-columns: 2fr 1fr; }
+
+/* -------- Image pickers -------------------------------------------------- */
+.photo-upload {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+.photo-preview {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--rule);
+    flex-shrink: 0;
+    background: var(--desk);
+}
+.photo-upload-controls { flex: 1; min-width: 0; }
+.photo-upload-controls > label {
+    font-style: italic;
+    color: var(--muted);
+    font-size: 0.88em;
+    display: block;
+    margin-bottom: 6px;
+}
+.signature-preview {
+    max-height: 70px;
+    width: auto;
+    max-width: 100%;
+    display: block;
+    margin-bottom: 6px;
+    opacity: 0.85;
+}
+
+/* -------- Signature tabs & draw pad -------------------------------------- */
+.sig-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--rule);
+}
+.sig-tab {
+    padding: 7px 18px;
+    font: inherit;
+    font-size: 0.88em;
+    cursor: pointer;
+    background: none;
+    border: 1px solid var(--rule);
+    border-bottom: none;
+    margin-bottom: -1px;
+    color: var(--muted);
+}
+.sig-tab[aria-selected="true"] {
+    background: var(--paper);
+    color: var(--ink);
+    font-weight: 600;
+    border-bottom: 1px solid var(--paper);
+}
+.sig-panel { padding: 14px 0 4px; }
+
+#sig-canvas {
+    display: block;
+    border: 1px solid var(--rule);
+    background: #fff;
+    cursor: crosshair;
+    touch-action: none;
+    width: 100%;
+    max-width: 500px;
+    height: 110px;
+}
+.sig-canvas-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.sig-canvas-actions .form-note { margin: 0; }
+
+/* -------- Repeatable entry cards ----------------------------------------- */
+.entry-card {
+    border: 1px solid var(--rule);
+    padding: 16px;
+    margin-bottom: 12px;
+    background: #fafaf8;
+}
+.entry-card-handle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+.entry-card-title {
+    font-style: italic;
+    color: var(--muted);
+    font-size: 0.9em;
+}
+.entry-card-actions { display: flex; gap: 6px; }
+.entry-card-actions .btn { padding: 4px 10px; font-size: 0.8em; }
+
+.empty-note {
+    font-style: italic;
+    color: var(--muted);
+    font-size: 0.88em;
+    margin-bottom: 10px;
+}
+
+/* -------- Status toast ---------------------------------------------------- */
+#status {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 20px;
+    font-size: 0.9em;
+    z-index: 999;
+    max-width: min(420px, calc(100vw - 40px));
+}
+#status[data-tone="error"] { background: var(--danger); }
+
+/* -------- Bottom actions -------------------------------------------------- */
+.bottom-actions {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.action-group { display: flex; gap: 10px; flex-wrap: wrap; }
+
+@media (max-width: 720px) {
+    .form-pair, .form-pair-wide { grid-template-columns: 1fr; }
+    .photo-upload { flex-direction: column; align-items: flex-start; }
+    .bottom-actions, .action-group { flex-direction: column; align-items: stretch; }
+}

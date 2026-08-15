@@ -3,637 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Name — Curriculum Vitae</title>
+    <title>Curriculum Vitae</title>
+    <meta name="description" content="Curriculum vitae.">
+    <meta name="theme-color" content="#ffffff">
 
-    <!-- Favicon (RealFaviconGenerator) -->
-    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <link rel="shortcut icon" href="favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
-    <link rel="manifest" href="site.webmanifest" />
+    <!-- Link previews (title/description are filled in from your CV data) -->
+    <meta property="og:type" content="profile">
+    <meta property="og:title" content="Curriculum Vitae">
+    <meta property="og:description" content="Curriculum vitae.">
+    <meta property="og:image" content="img.jpg">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Curriculum Vitae">
+
+    <!-- Favicon & PWA manifest -->
+    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
 
     <!-- Icons & fonts -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+    <link rel="stylesheet" href="assets/cv.css">
 
-    <!-- Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <!-- Optional enhancements: PDF export and QR code. Both are pinned, and
+         the page degrades gracefully if either fails to load. -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 
-    <style>
-        /* ============================================================
-           LaTeX-inspired digital CV — minimal, serif, academic.
-           Color palette is intentionally restrained. Tweak the
-           CSS variables below to rebrand without touching the rest.
-           ============================================================ */
-        :root {
-            --paper: #ffffff;       /* page background */
-            --ink:   #1a1a1a;       /* primary text */
-            --muted: #555555;       /* dates, sub-headings */
-            --rule:  #cccccc;       /* horizontal rules */
-            --link:  #1a1a1a;       /* link color (underline distinguishes) */
-            --max-width: 800px;
-        }
-
-        * { box-sizing: border-box; }
-
-        html, body {
-            margin: 0;
-            padding: 0;
-            background: #f4f4f1;    /* off-white surround, evokes paper on desk */
-            color: var(--ink);
-            font-family: 'EB Garamond', 'Latin Modern Roman', Garamond, Georgia, serif;
-            font-size: 17px;
-            line-height: 1.45;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .container {
-            max-width: var(--max-width);
-            margin: 32px auto;
-            background: var(--paper);
-            padding: 56px 64px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
-        }
-
-        /* -------- Header -------- */
-        .header {
-            text-align: center;
-            margin-bottom: 28px;
-        }
-        .header h1 {
-            font-weight: 500;
-            font-size: 2.4em;
-            letter-spacing: 0.02em;
-            margin: 0 0 4px 0;
-        }
-        .header .tagline {
-            font-style: italic;
-            color: var(--muted);
-            font-size: 1.05em;
-            margin: 0;
-        }
-
-        .profile-pic {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            object-fit: cover;
-            display: block;
-            margin: 0 auto 18px auto;
-            border: 1px solid var(--rule);
-        }
-        .profile-pic[src=""] { display: none; }
-
-        .contact-info {
-            text-align: center;
-            font-size: 0.92em;
-            color: var(--muted);
-            margin-top: 14px;
-            padding-top: 14px;
-            border-top: 1px solid var(--rule);
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 6px 18px;
-        }
-        .contact-info a {
-            color: var(--link);
-            text-decoration: none;
-        }
-        .contact-info a:hover { text-decoration: underline; }
-        .contact-info i {
-            margin-right: 6px;
-            color: var(--muted);
-        }
-
-        /* -------- Sections -------- */
-        .section { margin-top: 26px; }
-
-        h3 {
-            font-size: 0.95em;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.18em;
-            margin: 0 0 12px 0;
-            padding-bottom: 4px;
-            border-bottom: 1px solid var(--ink);
-        }
-
-        /* -------- Entries (education, experience) -------- */
-        .entry { margin-bottom: 14px; }
-        .entry:last-child { margin-bottom: 0; }
-
-        .entry-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            gap: 16px;
-        }
-        .entry-header h4 {
-            font-weight: 700;
-            font-size: 1em;
-            margin: 0;
-        }
-        .date {
-            font-style: italic;
-            color: var(--muted);
-            white-space: nowrap;
-            font-size: 0.92em;
-        }
-        .entry-sub {
-            font-style: italic;
-            color: var(--muted);
-            margin: 0 0 4px 0;
-            font-size: 0.95em;
-        }
-
-        ul {
-            margin: 4px 0 0 0;
-            padding-left: 22px;
-        }
-        ul li { margin-bottom: 2px; }
-        ul li::marker { color: var(--muted); }
-
-        a { color: var(--link); }
-
-        /* -------- Inline "label: value" rows (skills, talks, etc.) -------- */
-        .row {
-            display: grid;
-            grid-template-columns: max-content 1fr;
-            gap: 0 14px;
-            margin-bottom: 4px;
-        }
-        .row .label {
-            font-style: italic;
-            color: var(--muted);
-        }
-
-        .between-rows { margin-bottom: 6px; }
-
-        p { margin: 0 0 8px 0; }
-
-        /* -------- Footer (signature + QR) -------- */
-        .footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-top: 40px;
-            padding-top: 18px;
-            border-top: 1px solid var(--rule);
-        }
-        .qr-code img { width: 84px; height: 84px; display: block; }
-        .signature {
-            height: 70px;
-            width: auto;
-            opacity: 0.9;
-        }
-        .signature[src=""] { display: none; }
-
-        /* -------- Toolbar (download / toggle) -------- */
-        .toolbar {
-            max-width: var(--max-width);
-            margin: 24px auto 0 auto;
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            padding: 0 64px;
-        }
-        .btn {
-            font-family: inherit;
-            font-size: 0.85em;
-            letter-spacing: 0.05em;
-            padding: 8px 16px;
-            background: var(--paper);
-            color: var(--ink);
-            border: 1px solid var(--ink);
-            cursor: pointer;
-            transition: background 0.15s ease, color 0.15s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn:hover {
-            background: var(--ink);
-            color: var(--paper);
-        }
-
-        /* -------- Card view (linktree-style) -------- */
-        #card-view { display: none; }
-        .linktree-links { margin-top: 24px; }
-        .linktree-link {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            max-width: 100%;
-            margin: 10px 0;
-            padding: 12px 16px;
-            border: 1px solid var(--ink);
-            text-decoration: none;
-            color: var(--ink);
-            font-size: 1em;
-            transition: background 0.15s ease, color 0.15s ease;
-        }
-        .linktree-link i {
-            font-size: 1.1em;
-            width: 22px;
-            text-align: center;
-            color: var(--muted);
-        }
-        .linktree-link:hover {
-            background: var(--ink);
-            color: var(--paper);
-        }
-        .linktree-link:hover i { color: var(--paper); }
-
-        /* -------- Responsive -------- */
-        @media (max-width: 720px) {
-            html, body { font-size: 16px; }
-            .container { margin: 0; padding: 28px 22px; box-shadow: none; }
-            .toolbar { padding: 0 22px; flex-direction: column; }
-            .btn { width: 100%; padding: 12px; text-align: center; }
-            .header h1 { font-size: 2em; }
-            .entry-header { flex-direction: column; align-items: flex-start; gap: 0; }
-            .contact-info { flex-direction: column; gap: 4px; }
-            .footer { flex-direction: column-reverse; align-items: center; gap: 18px; }
-            .row { grid-template-columns: 1fr; }
-        }
-
-        /* -------- Print / PDF (A4) -------- */
-        @page { size: A4; margin: 12mm; }
-        @media print {
-            html, body { background: #fff; }
-            .container { box-shadow: none; margin: 0; padding: 0; max-width: none; }
-            .toolbar { display: none !important; }
-            .section, .entry, .footer { page-break-inside: avoid; }
-        }
-    </style>
+    <!-- CV content and rendering. Order matters; `defer` preserves it. -->
+    <script defer src="assets/cv-data.js"></script>
+    <script defer src="assets/cv-store.js"></script>
+    <script defer src="assets/cv-render.js"></script>
+    <script defer src="assets/cv-page.js"></script>
 </head>
 <body>
 
-    <!-- Toolbar -->
-    <div class="toolbar">
-        <a href="admin/" class="btn" id="adminBtn">Edit CV</a>
-        <button class="btn" id="toggle-view">View as Card</button>
-        <button class="btn" id="downloadBtn">Download PDF</button>
-    </div>
+    <nav class="toolbar no-print" aria-label="CV actions">
+        <a href="admin/" class="btn btn-quiet" id="adminBtn" hidden>Edit CV</a>
+        <button type="button" class="btn" id="toggle-view" aria-pressed="false">View as Card</button>
+        <button type="button" class="btn" id="downloadBtn">Download PDF</button>
+    </nav>
+
+    <noscript>
+        <p class="notice">This CV is rendered with JavaScript. Please enable it, or read
+        the printable version linked from the repository.</p>
+    </noscript>
 
     <div class="container">
 
-        <!-- ========================= FULL CV ========================= -->
-        <div id="cv-view">
-            <img id="cv-photo" src="" alt="Profile photo" class="profile-pic">
+        <!-- ============================ FULL CV ============================ -->
+        <article id="cv-view">
+            <img id="cv-photo" class="profile-pic" alt="" hidden>
             <header class="header">
                 <h1 id="cv-name"></h1>
                 <p class="tagline" id="cv-tagline"></p>
             </header>
-            <div class="contact-info" id="cv-contacts"></div>
+            <address class="contact-info" id="cv-contacts"></address>
             <main id="cv-main"></main>
             <footer class="footer">
                 <div class="qr-code" id="qrcode-cv"></div>
-                <img id="cv-signature" src="" alt="Signature" class="signature">
+                <img id="cv-signature" class="signature" alt="" hidden>
             </footer>
-        </div>
+        </article>
 
-        <!-- ========================= CARD VIEW ========================= -->
-        <div id="card-view">
-            <img id="card-photo" src="" alt="Profile photo" class="profile-pic">
+        <!-- =========================== CARD VIEW =========================== -->
+        <article id="card-view" hidden>
+            <img id="card-photo" class="profile-pic" alt="" hidden>
             <header class="header">
                 <h1 id="card-name"></h1>
                 <p class="tagline" id="card-tagline"></p>
             </header>
-            <div class="linktree-links" id="card-links"></div>
+            <nav class="linktree-links" id="card-links" aria-label="Contact links"></nav>
             <footer class="footer">
                 <div class="qr-code" id="qrcode-card"></div>
-                <img id="card-signature" src="" alt="Signature" class="signature">
+                <img id="card-signature" class="signature" alt="" hidden>
             </footer>
-        </div>
+        </article>
 
     </div>
 
-    <script>
-        // ================================================================
-        // DEFAULT DATA — template placeholder values.
-        // Edit these directly or use the /admin page to override via
-        // localStorage (no server required, works on any fork).
-        // ================================================================
-        const DEFAULT_DATA = {
-            name: "Your Name",
-            tagline: "Your Title / Role",
-            email: "you@example.com",
-            phone: "+212 6 00 00 00 00",
-            location: "Casablanca, Morocco",
-            locationUrl: "https://maps.google.com/?q=Casablanca,Morocco",
-            website: "https://your-site.example",
-            websiteLabel: "your-site.example",
-            github: "https://github.com/your-handle",
-            githubLabel: "your-handle",
-            scholar: "",
-            scholarLabel: "Google Scholar",
-            orcid: "",
-            orcidLabel: "ORCID",
-            linkedin: "",
-            linkedinLabel: "LinkedIn",
-            profilePhoto: "img.jpg",
-            signaturePhoto: "signature.png",
-            education: [
-                {
-                    degree: "M.S., Computer Science",
-                    date: "September 2018",
-                    institution: "University of Tartu, Estonia",
-                    details: ["Thesis: Replicating DeepMind StarCraft II RL Benchmark with Actor-Critic Methods"]
-                },
-                {
-                    degree: "B.S., Mathematical Statistics",
-                    date: "September 2014 – July 2018",
-                    institution: "University of Tartu, Estonia",
-                    details: []
-                }
-            ],
-            employment: [
-                { title: "Research Engineer", date: "March 2020 – Present", org: "DeepMind, London, UK", details: [] },
-                { title: "Research Engineer Intern", date: "June 2019 – September 2019", org: "DeepMind, London, UK", details: ["Contributed to AlphaStar’s league system development and launch on Battle.net.", "Created proof-of-concept ML framework in JAX, showcased with CV and NLP models."] },
-                { title: "Research Assistant", date: "February 2018 – February 2020", org: "Computational Neuroscience Research Group", details: ["Assisted with research and engineering in deep reinforcement learning."] },
-                { title: "Research Assistant", date: "June 2018 – December 2018", org: "PerkinElmer", details: ["Improved instance segmentation pipeline in fluorescent medical imaging."] },
-                { title: "Senior Web Developer", date: "September 2011 – February 2015", org: "KNP Labs", details: ["Developed and supported complex web applications (banking, education, retail).", "Coached junior developers via workshops, pair programming, and PR reviews."] },
-                { title: "Web Developer", date: "September 2010 – September 2011", org: "Attitude OÜ", details: ["Developed and supported web-based applications."] }
-            ],
-            skills: {
-                expert: "Python, PHP, JavaScript; Keras, Symfony, Doctrine, Angular; git",
-                proficient: "C++, R, Java, HTML, CSS; TensorFlow, PyTorch, NumPy, SciPy; AWS",
-                experience: "Bash, MATLAB, SAS, LaTeX; Caffe, Theano, OpenCV; vim"
-            },
-            openSource: "<p>Symfony Web Framework, Doctrine ORM <em>(contributor)</em></p><p>TensorFlow, PySC2, SciPy, StatsModels <em>(minor contributor)</em></p><p><a href=\"https://github.com/Inoryy/reaver-pysc2\">Reaver: SC2 DRL Agent</a>, <a href=\"https://github.com/Inoryy/csb-ai-starter\">CSB AI Starter</a>, <a href=\"https://github.com/KnpLabs/mailjet-api-php\">Mailjet PHP API</a> <em>(creator)</em></p>",
-            talks: [
-                { text: "Reinforcement Learning — Guest Lecture, University of Tartu", date: "December 2018" },
-                { text: "Deep Reinforcement Learning — DevClub, Tallinn", date: "June 2018" },
-                { text: "Behavior Driven Development with Behat and Mink — DevClub, Tallinn", date: "January 2013" }
-            ],
-            teaching: [
-                { text: "Neural Networks, TA — University of Tartu", date: "Spring 2019" },
-                { text: "Deep Reinforcement Learning, TA — University of Tartu", date: "Autumn 2018" }
-            ],
-            competitions: [
-                { text: "Kaggle 2018 Data Science Bowl (277 / 3634, team)", date: "April 2018" },
-                { text: "Codingame AI Contest, Coders of the Caribbean (28 / 3623)", date: "April 2017" },
-                { text: "Hackerrank University World Cup (22 / 4466, team)", date: "September 2015" },
-                { text: "IEEEXtreme 8.0 (208 / 1853, team)", date: "September 2014" }
-            ],
-            awards: [
-                { text: "Estonian National Contest for University Students, B.S. programme, 2nd prize", date: "December 2018" },
-                { text: "DevClub Best Talk Award", date: "December 2018" },
-                { text: "Cybernetica AS Master’s Fellowship", date: "October 2018" }
-            ],
-            coursework: [
-                "Information Theory, Stochastic Processes, Matrix Calculus, Monte-Carlo Methods, Machine Learning, Neural Networks, Data Analysis I–II, Numerical Analysis, Mathematical Analysis I–III, Probability Theory &amp; Statistics I–II, Algebra (Abstract &amp; Linear).",
-                "<em>Online:</em> Machine Learning (Stanford CS229), CNNs for Visual Recognition (Stanford CS231n), Deep Learning for NLP (Stanford CS224d), Intro to AI (Berkeley CS188), DRL Bootcamp (Berkeley), Reinforcement Learning (UCL), Deep RL (Berkeley CS294)."
-            ]
-        };
-
-        // ================================================================
-        // DATA LAYER — merge defaults with localStorage overrides
-        // ================================================================
-        function loadData() {
-            try {
-                const stored = localStorage.getItem('cv_data');
-                if (!stored) return DEFAULT_DATA;
-                const parsed = JSON.parse(stored);
-                return Object.assign({}, DEFAULT_DATA, parsed, {
-                    skills: Object.assign({}, DEFAULT_DATA.skills, parsed.skills)
-                });
-            } catch (e) {
-                return DEFAULT_DATA;
-            }
-        }
-
-        // ================================================================
-        // RENDER HELPERS
-        // ================================================================
-        function h(s) {
-            return String(s)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;');
-        }
-
-        function renderContacts(d) {
-            let parts = [];
-            if (d.email)    parts.push(`<a href="mailto:${h(d.email)}"><i class="fas fa-envelope"></i>${h(d.email)}</a>`);
-            if (d.phone)    parts.push(`<a href="tel:${h(d.phone)}"><i class="fas fa-phone"></i>${h(d.phone)}</a>`);
-            if (d.location) parts.push(`<a href="${h(d.locationUrl || '#')}" target="_blank"><i class="fas fa-map-marker-alt"></i>${h(d.location)}</a>`);
-            if (d.website)  parts.push(`<a href="${h(d.website)}" target="_blank"><i class="fas fa-globe"></i>${h(d.websiteLabel || d.website)}</a>`);
-            if (d.github)   parts.push(`<a href="${h(d.github)}" target="_blank"><i class="fab fa-github"></i>${h(d.githubLabel || d.github)}</a>`);
-            return parts.join('');
-        }
-
-        function renderCardLinks(d) {
-            let links = [];
-            if (d.email)    links.push(`<a href="mailto:${h(d.email)}" class="linktree-link"><i class="fas fa-envelope"></i><span>${h(d.email)}</span></a>`);
-            if (d.phone)    links.push(`<a href="tel:${h(d.phone)}" class="linktree-link"><i class="fas fa-phone"></i><span>${h(d.phone)}</span></a>`);
-            if (d.location) links.push(`<a href="${h(d.locationUrl || '#')}" target="_blank" class="linktree-link"><i class="fas fa-map-marker-alt"></i><span>${h(d.location)}</span></a>`);
-            if (d.website)  links.push(`<a href="${h(d.website)}" target="_blank" class="linktree-link"><i class="fas fa-globe"></i><span>${h(d.websiteLabel || d.website)}</span></a>`);
-            if (d.scholar)  links.push(`<a href="${h(d.scholar)}" target="_blank" class="linktree-link"><i class="fas fa-graduation-cap"></i><span>${h(d.scholarLabel || 'Google Scholar')}</span></a>`);
-            if (d.orcid)    links.push(`<a href="${h(d.orcid)}" target="_blank" class="linktree-link"><i class="fab fa-orcid"></i><span>${h(d.orcidLabel || 'ORCID')}</span></a>`);
-            if (d.linkedin) links.push(`<a href="${h(d.linkedin)}" target="_blank" class="linktree-link"><i class="fab fa-linkedin"></i><span>${h(d.linkedinLabel || 'LinkedIn')}</span></a>`);
-            if (d.github)   links.push(`<a href="${h(d.github)}" target="_blank" class="linktree-link"><i class="fab fa-github"></i><span>${h(d.githubLabel || d.github)}</span></a>`);
-            return links.join('');
-        }
-
-        function renderEducation(entries) {
-            return entries.map(e => `
-                <div class="entry">
-                    <div class="entry-header">
-                        <h4>${h(e.degree)}</h4>
-                        <span class="date">${h(e.date)}</span>
-                    </div>
-                    <p class="entry-sub">${h(e.institution)}</p>
-                    ${e.details && e.details.length ? `<ul>${e.details.map(d => `<li>${h(d)}</li>`).join('')}</ul>` : ''}
-                </div>
-            `).join('');
-        }
-
-        function renderEmployment(entries) {
-            return entries.map(e => `
-                <div class="entry">
-                    <div class="entry-header">
-                        <h4>${h(e.title)}</h4>
-                        <span class="date">${h(e.date)}</span>
-                    </div>
-                    <p class="entry-sub">${h(e.org)}</p>
-                    ${e.details && e.details.length ? `<ul>${e.details.map(d => `<li>${h(d)}</li>`).join('')}</ul>` : ''}
-                </div>
-            `).join('');
-        }
-
-        function renderSimpleList(entries) {
-            return entries.map(e => `
-                <div class="entry-header">
-                    <span>${h(e.text)}</span>
-                    <span class="date">${h(e.date)}</span>
-                </div>
-            `).join('');
-        }
-
-        function renderMain(d) {
-            const sections = [];
-
-            if (d.education && d.education.length) {
-                sections.push(`<section class="section"><h3>Education</h3>${renderEducation(d.education)}</section>`);
-            }
-            if (d.employment && d.employment.length) {
-                sections.push(`<section class="section"><h3>Employment</h3>${renderEmployment(d.employment)}</section>`);
-            }
-            if (d.skills && (d.skills.expert || d.skills.proficient || d.skills.experience)) {
-                let rows = '';
-                if (d.skills.expert)     rows += `<div class="row between-rows"><span class="label">Expert in:</span><span>${h(d.skills.expert)}</span></div>`;
-                if (d.skills.proficient) rows += `<div class="row between-rows"><span class="label">Proficient in:</span><span>${h(d.skills.proficient)}</span></div>`;
-                if (d.skills.experience) rows += `<div class="row"><span class="label">Experience in:</span><span>${h(d.skills.experience)}</span></div>`;
-                sections.push(`<section class="section"><h3>Skills</h3>${rows}</section>`);
-            }
-            if (d.openSource) {
-                sections.push(`<section class="section"><h3>Open Source</h3>${d.openSource}</section>`);
-            }
-            if (d.talks && d.talks.length) {
-                sections.push(`<section class="section"><h3>Talks</h3>${renderSimpleList(d.talks)}</section>`);
-            }
-            if (d.teaching && d.teaching.length) {
-                sections.push(`<section class="section"><h3>Teaching</h3>${renderSimpleList(d.teaching)}</section>`);
-            }
-            if (d.competitions && d.competitions.length) {
-                sections.push(`<section class="section"><h3>Competitions</h3>${renderSimpleList(d.competitions)}</section>`);
-            }
-            if (d.awards && d.awards.length) {
-                sections.push(`<section class="section"><h3>Awards</h3>${renderSimpleList(d.awards)}</section>`);
-            }
-            if (d.coursework && d.coursework.length) {
-                const paras = d.coursework.map(p => `<p>${p}</p>`).join('');
-                sections.push(`<section class="section"><h3>Relevant Coursework</h3>${paras}</section>`);
-            }
-
-            return sections.join('');
-        }
-
-        // ================================================================
-        // APPLY DATA TO DOM
-        // ================================================================
-        function applyData(d) {
-            document.title = (d.name || 'Your Name') + ' — Curriculum Vitae';
-
-            // Photos
-            document.getElementById('cv-photo').src    = d.profilePhoto  || '';
-            document.getElementById('card-photo').src  = d.profilePhoto  || '';
-            document.getElementById('cv-signature').src   = d.signaturePhoto || '';
-            document.getElementById('card-signature').src = d.signaturePhoto || '';
-
-            // Name & tagline
-            document.getElementById('cv-name').textContent     = d.name    || '';
-            document.getElementById('card-name').textContent   = d.name    || '';
-            document.getElementById('cv-tagline').textContent   = d.tagline || '';
-            document.getElementById('card-tagline').textContent = d.tagline || '';
-
-            // Contact info
-            document.getElementById('cv-contacts').innerHTML = renderContacts(d);
-            document.getElementById('card-links').innerHTML  = renderCardLinks(d);
-
-            // CV sections
-            document.getElementById('cv-main').innerHTML = renderMain(d);
-        }
-
-        // Render on load
-        applyData(loadData());
-
-        // ================================================================
-        // VIEW TOGGLE
-        // ================================================================
-        const cvView    = document.getElementById('cv-view');
-        const cardView  = document.getElementById('card-view');
-        const toggleBtn = document.getElementById('toggle-view');
-        const downloadBtn = document.getElementById('downloadBtn');
-
-        toggleBtn.addEventListener('click', () => {
-            const showingCV = cvView.style.display !== 'none';
-            if (showingCV) {
-                cvView.style.display   = 'none';
-                cardView.style.display = 'block';
-                toggleBtn.textContent  = 'View Full CV';
-                downloadBtn.style.display = 'none';
-            } else {
-                cvView.style.display   = 'block';
-                cardView.style.display = 'none';
-                toggleBtn.textContent  = 'View as Card';
-                downloadBtn.style.display = 'inline-block';
-            }
-        });
-
-        // ================================================================
-        // QR CODE (current page URL)
-        // ================================================================
-        const qrUrl = window.location.href;
-        QRCode.toDataURL(qrUrl, { errorCorrectionLevel: 'H', margin: 1 }, function (err, url) {
-            if (err) return;
-            ['qrcode-cv', 'qrcode-card'].forEach(id => {
-                const target = document.getElementById(id);
-                if (!target) return;
-                const img = document.createElement('img');
-                img.src = url;
-                img.alt = 'QR code';
-                target.appendChild(img);
-            });
-        });
-
-        // ================================================================
-        // PDF DOWNLOAD — optimised for A4 (standard in Morocco / Europe)
-        // ================================================================
-
-        // Wait until all images inside an element have finished loading so
-        // they don't render blank in the PDF (QR code loads asynchronously,
-        // photo/signature may be remote).
-        function waitForImages(element) {
-            const imgs = Array.from(element.querySelectorAll('img'));
-            return Promise.all(imgs.map(img => {
-                if (img.complete && img.naturalHeight !== 0) return Promise.resolve();
-                return new Promise(resolve => {
-                    img.addEventListener('load', resolve, { once: true });
-                    img.addEventListener('error', resolve, { once: true });
-                });
-            }));
-        }
-
-        downloadBtn.addEventListener('click', async () => {
-            const name = (document.getElementById('cv-name').textContent.trim() || 'CV');
-            const element = document.getElementById('cv-view');
-
-            const original = downloadBtn.textContent;
-            downloadBtn.textContent = 'Preparing…';
-            downloadBtn.disabled = true;
-
-            try {
-                await waitForImages(element);
-                await html2pdf().from(element).set({
-                    // A4 = 210 × 297 mm. 12 mm margins keep content clear of
-                    // printer non-printable edges on standard A4 printers.
-                    margin: [12, 12, 12, 12],
-                    filename: `${name} - CV.pdf`,
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: {
-                        scale: 2,
-                        useCORS: true,        // allow remote photo / signature
-                        allowTaint: false,
-                        backgroundColor: '#ffffff'
-                    },
-                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                    // Never split a section across two pages.
-                    pagebreak: { mode: ['css', 'legacy'], avoid: ['.section', '.entry', '.footer'] }
-                }).save();
-            } catch (e) {
-                alert('Sorry, the PDF could not be generated. Please try again.');
-            } finally {
-                downloadBtn.textContent = original;
-                downloadBtn.disabled = false;
-            }
-        });
-    </script>
 </body>
 </html>
