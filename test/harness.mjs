@@ -85,6 +85,13 @@ export function createGitHub(world) {
         const login = userFor(token);
         calls.push({ method, path: url.pathname, login });
 
+        // Record every host the credential is presented to, so a test can
+        // assert it never leaves GitHub.
+        if (auth) {
+            world.tokenDestinations = world.tokenDestinations || [];
+            if (!world.tokenDestinations.includes(url.host)) world.tokenDestinations.push(url.host);
+        }
+
         const json = (status, body) => route.fulfill({
             status, contentType: 'application/json', body: JSON.stringify(body)
         });
@@ -110,16 +117,34 @@ export function createGitHub(world) {
         const repo = repoOf(full);
         if (!repo) return json(404, { message: 'Not Found' });
 
-        // GitHub reports permissions per token, not per repository.
+        // GitHub reports permissions for the signed-in user, not for the
+        // repository in the abstract. An organisation repository names them
+        // per collaborator; a personal one belongs to its owner.
         const mine = repo.owner.login === login;
-        const view = { ...repo, permissions: { admin: mine, push: mine, pull: true } };
+        const permissions = (repo.permissionsByUser && repo.permissionsByUser[login])
+            || { admin: mine, push: mine, pull: true };
+        const view = { ...repo, permissions };
 
         if (!rest) return json(200, view);
 
         if (rest === '/pages') {
-            // Real GitHub needs admin access for this endpoint.
-            if (!mine) return json(404, { message: 'Not Found' });
+            // Real GitHub needs admin access here — and a fine-grained token
+            // limited to Contents cannot read it at all.
+            if (repo.pagesHidden) return json(403, { message: 'Resource not accessible by personal access token' });
+            if (!permissions.admin) return json(404, { message: 'Not Found' });
             return repo.pages ? json(200, repo.pages) : json(404, { message: 'Not Found' });
+        }
+
+        if (rest.startsWith('/branches')) {
+            const names = (world.branches && world.branches[full]) || [repo.default_branch];
+            return json(200, names.map(name => ({ name })));
+        }
+
+        const treeMatch = /^\/git\/trees\/([^?]+)/.exec(rest);
+        if (treeMatch) {
+            const ref = decodeURIComponent(treeMatch[1]);
+            const paths = (world.trees && world.trees[full + ':' + ref]) || [];
+            return json(200, { tree: paths.map(path => ({ path, type: 'blob' })) });
         }
 
         const contents = /^\/contents\/(.+)$/.exec(rest);
@@ -139,7 +164,7 @@ export function createGitHub(world) {
 
             if (method === 'PUT') {
                 // The check that actually matters: writing needs write access.
-                if (!mine) {
+                if (!permissions.push) {
                     return json(403, { message: 'Resource not accessible by personal access token' });
                 }
                 const body = request.postDataJSON();

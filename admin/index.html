@@ -59,58 +59,52 @@
 
             <!-- Signed out -->
             <div id="gh-anon" hidden>
-                <p class="gh-line">You are editing a local draft. Sign in to publish your CV
-                   so that everyone can see it.</p>
+                <p class="gh-line">You are editing a draft in this browser. To put it on your live CV,
+                   give the editor permission to save to your GitHub repository.</p>
                 <div class="action-group">
-                    <button type="button" class="btn btn-primary" data-action="oauth" hidden id="gh-oauth-btn">Sign in with GitHub</button>
-                    <button type="button" class="btn" data-action="show-token-form" id="gh-token-btn">Sign in with GitHub</button>
+                    <button type="button" class="btn btn-primary" data-action="show-token-form">Connect GitHub</button>
                 </div>
             </div>
 
-            <!-- Signed out → token form -->
+            <!-- Signed out → access form -->
             <div id="gh-form" hidden>
+                <h3 class="gh-heading">GitHub access required</h3>
+                <p class="gh-line">Create an access token that can reach <strong>only this
+                   repository</strong>, and nothing else in your account.</p>
+
+                <ol class="gh-steps">
+                    <li>
+                        <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">
+                        Open the token page on GitHub</a> (Settings → Developer settings → Fine-grained tokens).
+                    </li>
+                    <li>Give it any name and an expiry date you are comfortable with.</li>
+                    <li>Under <em>Repository access</em>, choose <strong>Only select repositories</strong>
+                        and pick the repository holding this CV.</li>
+                    <li>Under <em>Permissions → Repository permissions</em>, set:
+                        <p class="gh-permission"><strong>Contents</strong> → <strong>Read and write</strong></p>
+                        That is the only permission needed. Leave everything else alone.</li>
+                    <li>Press <em>Generate token</em>, copy it, and paste it below.</li>
+                </ol>
+
                 <div class="form-group">
-                    <label for="gh-token">Paste your GitHub access token</label>
-                    <input type="password" id="gh-token" autocomplete="off" spellcheck="false"
-                           placeholder="github_pat_…">
+                    <label for="gh-token">Paste the token here</label>
+                    <input type="password" id="gh-token" autocomplete="off" autocapitalize="off"
+                           autocorrect="off" spellcheck="false" placeholder="github_pat_…">
                 </div>
                 <label class="gh-check">
                     <input type="checkbox" id="gh-remember">
                     Stay signed in on this device
                 </label>
+                <p class="form-note gh-storage">
+                    The token is kept in this browser only and is never added to your repository or
+                    sent anywhere except GitHub. Without the tick above it is forgotten when you close
+                    this tab; with it, it stays on this device until you press <em>Sign Out</em>. Only
+                    tick it on a computer that is yours alone.
+                </p>
                 <div class="action-group">
                     <button type="button" class="btn btn-primary" data-action="connect">Continue</button>
                     <button type="button" class="btn btn-quiet" data-action="cancel-signin">Cancel</button>
                 </div>
-
-                <details class="gh-help">
-                    <summary>Where do I get a token? (one minute, once)</summary>
-                    <ol>
-                        <li>Open
-                            <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">
-                            GitHub&nbsp;→ Settings → Developer settings → Fine-grained tokens → Generate new token</a>.</li>
-                        <li>Give it any name, and an expiry date you are comfortable with.</li>
-                        <li>Under <em>Repository access</em>, choose <strong>Only select repositories</strong>
-                            and pick the repository holding this CV.</li>
-                        <li>Under <em>Permissions → Repository permissions</em>, set
-                            <strong>Contents</strong> to <strong>Read and write</strong>. Nothing else is needed.</li>
-                        <li>Generate the token, copy it, and paste it above.</li>
-                    </ol>
-                    <p class="form-note">The token stays in this browser and is never added to your
-                       repository. Tick <em>Stay signed in</em> only on a device that is yours alone;
-                       otherwise it is forgotten as soon as you close the tab.</p>
-                </details>
-            </div>
-
-            <!-- Signed out → device flow, only if this fork configured one -->
-            <div id="gh-device" hidden>
-                <p class="gh-line">On GitHub, enter this code to finish signing in:</p>
-                <p class="gh-code" id="gh-device-code"></p>
-                <div class="action-group">
-                    <a class="btn btn-primary" id="gh-device-link" target="_blank" rel="noopener noreferrer">Open GitHub</a>
-                    <button type="button" class="btn btn-quiet" data-action="cancel-signin">Cancel</button>
-                </div>
-                <p class="form-note" id="gh-device-note">Waiting for you to approve it on GitHub…</p>
             </div>
 
             <!-- Signed in -->

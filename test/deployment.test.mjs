@@ -217,7 +217,12 @@ export default async function (browser, log) {
             'round trip: bullet lists');
         log(/"profilePhoto": "img\.jpg"/.test(written), 'round trip: image references');
 
-        const parsed = JSON.parse(written.slice(written.indexOf('{'), written.lastIndexOf('}') + 1));
+        // Read it back with the app's own reader — the published file is a
+        // commented JavaScript file, not bare JSON.
+        const parsed = await page.evaluate(text => CVStore.deserialize(text), written);
+        log(/\/\/ -- Identity/.test(written) && /\/\/ -- Sections/.test(written),
+            'round trip: the published file keeps its explanatory comments');
+        log(/CV CONTENT/.test(written), 'round trip: and its header');
         log(parsed.education[0].degree === topDegree, 'round trip: reordering is kept');
         log(parsed.employment[parsed.employment.length - 1].details.length === 2,
             'round trip: the added entry is there');
@@ -272,7 +277,7 @@ export default async function (browser, log) {
         await page.waitForSelector('#gh-anon:not([hidden])', { timeout: 15000 });
         await page.click('.toolbar [data-action="publish"]');
         await page.waitForTimeout(500);
-        log(/Sign in with GitHub to publish/i.test(await page.textContent('#gh-note')),
+        log(/Connect GitHub to publish/i.test(await page.textContent('#gh-note')),
             '…but it grants no permission to publish');
         log(state.commits.length === 0, 'and nothing is written');
         await context.close();
