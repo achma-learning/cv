@@ -4,7 +4,8 @@ A dependency-free HTML curriculum vitae with the sober, academic look of a LaTeX
 CV. No build step, no framework — fork it, edit one data file, and host it on
 GitHub Pages.
 
-> Preview: run a local server (below) and open `index.html`.
+> Fork it, turn on GitHub Pages, and edit your CV from the browser — see
+> [Quick start](#quick-start).
 
 ---
 
@@ -34,37 +35,51 @@ GitHub Pages.
 
 ## Quick start
 
-### 1. Fork and clone
+No terminal, no code — nine steps:
+
+1. **Fork** this repository. Your fork is yours; nobody else can publish to it.
+2. In your fork: **Settings → Pages → Deploy from a branch**, pick branch
+   `master` (or `main`) and folder `/ (root)`.
+3. Wait a minute, then open your CV at `https://<your-handle>.github.io/cv/`.
+4. Add `?edit` to that address and click **Edit CV**.
+5. Click **Connect GitHub**. It links you to
+   [GitHub's fine-grained token page](https://github.com/settings/personal-access-tokens/new).
+6. Under *Repository access* choose **Only select repositories** and pick your
+   fork. Under *Permissions → Repository permissions* set **Contents** to
+   **Read and write**. Nothing else is needed.
+7. Copy the token, paste it into the editor, press **Continue**.
+8. Fill in the form. **Preview** to see the real CV.
+9. Press **Publish**. Your CV is live once GitHub Pages finishes rebuilding,
+   usually under a minute.
+
+> ⚠️ **Never put a token in your repository.** Do not paste it into
+> `assets/cv-data.js`, `assets/cv-config.js`, an HTML file, or any other file you
+> commit — anything committed to a public repository is public, and a committed
+> token would let anyone change your CV. The editor keeps it in your browser and
+> never writes it to a file. If you ever paste one somewhere by accident,
+> [revoke it](https://github.com/settings/tokens?type=beta) immediately.
+
+Full detail in [Browser Editor](#browser-editor) below.
+
+---
+
+## Working in an editor instead
+
+The browser editor is optional. Everything it does you can do by hand.
 
 ```bash
 git clone https://github.com/<your-handle>/cv.git
 cd cv
-```
-
-### 2. Preview locally
-
-```bash
-python3 -m http.server 8000
-# then open http://localhost:8000
+python3 -m http.server 8000     # then open http://localhost:8000
 ```
 
 A local server is recommended over opening the file directly — some browsers
 restrict scripts loaded from `file://`.
 
-### 3. Add your content
-
-**Option A — the browser editor (no code).** Publish your fork (below), open it,
-and follow [Browser Editor](#browser-editor). You will never open a file.
-
-**Option B — edit the data file.** Open [`assets/cv-data.js`](assets/cv-data.js),
-replace the placeholder values, and commit. Every field is documented inline;
-empty fields (`""` or `[]`) are simply not rendered.
-
-### 4. Deploy on GitHub Pages
-
-1. Push your fork.
-2. **Settings → Pages → Deploy from a branch**, branch `master` (or `main`), folder `/ (root)`.
-3. Your CV is live at `https://<your-handle>.github.io/cv/`.
+Open [`assets/cv-data.js`](assets/cv-data.js), replace the placeholder values and
+commit. Every field is documented inline; empty fields (`""` or `[]`) are simply
+not rendered. The editor and the file are interchangeable — the editor writes the
+same format, comments and all, so you can switch between them freely.
 
 ---
 
