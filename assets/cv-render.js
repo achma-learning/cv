@@ -159,17 +159,26 @@
 
     /* -- Entry point -------------------------------------------------------- */
 
-    function apply(d) {
+    /**
+     * Render `d` into the CV markup on the page.
+     *
+     * `options.metadata: false` renders the document only, leaving the page
+     * title and link-preview tags alone — what the editor's preview wants, as
+     * it is showing a CV inside a page that is not the CV.
+     */
+    function apply(d, options) {
         var name = d.name || 'Curriculum Vitae';
         var summary = [d.name, d.tagline].filter(Boolean).join(' — ');
 
-        document.title = name + ' — Curriculum Vitae';
-        var description = document.querySelector('meta[name="description"]');
-        if (description) description.setAttribute('content', summary + '. Curriculum vitae.');
-        ['og:title', 'twitter:title'].forEach(function (prop) {
-            var tag = document.querySelector('meta[property="' + prop + '"], meta[name="' + prop + '"]');
-            if (tag) tag.setAttribute('content', summary);
-        });
+        if (!options || options.metadata !== false) {
+            document.title = name + ' — Curriculum Vitae';
+            var description = document.querySelector('meta[name="description"]');
+            if (description) description.setAttribute('content', summary + '. Curriculum vitae.');
+            ['og:title', 'twitter:title'].forEach(function (prop) {
+                var tag = document.querySelector('meta[property="' + prop + '"], meta[name="' + prop + '"]');
+                if (tag) tag.setAttribute('content', summary);
+            });
+        }
 
         setImage(document.getElementById('cv-photo'), d.profilePhoto, name);
         setImage(document.getElementById('card-photo'), d.profilePhoto, name);

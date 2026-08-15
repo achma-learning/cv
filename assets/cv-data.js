@@ -1,10 +1,13 @@
 /* ============================================================================
    CV CONTENT — the single source of truth for this site.
 
-   Edit this file and commit it: whatever is here is what visitors see.
-   The /admin editor writes to your browser's localStorage instead, which only
-   affects your own machine — use its "Export cv-data.js" button to bring those
-   edits back into this file.
+   Whatever is in this file is what visitors see. There are two ways to change
+   it, and they end in the same place:
+
+     - Edit it here and commit.
+     - Use the editor at /admin/ and press Publish, which commits this file for
+       you. Signing in with GitHub is what makes that possible, and only the
+       account that owns this repository can do it.
 
    Fields left empty ("" or []) are simply not rendered.
    ========================================================================== */
