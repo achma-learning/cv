@@ -1,0 +1,283 @@
+/* ============================================================================
+   LaTeX-inspired digital CV — minimal, serif, academic.
+   Shared by the CV page and the /admin editor. Rebrand by editing the
+   custom properties below; nothing else hard-codes a colour.
+   ========================================================================== */
+:root {
+    --paper:   #ffffff;   /* page background */
+    --desk:    #f4f4f1;   /* surround behind the page */
+    --ink:     #1a1a1a;   /* primary text */
+    --muted:   #555555;   /* dates, sub-headings */
+    --rule:    #cccccc;   /* horizontal rules */
+    --link:    #1a1a1a;   /* link colour (underline carries the affordance) */
+    --danger:  #c0392b;
+    --max-width: 800px;
+    --page-padding: 64px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--desk);
+    color: var(--ink);
+    font-family: 'EB Garamond', 'Latin Modern Roman', Garamond, Georgia, serif;
+    font-size: 17px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+}
+
+.container {
+    max-width: var(--max-width);
+    margin: 32px auto;
+    background: var(--paper);
+    padding: 56px var(--page-padding);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* -------- Toolbar ------------------------------------------------------- */
+.toolbar {
+    max-width: var(--max-width);
+    margin: 24px auto 0 auto;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    padding: 0 var(--page-padding);
+}
+
+.btn {
+    font-family: inherit;
+    font-size: 0.85em;
+    letter-spacing: 0.05em;
+    padding: 8px 16px;
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+.btn:hover { background: var(--ink); color: var(--paper); }
+.btn:disabled { opacity: 0.5; cursor: default; }
+.btn:disabled:hover { background: var(--paper); color: var(--ink); }
+.btn-primary { background: var(--ink); color: var(--paper); }
+.btn-primary:hover { opacity: 0.82; }
+.btn-danger { border-color: var(--danger); color: var(--danger); background: var(--paper); }
+.btn-danger:hover { background: var(--danger); color: var(--paper); }
+.btn-quiet { border-color: var(--rule); color: var(--muted); }
+.btn-quiet:hover { background: var(--rule); color: var(--ink); }
+
+/* -------- Header -------------------------------------------------------- */
+.header { text-align: center; margin-bottom: 28px; }
+.header h1 {
+    font-weight: 500;
+    font-size: 2.4em;
+    letter-spacing: 0.02em;
+    margin: 0 0 4px 0;
+}
+.header .tagline {
+    font-style: italic;
+    color: var(--muted);
+    font-size: 1.05em;
+    margin: 0;
+}
+
+.profile-pic {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 18px auto;
+    border: 1px solid var(--rule);
+}
+
+.contact-info {
+    text-align: center;
+    font-style: normal;   /* <address> defaults to italic */
+    font-size: 0.92em;
+    color: var(--muted);
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+}
+.contact-info a { color: var(--link); text-decoration: none; }
+.contact-info a:hover { text-decoration: underline; }
+.contact-info i { margin-right: 6px; color: var(--muted); }
+
+/* -------- Sections ------------------------------------------------------ */
+.section { margin-top: 26px; }
+
+.section-title {
+    font-size: 0.95em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 0 0 12px 0;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--ink);
+}
+
+/* -------- Entries (education, employment) ------------------------------- */
+.entry { margin-bottom: 14px; }
+.entry:last-child { margin-bottom: 0; }
+
+/* Grid rather than flex: the date column never collapses, however long the
+   title on the left runs. */
+.entry-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 0 16px;
+}
+.entry-title {
+    font-weight: 700;
+    font-size: 1em;
+    margin: 0;
+}
+.date {
+    font-style: italic;
+    color: var(--muted);
+    white-space: nowrap;
+    font-size: 0.92em;
+}
+.entry-sub {
+    font-style: italic;
+    color: var(--muted);
+    margin: 0 0 4px 0;
+    font-size: 0.95em;
+}
+
+/* Single-line entries: talks, teaching, competitions, awards. */
+.entry-line {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 0 16px;
+    margin-bottom: 3px;
+}
+.entry-line:last-child { margin-bottom: 0; }
+
+ul { margin: 4px 0 0 0; padding-left: 22px; }
+ul li { margin-bottom: 2px; }
+ul li::marker { color: var(--muted); }
+
+a { color: var(--link); }
+
+/* -------- Inline "label: value" rows (skills) --------------------------- */
+.row {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0 14px;
+    margin-bottom: 4px;
+}
+.row:last-child { margin-bottom: 0; }
+.row .label { font-style: italic; color: var(--muted); }
+
+p { margin: 0 0 8px 0; }
+.section p:last-child { margin-bottom: 0; }
+
+/* -------- Footer (QR + signature) --------------------------------------- */
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 40px;
+    padding-top: 18px;
+    border-top: 1px solid var(--rule);
+    min-height: 40px;
+}
+.qr-code img { width: 84px; height: 84px; display: block; }
+.signature { height: 70px; width: auto; opacity: 0.9; }
+
+/* -------- Card view (Linktree-style) ------------------------------------ */
+.linktree-links { margin-top: 24px; }
+.linktree-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 10px 0;
+    padding: 12px 16px;
+    border: 1px solid var(--ink);
+    text-decoration: none;
+    color: var(--ink);
+    font-size: 1em;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+.linktree-link i {
+    font-size: 1.1em;
+    width: 22px;
+    text-align: center;
+    color: var(--muted);
+}
+.linktree-link:hover { background: var(--ink); color: var(--paper); }
+.linktree-link:hover i { color: var(--paper); }
+
+/* -------- Notices ------------------------------------------------------- */
+.notice {
+    max-width: var(--max-width);
+    margin: 16px auto 0 auto;
+    padding: 10px var(--page-padding);
+    font-size: 0.88em;
+    font-style: italic;
+    color: var(--muted);
+    text-align: center;
+}
+
+/* -------- Responsive ---------------------------------------------------- */
+@media (max-width: 720px) {
+    :root { --page-padding: 22px; }
+    html, body { font-size: 16px; }
+    .container { margin: 0; padding: 28px var(--page-padding); box-shadow: none; }
+    .toolbar { flex-direction: column; }
+    .btn { width: 100%; padding: 12px; text-align: center; }
+    .header h1 { font-size: 2em; }
+    .entry-header, .entry-line { grid-template-columns: 1fr; }
+    .contact-info { flex-direction: column; gap: 4px; }
+    .footer { flex-direction: column-reverse; align-items: center; gap: 18px; }
+    .row { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+}
+
+/* -------- Print / PDF (A4) ---------------------------------------------- */
+@page { size: A4; margin: 14mm; }
+
+@media print {
+    html, body {
+        background: #fff;
+        font-size: 11pt;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .container {
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+        max-width: none;
+    }
+    .toolbar, .notice, .no-print { display: none !important; }
+
+    /* Keep a heading with its first entry, and never split an entry. */
+    .section-title { break-after: avoid; page-break-after: avoid; }
+    .entry, .entry-line, .row, .footer { break-inside: avoid; page-break-inside: avoid; }
+    p, li { orphans: 2; widows: 2; }
+
+    a { text-decoration: none; color: #000; }
+}
