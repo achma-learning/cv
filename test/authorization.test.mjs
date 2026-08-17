@@ -299,6 +299,20 @@ export default async function (browser, log) {
         log((await page.$$('#cv-main .section')).length > 0, 'with the real sections');
         log(!/Preview Person/.test(await page.title()), 'and leaves the editor page title alone');
 
+        // The card at #card is the other half of the public page, built from the
+        // same data — so it is previewable too.
+        log(await page.isVisible('#preview-cv') && await page.isHidden('#preview-card'),
+            'the full CV shows first');
+        await page.click('[data-action="preview-view"]');
+        log(await page.isVisible('#preview-card') && await page.isHidden('#preview-cv'),
+            'the preview switches to the card view');
+        log(await page.textContent('#card-name') === 'Preview Person',
+            'the card shows the edited name');
+        log((await page.$$('#card-links .linktree-link')).length > 0,
+            'and the real contact buttons');
+        await page.click('[data-action="preview-view"]');
+        log(await page.isVisible('#preview-cv'), 'and switches back');
+
         await page.keyboard.press('Escape');
         log(await page.isHidden('#preview'), 'Escape closes it');
         await context.close();

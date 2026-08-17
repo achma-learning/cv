@@ -483,11 +483,27 @@
        is the CV rather than a second opinion of it. `metadata: false` keeps it
        from renaming the browser tab on its way past. */
 
+    // The public page shows the CV two ways; so does this, from the same data.
+    var previewCard = false;
+
+    function showPreviewView() {
+        $('preview-cv').hidden = previewCard;
+        $('preview-card').hidden = !previewCard;
+        $('preview-view').textContent = previewCard ? 'View Full CV' : 'View as Card';
+        $('preview-view').setAttribute('aria-pressed', String(previewCard));
+        $('preview').querySelector('.preview-scroll').scrollTop = 0;
+    }
+
     function openPreview() {
         CVRender.apply(readForm(), { metadata: false });
+        showPreviewView();
         $('preview').hidden = false;
-        $('preview').querySelector('.preview-scroll').scrollTop = 0;
         document.body.style.overflow = 'hidden';
+    }
+
+    function togglePreviewView() {
+        previewCard = !previewCard;
+        showPreviewView();
     }
 
     function closePreview() {
@@ -923,6 +939,7 @@
         save: save,
         reset: reset,
         preview: openPreview,
+        'preview-view': togglePreviewView,
         'close-preview': closePreview,
         publish: function () { publish(false); },
         'publish-force': function () { publish(true); },
